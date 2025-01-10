@@ -8,21 +8,16 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  role      Role     @relation(fields: [roleId], references: [id])
-  roleId    Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  orders    Order[]
+  id           Int      @id @default(autoincrement())
+  name         String   @default("Unknown") // Default value for existing rows
+  email        String   @unique
+  password     String
+  isSuperAdmin Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  Orders       Order[]
 }
 
-model Role {
-  id    Int     @id @default(autoincrement())
-  name  String  @unique
-  users User[]
-}
 
 model Product {
   id          Int      @id @default(autoincrement())
