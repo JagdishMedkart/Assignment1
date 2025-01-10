@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { compareSync } from "bcrypt-ts";
 import { AuthSchema } from "../authSchema"
-import prisma from "../../../../../../prisma/client"
+import prisma from "../../../../../../prisma/client";
 import { randomString } from "@/lib/util";
 import { cookies } from "next/headers";
 
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
                             },
                         },
                         {
-                            userId: user.id,
+                            userId: user.userId,
                         },
                     ],
                 },
@@ -38,12 +38,12 @@ export async function POST(req: NextRequest) {
             await prisma.session.create({
                 data: {
                     sessionToken: sessionToken,
-                    userId: user.id,
+                    userId: user.userId,
                     expires: futureDate.toISOString().replace("T", " "),
                 },
             });
 
-            cookies().set({
+            (await cookies()).set({
                 name: "session-us",
                 value: sessionToken,
                 expires: futureDate,

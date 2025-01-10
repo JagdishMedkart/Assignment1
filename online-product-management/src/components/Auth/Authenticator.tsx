@@ -6,9 +6,9 @@ const protectedRoutes = ['/dashboard/home', '/dashboard/users'];
 const unProtectedRoutes = ['/auth/signin', '/auth/signup','/auth/signinotp'];
 
 export const Authenticator = async ({ children }: { children: React.ReactNode }) => {
-  const path = headers().get('x-current-path');
+  const path = (await headers()).get('x-current-path');
 
-  let sess = cookies().get('session-us')?.value;
+  let sess = (await cookies()).get('session-us')?.value;
   let authenticated = false;
   if (sess != null) {
     const userSession = await prisma.session.findFirst({ where: { sessionToken: sess } });
