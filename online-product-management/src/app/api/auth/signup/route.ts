@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
       {
         message: "User registration successful",
         success: true,
-        user: { id: newUser.id, email: newUser.email }, // Return minimal user info
+        user: { id: newUser.userId, email: newUser.email }, // Return minimal user info
       },
       { status: 201 }
     );
