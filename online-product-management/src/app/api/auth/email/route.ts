@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: "All fields (to, subject, text) are required." }, { status: 400 });
         }
 
-        let otp: string = Math.floor(100000 + Math.random() * 900000).toString();
+        const otp: string = Math.floor(100000 + Math.random() * 900000).toString();
 
         const mailOptions = {
             from: process.env.SMTP_EMAIL, // Sender email from environment variable

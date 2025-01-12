@@ -1,66 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
+import { authSchema } from "../authSchema"; 
 import { hashSync } from "bcrypt-ts";
-import prisma from "../../../../../../prisma/client";
+import prisma from "../../../../../prisma/client";
 
 export async function POST(req: NextRequest) {
-  if (req.method !== "POST") {
-    return NextResponse.json(
-      { message: "Method not allowed", success: false },
-      { status: 405 }
-    );
-  }
-
-  try {
-    // Parse the request body
-    const body = await req.json();
-
-    // Basic Validation
-    const { fullName, email, password } = body;
-    if (!fullName || !email || !password) {
-      return NextResponse.json(
-        { message: "All fields are required", success: false },
-        { status: 400 }
-      );
+  try{
+    if (req.method === 'POST') {
+        const body= await req.json();
+        console.log(body);
+        const validation = authSchema.safeParse(body);
+        console.log(validation);
+        console.log(validation.success)
+        if (!validation.success)
+            return NextResponse.json({ message: 'User registration failed', success: false },{status:500});
+        const hash = hashSync(body.password,10);
+        console.log(hash);
+        const newUser= await prisma.user.create({
+            data:{
+              name:body.Username,
+              email:body.Email,
+              passwordHash:hash,
+              isSuperAdmin: false,
+            }
+        })
+        return NextResponse.json({ message: 'User registration successful', success: true },{status:200})
+      } else {
+        return NextResponse.json('Method not allowed',{status:405})
+      }
     }
-
-    // Check if the user already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (existingUser) {
-      return NextResponse.json(
-        { message: "Email already registered", success: false },
-        { status: 409 } // Conflict
-      );
-    }
-
-    // Hash the password
-    const hashedPassword = hashSync(password, 10);
-
-    // Create the new user
-    const newUser = await prisma.user.create({
-      data: {
-        name: fullName,
-        email,
-        password: hashedPassword,
-        isSuperAdmin: false, // Default to customer role
-      },
-    });
-
-    return NextResponse.json(
-      {
-        message: "User registration successful",
-        success: true,
-        user: { id: newUser.userId, email: newUser.email }, // Return minimal user info
-      },
-      { status: 201 }
-    );
-  } catch (error) {
-    console.error("Error in signup:", error);
-    return NextResponse.json(
-      { message: "An error occurred during registration", success: false },
-      { status: 500 }
-    );
+    catch(error) {
+      if (error instanceof Error){
+          console.log("Error: ", error.stack)
+      }
   }
-}
+  }

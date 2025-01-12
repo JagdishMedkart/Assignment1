@@ -1,74 +1,68 @@
-import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import prisma from "../../../../../../prisma/client"; // Corrected path
+import { NextRequest, NextResponse } from "next/server";
+import { compareSync } from "bcrypt-ts";
+import { AuthSchema } from "../authSchema"
+import prisma from "../../../../../prisma/client";
 import { randomString } from "@/lib/util";
 import { cookies } from "next/headers";
 
-const handler = NextAuth({
-  providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-  ],
-  secret: process.env.SECRET,
-  pages: {
-    error: "/auth/signin",
-  },
-  callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      const dbuser = await prisma.user.findFirst({ where: { email: user.email } });
-      if (!dbuser) {
-        return false;
-      }
+interface LoginRequest {
+    email: string;
+    password: string;
+}
 
-      const sessionToken = randomString(32);
-      const now = new Date();
-      const futureDate = new Date(Date.now() + 1000 * 60 * 60 * 6); // 6 hours into the future
-      await prisma.session.deleteMany({
-        where: {
-          OR: [
-            { expires: { lt: now } },
-            { userId: dbuser.userId },
-          ],
-        },
-      });
-      await prisma.session.create({
-        data: {
-          sessionToken,
-          userId: dbuser.userId,
-          expires: futureDate,
-        },
-      });
+export async function POST(req: NextRequest) {
+  try{
+    if (req.method === "POST") {
+        const body = await req.json();
+        const { email, password }: LoginRequest = body;
+        const user = await prisma.user.findFirst({ where: { email: email } });
+        console.log(user);
+        if (!user) {
+            return NextResponse.json({ message: "Invalid credentials", success: false }, { status: 401 });
+        }
+        const isValid = compareSync(password, user.passwordHash);
+        if (!isValid) {
+            return NextResponse.json({ message: "Invalid credentials", success: false }, { status: 401 });
+        }
+        if (email != null) {
+            const sessionToken = randomString(32);
+            const now = new Date();
+            const futureDate = new Date(Date.now() + 1000 * 60 * 60 * 6); // 6 hours into the future
+            await prisma.session.deleteMany({
+                where: {
+                    OR: [
+                        {
+                            expires: {
+                                lt: now.toISOString().replace("T", " "),
+                            },
+                        },
+                        {
+                            userId: user.userId,
+                        },
+                    ],
+                },
+            });
+            await prisma.session.create({
+                data: {
+                    sessionToken: sessionToken,
+                    userId: user.userId,
+                    expires: futureDate.toISOString().replace("T", " "),
+                },
+            });
 
-      (await cookies()).set("session-us", sessionToken, { expires: futureDate });
+            (await cookies()).set({
+                name: "session-us",
+                value: sessionToken,
+                expires: futureDate,
+            });
 
-      return true;
-    },
-    async redirect({ url, baseUrl }) {
-      return baseUrl + "/dashboard/home";
-    },
-    async session({ session, token, user }) {
-      const dbuser = await prisma.user.findFirst({ where: { email: session.user?.email } });
-      if (!dbuser) {
-        return session;
-      }
-      const now = new Date();
-      const ourSess = await prisma.session.findFirst({
-        where: { userId: dbuser.userId, expires: { gt: now } },
-      });
-      if (!ourSess) {
-        return session;
-      }
-
-      (await cookies()).set("session-us", ourSess.sessionToken, { expires: new Date(ourSess.expires) });
-
-      return session;
-    },
-    async jwt({ token, user, account, profile, isNewUser }) {
-      return token;
-    },
-  },
-});
-
-export { handler as GET, handler as POST };
+            return NextResponse.json({ message: "Success", success: true }, { status: 200 });
+        }
+    } else {
+        return NextResponse.json("Method not allowed", { status: 405 });
+    }
+  } catch (error) {
+    console.error("Error in signIn callback:", error);
+    return false;
+  }
+}

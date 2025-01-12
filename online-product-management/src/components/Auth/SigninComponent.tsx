@@ -49,7 +49,7 @@ const SignInPage: React.FC = () => {
 
   const validate = () => {
     let valid = true;
-    let errors: { email?: string; password?: string } = {};
+    const errors: { email?: string; password?: string } = {};
 
     if (!email) {
       errors.email = 'Email is required';
@@ -77,6 +77,7 @@ const SignInPage: React.FC = () => {
           email: email,
           password: password,
         }
+        console.log(data);
         const response = await fetch('/api/auth/signin', {
           method: 'POST',
           body: JSON.stringify(data),
@@ -86,7 +87,7 @@ const SignInPage: React.FC = () => {
         }).then(d => d.json());
         if (response.success) {
           localStorage.setItem('incomingToast', 'Successfully signed in!');
-          window.location.href = '/dashboard/home';
+          window.location.href = '/';
         } else {
           setSubmitting(false);
           toast.error(response.message, {

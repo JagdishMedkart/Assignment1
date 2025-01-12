@@ -1,5 +1,5 @@
 import { cookies, headers } from "next/headers";
-import prisma from "../../../../prisma/client";
+import prisma from "../../../prisma/client";
 import { redirect } from "next/navigation";
 
 const protectedRoutes = ['/dashboard/home', '/dashboard/users'];

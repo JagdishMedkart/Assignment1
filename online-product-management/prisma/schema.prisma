@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // Use your database provider
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId       Int         @id @default(autoincrement())
+  name         String
+  email        String      @unique
+  emailVerified DateTime?
+  image        String?
+  passwordHash String      @default("")
+  isSuperAdmin Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  sessions     Session[]
+  orders       Order[]
+}
+
+model Session {
+  sessionId    Int         @id @default(autoincrement())
+  sessionToken String      @unique
+  userId       Int
+  user         User        @relation(fields: [userId], references: [userId], onDelete: Cascade, map: "fk_session_user")
+  expires      DateTime
+  createdAt    DateTime    @default(now())
+}
+
+model Product {
+  wsCode       Int         @id @unique
+  name         String
+  salesPrice   Float
+  mrp          Float
+  packageSize  Float
+  tags         String[]
+  images       String[]
+  categoryId   Int?
+  category     Category?   @relation(fields: [categoryId], references: [categoryId], onDelete: SetNull, map: "fk_product_category")
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  orderItems   OrderItem[]
+}
+
+model Category {
+  categoryId   Int         @id @default(autoincrement())
+  name         String      @unique
+  products     Product[]
+  createdAt    DateTime    @default(now())
+}
+
+model Order {
+  orderId      Int         @id @default(autoincrement())
+  userId       Int
+  user         User        @relation(fields: [userId], references: [userId], onDelete: Cascade, map: "fk_order_user")
+  totalAmount  Float
+  status       OrderStatus @default(PENDING)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  orderItems   OrderItem[]
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model OrderItem {
+  orderItemId  Int         @id @default(autoincrement())
+  orderId      Int
+  order        Order       @relation(fields: [orderId], references: [orderId], onDelete: Cascade, map: "fk_orderItem_order")
+  productWsCode Int
+  product      Product     @relation(fields: [productWsCode], references: [wsCode], onDelete: Cascade, map: "fk_orderItem_product")
+  quantity     Int
+  unitPrice    Float
+  totalPrice   Float
+}

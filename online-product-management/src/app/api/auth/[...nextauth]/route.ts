@@ -1,90 +1,117 @@
-// app/api/auth/[...nextauth]/route.ts
-
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import prisma from "../../../../../../prisma/client"
+import prisma from "../../../../../prisma/client";
 import { randomString } from "@/lib/util";
 import { cookies } from "next/headers";
 
+const SESSION_EXPIRY_HOURS = 6;
+
 const handler = NextAuth({
-    providers: [
-        GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-        }),
-    ],
-    secret: process.env.SECRET,
-    pages: {
-        error: "/auth/signin",
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+  ],
+  secret: process.env.SECRET,
+  pages: {
+    error: "/auth/signin",
+  },
+  callbacks: {
+    async signIn({ user }) {
+      try {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: user.email },
+        });
+        console.log(dbUser);
+        if (!dbUser) {
+          console.error(`User not found: ${user.email}`);
+          return false;
+        }
+
+        // Generate a new session
+        const sessionToken = randomString(32);
+        const expires = new Date(Date.now() + SESSION_EXPIRY_HOURS * 60 * 60 * 1000);
+
+        // Remove expired sessions or existing sessions for the user
+        await prisma.session.deleteMany({
+          where: {
+            OR: [
+              { expires: { lt: new Date() } },
+              { userId: dbUser.userId },
+            ],
+          },
+        });
+
+        // Create a new session
+        await prisma.session.create({
+          data: {
+            sessionToken,
+            userId: dbUser.userId,
+            expires,
+          },
+        });
+
+        // Set session cookie
+        (await
+              // Set session cookie
+              cookies()).set("session-us", sessionToken, { expires });
+
+        return true;
+      } catch (error) {
+        console.error("Error in signIn callback:", error);
+        return false;
+      }
     },
-    callbacks: {
-        async signIn({ user, account, profile, email, credentials }) {
-            // Custom sign-in logic here if needed
-            const dbuser = await prisma.user.findFirst({ where: { email: user.email } });
-            if (!dbuser) {
-                return false;
-            }
 
-            const sessionToken = randomString(32);
-            const now = new Date();
-            const futureDate = new Date(Date.now() + 1000 * 60 * 60 * 6); // 6 hours into the future
-            await prisma.session.deleteMany({
-                where: {
-                    OR: [
-                        {
-                            expires: {
-                                lt: now.toISOString().replace("T", " "),
-                            },
-                        },
-                        {
-                            userId: dbuser.userId,
-                        },
-                    ],
-                },
-            });
-            await prisma.session.create({
-                data: {
-                    sessionToken: sessionToken,
-                    userId: dbuser.userId,
-                    expires: futureDate.toISOString().replace("T", " "),
-                },
-            });
-
-            (await cookies()).set({
-                name: "session-us",
-                value: sessionToken,
-                expires: futureDate,
-            });
-
-            return true;
-        },
-        async redirect({ url, baseUrl }) {
-            return baseUrl + "/dashboard/home";
-        },
-        async session({ session, token, user }) {
-            const dbuser = await prisma.user.findFirst({ where: { email: session.user?.email } });
-            if (dbuser == null) {
-                return session;
-            }
-            const now = new Date();
-            const ourSess = await prisma.session.findFirst({ where: { userId: dbuser.userId, expires: { gt: now.toISOString().replace("T", " ") } } });
-            if (ourSess == null) {
-                return session;
-            }
-
-            (await cookies()).set({
-                name: "session-us",
-                value: ourSess.sessionToken,
-                expires: new Date(ourSess.expires),
-            });
-
-            return session;
-        },
-        async jwt({ token, user, account, profile, isNewUser }) {
-            // Add custom JWT properties here if needed
-            return token;
-        },
+    async redirect({ baseUrl }) {
+      return `${baseUrl}/dashboard/home`;
     },
+
+    async session({ session }) {
+      try {
+        const email = session.user?.email;
+
+        if (!email) return session;
+
+        const dbUser = await prisma.user.findUnique({ where: { email } });
+
+        if (!dbUser) {
+          console.error(`User not found during session callback: ${email}`);
+          return session;
+        }
+
+        // Check for an active session
+        const activeSession = await prisma.session.findFirst({
+          where: {
+            userId: dbUser.userId,
+            expires: { gt: new Date() },
+          },
+        });
+
+        if (!activeSession) {
+          console.error(`No active session found for user: ${email}`);
+          return session;
+        }
+
+        // Refresh session cookie
+        (await
+              // Refresh session cookie
+              cookies()).set("session-us", activeSession.sessionToken, {
+          expires: new Date(activeSession.expires),
+        });
+
+        return session;
+      } catch (error) {
+        console.error("Error in session callback:", error);
+        return session;
+      }
+    },
+
+    async jwt({ token, user }) {
+      return token;
+    },
+  },
 });
 
 export { handler as GET, handler as POST };

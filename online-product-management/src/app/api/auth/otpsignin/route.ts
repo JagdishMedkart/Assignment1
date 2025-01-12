@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { compareSync } from "bcrypt-ts";
 import { AuthSchema } from "../authSchema"
-import prisma from "../../../../../../prisma/client";
+import prisma from "../../../../../prisma/client";
 import { randomString } from "@/lib/util";
 import { cookies } from "next/headers";
 

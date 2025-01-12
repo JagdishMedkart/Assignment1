@@ -2,23 +2,23 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-// import { getCookie } from "cookies-next";
-// import ProfileDropdown from "./ProfileDropdown";
+import { getCookie } from "cookies-next";
+import ProfileDropdown from "./ProfileDropdown"
 
 const Nav: React.FC = () => {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-//   const [showDropdown, setShowDropdown] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-//   useEffect(() => {
-//     const token = getCookie('session-us');
-//     setIsLogin(!!token);
-//     setIsLoading(false);
-//   }, []);
+  useEffect(() => {
+    const token = getCookie('session-us');
+    setIsLogin(!!token);
+    setIsLoading(false);
+  }, []);
 
 //   if (isLoading) return null;
 
@@ -79,13 +79,7 @@ const Nav: React.FC = () => {
             </ul>
             <div>
               {isLogin ? (
-                <button
-                type="button"
-                onClick={() => router.push("/auth/signup")}
-                className="bg-white text-black font-medium rounded-lg text-sm px-5 py-1 text-center"
-              >
-                Logout
-              </button>
+                 <ProfileDropdown />
               ) : (
                 <button
                   type="button"
@@ -101,13 +95,7 @@ const Nav: React.FC = () => {
           <div className="flex items-center md:hidden">
             <div className="ml-auto"> 
               {isLogin ? (
-                <button
-                  type="button"
-                  onClick={() => router.push("/auth/signup")}
-                  className="bg-white text-black font-medium rounded-lg text-sm px-5 py-1 text-center"
-                >
-                  Logout
-                </button>
+                 <ProfileDropdown />
               )
                   : (
                 <button
