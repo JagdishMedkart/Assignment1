@@ -118,7 +118,7 @@ const SignInPage: React.FC = () => {
     <div className="flex flex-col min-h-screen md:flex-row">
       <div className="relative w-full md:w-1/2 bg-gray-100">
         <Image
-          src="/signin_image.jpeg"
+          src="/image1.png"
           alt="Sign In Image"
           layout="fill"
           objectFit="cover"
@@ -177,7 +177,7 @@ const SignInPage: React.FC = () => {
                 Sign in with OTP
               </button>
           </div>
-          <div className='mt-2'>
+          {/* <div className='mt-2'>
               <button
                 className="w-full px-4 py-2 flex items-center text-black bg-white border border-gray-300 rounded-lg shadow hover:bg-gray-100 focus:outline-none focus:ring focus:ring-blue-300"
                 onClick={() => signIn('google')}
@@ -189,7 +189,7 @@ const SignInPage: React.FC = () => {
                 />
                 <span className="flex-1 text-center text-black">Sign in with Google</span>
               </button>
-          </div>
+          </div> */}
           {/*Sign Up link*/}
           <p className="mt-4 text-center text-gray-600">
             Don't have an account?{' '}

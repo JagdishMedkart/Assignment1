@@ -120,7 +120,7 @@ const SignInOTP: React.FC = () => {
 
   const validate = () => {
     let valid = true;
-    let errors: { email?: string; } = {};
+    const errors: { email?: string; } = {};
 
 
     if (!email) {
@@ -164,7 +164,7 @@ const SignInOTP: React.FC = () => {
         }).then(d => d.json());
         if (response.success) {
           localStorage.setItem('incomingToast', 'Successfully signed in!');
-          window.location.href = '/dashboard/home';
+          window.location.href = '/';
         } else {
           setSubmitting(false);
           toast.error(response.message, {
@@ -196,7 +196,7 @@ const SignInOTP: React.FC = () => {
       <div className="flex flex-col min-h-screen md:flex-row">
         <div className="relative w-full md:w-1/2 bg-gray-100">
           <Image
-            src="/signin_image.jpeg"
+            src="/image1.png"
             alt="Sign Up Image"
             layout="fill"
             objectFit="cover"
