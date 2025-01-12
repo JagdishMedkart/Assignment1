@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 63, "column": 0}, "map": {"version":3,"sources":["file://C%3A/Users/HP/Assignment1/online-product-management/prisma/client.ts"],"sourcesContent":["import { PrismaClient } from \"@prisma/client\";\r\n\r\nconst globalForPrisma = global as unknown as { prisma?: PrismaClient };\r\n\r\nconst prisma = globalForPrisma.prisma || new PrismaClient();\r\n\r\nif (process.env.NODE_ENV !== \"production\") globalForPrisma.prisma = prisma;\r\n\r\nexport default prisma;\r\n"],"names":[],"mappings":";;;AAAA;;AAEA,MAAM,kBAAkB;AAExB,MAAM,SAAS,gBAAgB,MAAM,IAAI,IAAI,6HAAA,CAAA,eAAY;AAEzD,wCAA2C,gBAAgB,MAAM,GAAG;uCAErD"}},
+    {"offset": {"line": 72, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}

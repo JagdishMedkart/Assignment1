@@ -55,8 +55,8 @@ export async function POST(req: NextRequest) {
                 value: sessionToken,
                 expires: futureDate,
             });
-
-            return NextResponse.json({ message: "Success", success: true }, { status: 200 });
+            const data = user.isSuperAdmin ? "admin" : "no-admin";
+            return NextResponse.json({ message: "Success", data: data, success: true }, { status: 200 });
         }
     } else {
         return NextResponse.json("Method not allowed", { status: 405 });

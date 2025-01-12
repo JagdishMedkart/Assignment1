@@ -87,7 +87,9 @@ const SignInPage: React.FC = () => {
         }).then(d => d.json());
         if (response.success) {
           localStorage.setItem('incomingToast', 'Successfully signed in!');
-          window.location.href = '/';
+          if (response.data === "admin")
+            window.location.href = '/dashboard/home';
+          else window.location.href = "/";
         } else {
           setSubmitting(false);
           toast.error(response.message, {
@@ -166,16 +168,17 @@ const SignInPage: React.FC = () => {
             </div>
           </form>
           <div className='mt-2'>
-              <button
-                type="submit"
-                onClick={() => {
-                  localStorage.setItem("email", email);
-                  router.push("/auth/signinotp")}
-                }
-                className="w-full px-4 py-2 text-white bg-slate-500 rounded-lg shadow hover:bg-slate-600 focus:outline-none focus:ring focus:ring-blue-300 text-black"
-              >
-                Sign in with OTP
-              </button>
+            <button
+              type="submit"
+              onClick={() => {
+                localStorage.setItem("email", email);
+                router.push("/auth/signinotp")
+              }
+              }
+              className="w-full px-4 py-2 text-white bg-slate-500 rounded-lg shadow hover:bg-slate-600 focus:outline-none focus:ring focus:ring-blue-300 text-black"
+            >
+              Sign in with OTP
+            </button>
           </div>
           {/* <div className='mt-2'>
               <button

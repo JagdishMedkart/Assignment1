@@ -164,7 +164,9 @@ const SignInOTP: React.FC = () => {
         }).then(d => d.json());
         if (response.success) {
           localStorage.setItem('incomingToast', 'Successfully signed in!');
-          window.location.href = '/';
+          if (response.data === "admin")
+            window.location.href = '/dashboard/home';
+          else window.location.href = "/";
         } else {
           setSubmitting(false);
           toast.error(response.message, {
