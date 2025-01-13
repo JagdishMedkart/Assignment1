@@ -12,8 +12,10 @@ const ProductBuilder: React.FC = () => {
   const [salesPrice, setSalesPrice] = useState("");
   const [mrp, setMrp] = useState("");
   const [packageSize, setPackageSize] = useState("");
-  const [category, setCategory] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const [tags, setTags] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
+  const [categories, setCategories] = useState<{ categoryId: number; name: string }[]>([]);
   const [loading, setLoading] = useState(false);
 
   const resetForm = () => {
@@ -22,19 +24,51 @@ const ProductBuilder: React.FC = () => {
     setSalesPrice("");
     setMrp("");
     setPackageSize("");
-    setCategory("");
+    setCategoryId("");
     setTags([]);
+    setImages([]);
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch("/api/categories");
+      const data = await response.json();
+      console.log(data);
+      if (data.success) setCategories(data.categories);
+      else toast.error("Failed to load categories.");
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      toast.error("Error fetching categories.");
+    }
   };
 
   const handleAddProduct = async () => {
-    if (!name || !wsCode || !salesPrice || !mrp || !packageSize || !category) {
+    if (!name || !wsCode || !salesPrice || !mrp || !packageSize || !categoryId) {
       toast.error("Please fill all required fields!");
       return;
     }
-
+  
+    if (images.length > 5) {
+      toast.error("You can upload a maximum of 5 images.");
+      return;
+    }
+  
+    const base64Images = await Promise.all(
+      images.map(
+        (image) =>
+          new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = reject;
+            reader.readAsDataURL(image);
+          })
+      )
+    );
+  
     setLoading(true);
-
+  
     try {
+      console.log(categories);
       const response = await fetch("/api/products", {
         method: "POST",
         headers: {
@@ -46,33 +80,42 @@ const ProductBuilder: React.FC = () => {
           salesPrice: parseFloat(salesPrice),
           mrp: parseFloat(mrp),
           packageSize: parseFloat(packageSize),
+          categoryId: parseInt(categoryId),
           tags,
-          category,
+          images: base64Images, // Send the Base64 strings
         }),
       });
-
-      const data = await response.json();
-      if (data.success) {
-        toast.success("Product added successfully!");
-        setIsModalOpen(false);
-        resetForm();
-      } else {
-        toast.error(data.message || "Failed to add product");
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Unknown error occurred");
       }
+  
+      const data = await response.json();
+      toast.success(data.message || "Product added successfully!");
+      setIsModalOpen(false);
+      resetForm();
     } catch (error) {
+      if (error instanceof Error){
+        console.log("Error: ", error.stack)
+    }
       console.error("Error adding product:", error);
-      toast.error("An error occurred.");
+      toast.error(error.message || "An error occurred.");
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="max-w-4xl mx-auto">
       <Toaster position="top-center" reverseOrder={false} />
       <button
         className="flex items-center justify-center w-full p-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl shadow-md hover:shadow-lg transition duration-300"
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => {
+          setIsModalOpen(true);
+          fetchCategories();
+        }}
       >
         <AiOutlinePlusCircle size={30} className="mr-3" />
         Add New Product
@@ -149,13 +192,16 @@ const ProductBuilder: React.FC = () => {
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-black">Category</label>
                 <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
+                  value={categoryId}
+                  onChange={(e) => setCategoryId(e.target.value)}
                   className="select select-bordered w-full text-black"
                 >
                   <option value="">Select Category</option>
-                  <option value="Category1">Category 1</option>
-                  <option value="Category2">Category 2</option>
+                  {categories.map((category) => (
+                    <option key={category.categoryId} value={category.categoryId}>
+                      {category.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="space-y-2">
@@ -167,6 +213,17 @@ const ProductBuilder: React.FC = () => {
                     setTags(e.target.value.split(",").map((tag) => tag.trim()))
                   }
                   className="textarea textarea-bordered w-full text-black"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-black">Upload Images</label>
+                <input
+                  type="file"
+                  multiple
+                  accept=".png, .jpeg, .webp"
+                  onChange={(e) =>
+                    setImages(e.target.files ? Array.from(e.target.files) : [])
+                  }
                 />
               </div>
               <div className="flex justify-between mt-6">

@@ -1,38 +1,30 @@
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { PrismaClient } = require("../prisma/client");
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Clearing User table...");
+  const categories = [
+    { name: "Electronics" },
+    { name: "Fashion" },
+    { name: "Home Appliances" },
+    { name: "Books" },
+    { name: "Sports Equipment" },
+  ];
 
-  // Truncate the User table and reset the primary key sequence
-  await prisma.$executeRawUnsafe(`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE;`);
+  for (const category of categories) {
+    await prisma.category.upsert({
+      where: { name: category.name },
+      update: {},
+      create: category,
+    });
+  }
 
-  console.log("Adding a new admin user...");
-
-  // Create a hashed password
-  const bcrypt = require("bcrypt");
-  const hashedPassword = await bcrypt.hash("admin123", 10);
-
-  // Insert a new admin user
-  const newUser = await prisma.user.create({
-    data: {
-      name: "Admin User",
-      email: "admin@example.com",
-      passwordHash: hashedPassword,
-      isSuperAdmin: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  });
-
-  console.log("New user added:", newUser);
+  console.log("Categories added successfully!");
 }
 
 main()
   .catch((e) => {
-    console.error("Error while seeding:", e);
+    console.error(e);
     process.exit(1);
   })
   .finally(async () => {

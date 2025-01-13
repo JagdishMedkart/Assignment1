@@ -5,7 +5,7 @@ export const OTP = (otp: string) =>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZeroCodeSQL - OTP Verification</title>
+    <title>ProductEase - OTP Verification</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -71,7 +71,7 @@ export const OTP = (otp: string) =>
 <body>
     <div class="container">
         <div class="header">
-            <h1><strong>ZeroCodeSQL</strong></h1>
+            <h1><strong>ProductEase</strong></h1>
         </div>
         <div class="content">
             <p>Your One-Time Password (OTP) is:</p>
