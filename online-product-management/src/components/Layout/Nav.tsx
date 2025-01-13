@@ -67,8 +67,8 @@ const Nav: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/pricing" className="text-white hover:text-gray-300">
-                  Pricing
+                <Link href="/viewproducts" className="text-white hover:text-gray-300">
+                  Products
                 </Link>
               </li>
               <li>
@@ -128,8 +128,8 @@ const Nav: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link href="/pricing" className="block py-2 px-3 rounded text-white hover:bg-gray-700">
-                Pricing
+              <Link href="/viewproducts" className="block py-2 px-3 rounded text-white hover:bg-gray-700">
+                Products
               </Link>
             </li>
             <li>
@@ -145,4 +145,3 @@ const Nav: React.FC = () => {
 };
 
 export default Nav;
-export {}
