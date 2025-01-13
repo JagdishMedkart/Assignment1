@@ -5,5 +5,11 @@
   "/dashboard/products/page": "app/dashboard/products/page.js",
   "/api/products/route": "app/api/products/route.js",
   "/api/categories/route": "app/api/categories/route.js",
-  "/_not-found/page": "app/_not-found/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/products/[wsCode]/route": "app/api/products/[wsCode]/route.js",
+  "/auth/signup/page": "app/auth/signup/page.js",
+  "/auth/signin/page": "app/auth/signin/page.js",
+  "/api/auth/signin/route": "app/api/auth/signin/route.js",
+  "/api/auth/email/route": "app/api/auth/email/route.js",
+  "/api/auth/signup/route": "app/api/auth/signup/route.js"
 }

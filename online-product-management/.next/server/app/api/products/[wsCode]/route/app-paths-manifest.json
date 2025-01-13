@@ -1,0 +1,3 @@
+{
+  "/api/products/[wsCode]/route": "app/api/products/[wsCode]/route.js"
+}
