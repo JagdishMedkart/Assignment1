@@ -94,17 +94,18 @@ async function GET(req) {
                 status: 401
             });
         }
-        const session = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].session.findFirst({
+        let user = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].user.findFirst({
             where: {
-                sessionToken,
-                expires: {
-                    gt: new Date().toISOString().replace("T", " ")
+                sessions: {
+                    some: {
+                        sessionToken: sessionToken
+                    }
                 }
             }
         });
-        if (!session) {
+        if (!user) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                message: "Invalid or expired session",
+                message: "You are not logged in!",
                 isLoggedIn: false
             }, {
                 status: 401
@@ -112,7 +113,8 @@ async function GET(req) {
         }
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             message: "Authenticated",
-            isLoggedIn: true
+            isLoggedIn: true,
+            user
         }, {
             status: 200
         });

@@ -6,25 +6,42 @@ export async function GET(req: NextRequest) {
     const sessionToken = req.cookies.get("session-us")?.value; // Retrieve session-us cookie
 
     if (!sessionToken) {
-      return NextResponse.json({ message: "Not authenticated", isLoggedIn: false }, { status: 401 });
+      return NextResponse.json(
+        { message: "Not authenticated", isLoggedIn: false },
+        { status: 401 }
+      );
     }
 
-    const session = await prisma.session.findFirst({
+    let user = await prisma.user.findFirst({
       where: {
-        sessionToken,
-        expires: {
-          gt: new Date().toISOString().replace("T", " "), // Ensure session is not expired
+        sessions: {
+          some: {
+            sessionToken: sessionToken,
+          },
         },
       },
     });
 
-    if (!session) {
-      return NextResponse.json({ message: "Invalid or expired session", isLoggedIn: false }, { status: 401 });
+    if (!user) {
+      return NextResponse.json(
+        { message: "You are not logged in!", isLoggedIn: false },
+        { status: 401 }
+      );
     }
 
-    return NextResponse.json({ message: "Authenticated", isLoggedIn: true }, { status: 200 });
+    return NextResponse.json(
+      {
+        message: "Authenticated",
+        isLoggedIn: true,
+        user, // Returning the user object
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error in /api/auth/check:", error);
-    return NextResponse.json({ message: "Internal server error", success: false }, { status: 500 });
+    return NextResponse.json(
+      { message: "Internal server error", success: false },
+      { status: 500 }
+    );
   }
 }

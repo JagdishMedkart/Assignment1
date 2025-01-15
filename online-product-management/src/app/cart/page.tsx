@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useCart } from "../../components/CartContext";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
+import { User } from "@prisma/client";
 
 const CartPage = () => {
   const { cart, removeFromCart, addToCart, clearCart } = useCart();
@@ -13,6 +14,7 @@ const CartPage = () => {
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any[]>([]);
+  const [currrentUser, setCurrentUser] = useState<User>();
   const router = useRouter();
 
   const handleQuantityChange = (productId: string, newQuantity: number) => {
@@ -40,7 +42,9 @@ const CartPage = () => {
         return;
       }
   
-      const { isLoggedIn } = await response.json();
+      const { isLoggedIn, user } = await response.json();
+      console.log(user);
+      setCurrentUser(user);
       if (!isLoggedIn) {
         toast.error("Please log in to place an order.");
         router.push(`/auth/signin`);
@@ -69,11 +73,46 @@ const CartPage = () => {
   
   const handleModalClose = () => setIsModalOpen(false);
 
-  const handleOrderConfirm = () => {
-    toast.success("Order placed successfully!");
-    setIsModalOpen(false);
-    clearCart();
-  };
+  const handleOrderConfirm = async () => {
+    try {
+      console.log(currrentUser);
+      
+      // Create order data, use the updated quantities from the state
+      const orderData = {
+        userId: currrentUser?.userId, // Replace with actual user ID
+        orderItems: cart.map((item) => ({
+          productWsCode: item.productId,
+          quantity: quantities[item.productId] || item.quantity, // Use updated quantity from state
+          unitPrice: item.price,
+          totalPrice: (quantities[item.productId] || item.quantity) * item.price, // Total price based on updated quantity
+        })),
+        totalAmount: cart.reduce((sum, item) => sum + (quantities[item.productId] || item.quantity) * item.price, 0), // Calculate total based on updated quantity
+        address: "123 Street, City, Country", // Replace with user's actual address
+        notes: "Please deliver between 9 AM - 5 PM", // Optional
+      };
+      
+      console.log(orderData);
+  
+      const response = await fetch("/api/order/place", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData),
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        toast.success("Order placed successfully!");
+        clearCart(); // Clear the cart
+        setIsModalOpen(false);
+      } else {
+        toast.error(data.message || "Failed to place order.");
+      }
+    } catch (error) {
+      console.error("Error placing order:", error);
+      toast.error("An error occurred. Please try again.");
+    }
+  };  
+  
 
   return (
     <div className="max-w-7xl mx-auto p-6">
