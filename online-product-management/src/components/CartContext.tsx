@@ -4,86 +4,88 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 // Define Cart Item Type
 interface CartItem {
-  productId: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
+    productId: string;
+    name: string;
+    price: number;
+    quantity: number;
+    image: string;
 }
 
 interface CartContextType {
-  cart: CartItem[];
-  addToCart: (item: CartItem) => void;
-  removeFromCart: (productId: string) => void;
-  clearCart: () => void;
+    cart: CartItem[];
+    addToCart: (item: CartItem) => void;
+    removeFromCart: (productId: string) => void;
+    clearCart: () => void;
 }
 
 // Create Cart Context
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const useCart = (): CartContextType => {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error("useCart must be used within a CartProvider");
-  }
-  return context;
+    const context = useContext(CartContext);
+    if (!context) {
+        throw new Error("useCart must be used within a CartProvider");
+    }
+    return context;
 };
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [cart, setCart] = useState<CartItem[]>([]);
+    const [cart, setCart] = useState<CartItem[]>([]);
 
-  // Load cart from localStorage on initial render
-  useEffect(() => {
-    const storedCart = localStorage.getItem("cart");
-    if (storedCart) {
-      setCart(JSON.parse(storedCart));
-    }
-  }, []);
+    // Load cart from localStorage on initial render
+    useEffect(() => {
+        const storedCart = localStorage.getItem("cart");
+        if (storedCart) {
+            setCart(JSON.parse(storedCart));
+        }
+    }, []);
 
-  // Update localStorage whenever cart changes
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
+    // Update localStorage whenever cart changes
+    useEffect(() => {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }, [cart]);
 
-  const addToCart = (item: CartItem) => {
-    setCart((prevCart) => {
-      const existingItemIndex = prevCart.findIndex((i) => i.productId === item.productId);
-      let currentQuantity = 0;
-      if(existingItemIndex !== -1)
-      {
-        currentQuantity = prevCart[existingItemIndex].quantity;
-        setCart((prevCart) => prevCart.filter((item) => item.productId !== item.productId));
-      }
-      console.log(existingItemIndex);
-      console.log(prevCart);
-      
-      if (existingItemIndex !== -1) {
-        // If the item already exists, just update the quantity to the exact selected quantity
-        const updatedCart = [...prevCart];
-        console.log("qua = ", item.quantity)
-        console.log("old quantity = ", updatedCart[existingItemIndex].quantity)
-        updatedCart[existingItemIndex].quantity += item.quantity; // Replace with selected quantity
-        console.log("new quantity = ", updatedCart[existingItemIndex].quantity)
-        console.log(prevCart);
-        return updatedCart;
-      } else {
-        // If item does not exist, add it as new
-        return [...prevCart, item];
-      }
-    });
-  };
+    const addToCart = (item: CartItem) => {
+        setCart((prevCart) => {
+            const existingItemIndex = prevCart.findIndex((i) => i.productId === item.productId);
+            let currentQuantity = 0;
+            if (existingItemIndex !== -1) {
+                currentQuantity = prevCart[existingItemIndex].quantity;
+                setCart((prevCart) => prevCart.filter((item) => item.productId !== item.productId));
+            }
+            console.log(existingItemIndex);
+            console.log(prevCart);
 
-  const removeFromCart = (productId: string) => {
-    setCart((prevCart) => prevCart.filter((item) => item.productId !== productId));
-  };
+            if (existingItemIndex !== -1) {
+                // If the item already exists, just update the quantity to the exact selected quantity
+                const updatedCart = [...prevCart];
+                console.log("qua = ", item.quantity)
+                console.log("old quantity = ", updatedCart[existingItemIndex].quantity)
+                updatedCart[existingItemIndex].quantity += item.quantity;
+                if (updatedCart[existingItemIndex].quantity <= 0) {
+                    updatedCart.splice(existingItemIndex, 1); // Remove if quantity is 0 or less
+                } // Replace with selected quantity
+                console.log("new quantity = ", updatedCart[existingItemIndex].quantity)
+                console.log(prevCart);
+                return updatedCart;
+            } else {
+                // If item does not exist, add it as new
+                return [...prevCart, item];
+            }
+        });
+    };
 
-  const clearCart = () => {
-    setCart([]);
-  };
+    const removeFromCart = (productId: string) => {
+        setCart((prevCart) => prevCart.filter((item) => item.productId !== productId));
+    };
 
-  return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
-      {children}
-    </CartContext.Provider>
-  );
+    const clearCart = () => {
+        setCart([]);
+    };
+
+    return (
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
+            {children}
+        </CartContext.Provider>
+    );
 };

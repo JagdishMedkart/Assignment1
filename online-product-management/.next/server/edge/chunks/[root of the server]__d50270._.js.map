@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 23, "column": 0}, "map": {"version":3,"sources":["turbopack://[project]/src/middleware.ts"],"sourcesContent":["import { NextRequest, NextResponse } from \"next/server\";\r\n\r\nexport function middleware(req: NextRequest) {\r\n  const sessionToken = req.cookies.get(\"session-us\")?.value;\r\n\r\n  // Check if the user is trying to access the cart\r\n  if (req.nextUrl.pathname === \"/cart\" && !sessionToken) {\r\n    const redirectUrl = new URL(\"/auth/signin\", req.url);\r\n    redirectUrl.searchParams.set(\"redirect\", req.nextUrl.pathname); // Set the redirect path\r\n    return NextResponse.redirect(redirectUrl);\r\n  }\r\n\r\n  return NextResponse.next();\r\n}\r\n\r\n// Middleware applies to these paths\r\nexport const config = {\r\n  matcher: [\"/cart\"],\r\n};\r\n"],"names":[],"mappings":";;;;AAAA;AAAA;;AAEO,SAAS,WAAW,GAAgB;IACzC,MAAM,eAAe,IAAI,OAAO,CAAC,GAAG,CAAC,eAAe;IAEpD,iDAAiD;IACjD,IAAI,IAAI,OAAO,CAAC,QAAQ,KAAK,WAAW,CAAC,cAAc;QACrD,MAAM,cAAc,IAAI,IAAI,gBAAgB,IAAI,GAAG;QACnD,YAAY,YAAY,CAAC,GAAG,CAAC,YAAY,IAAI,OAAO,CAAC,QAAQ,GAAG,wBAAwB;QACxF,OAAO,qLAAA,CAAA,eAAY,CAAC,QAAQ,CAAC;IAC/B;IAEA,OAAO,qLAAA,CAAA,eAAY,CAAC,IAAI;AAC1B;AAGO,MAAM,SAAS;IACpB,SAAS;QAAC;KAAQ;AACpB"}},
+    {"offset": {"line": 45, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}

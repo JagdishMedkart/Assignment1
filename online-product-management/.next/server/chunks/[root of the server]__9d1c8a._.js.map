@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 47, "column": 0}, "map": {"version":3,"sources":["file://C%3A/Users/Medkart/Project1/Assignment1/online-product-management/src/app/api/auth/check/route.ts"],"sourcesContent":["// src/pages/api/auth/check.ts\r\nimport { NextApiRequest, NextApiResponse } from \"next\";\r\nimport { checkLoginStatus } from \"../../../app/components/CheckLoginStatus\";\r\n\r\nexport default async function handler(req: NextApiRequest, res: NextApiResponse) {\r\n  try {\r\n    const isLoggedIn = await checkLoginStatus();\r\n    res.status(200).json({ isLoggedIn });\r\n  } catch (error) {\r\n    console.error(\"Error checking login status:\", error);\r\n    res.status(500).json({ isLoggedIn: false, error: \"Internal server error\" });\r\n  }\r\n}\r\n"],"names":[],"mappings":"AAAA,8BAA8B;;;;;;;;;;AAIf,eAAe,QAAQ,GAAmB,EAAE,GAAoB;IAC7E,IAAI;QACF,MAAM,aAAa,MAAM;QACzB,IAAI,MAAM,CAAC,KAAK,IAAI,CAAC;YAAE;QAAW;IACpC,EAAE,OAAO,OAAO;QACd,QAAQ,KAAK,CAAC,gCAAgC;QAC9C,IAAI,MAAM,CAAC,KAAK,IAAI,CAAC;YAAE,YAAY;YAAO,OAAO;QAAwB;IAC3E;AACF"}},
+    {"offset": {"line": 71, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}

@@ -63,7 +63,10 @@ const CartProvider = ({ children })=>{
                 ];
                 console.log("qua = ", item.quantity);
                 console.log("old quantity = ", updatedCart[existingItemIndex].quantity);
-                updatedCart[existingItemIndex].quantity += item.quantity; // Replace with selected quantity
+                updatedCart[existingItemIndex].quantity += item.quantity;
+                if (updatedCart[existingItemIndex].quantity <= 0) {
+                    updatedCart.splice(existingItemIndex, 1); // Remove if quantity is 0 or less
+                } // Replace with selected quantity
                 console.log("new quantity = ", updatedCart[existingItemIndex].quantity);
                 console.log(prevCart);
                 return updatedCart;
@@ -92,8 +95,8 @@ const CartProvider = ({ children })=>{
         children: children
     }, void 0, false, {
         fileName: "[project]/src/components/CartContext.tsx",
-        lineNumber: 85,
-        columnNumber: 5
+        lineNumber: 87,
+        columnNumber: 9
     }, this);
 };
 _s1(CartProvider, "gPYbNUmWK8tVVPcrFDrHV23HVlE=");
