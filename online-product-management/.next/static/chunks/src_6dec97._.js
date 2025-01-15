@@ -21,6 +21,7 @@ const ProfileDropdown = ()=>{
     const toggleDropdown = ()=>setIsOpen(!isOpen);
     const handleLogout = ()=>{
         document.cookie = 'session-us=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        localStorage.removeItem("cart");
         // Optionally, you might want to redirect the user or update app state
         window.location.href = '/';
     };
@@ -35,12 +36,12 @@ const ProfileDropdown = ()=>{
                     className: "w-8 h-8 bg-gray-300 rounded-full align-middle"
                 }, void 0, false, {
                     fileName: "[project]/src/components/Layout/ProfileDropdown.tsx",
-                    lineNumber: 21,
+                    lineNumber: 22,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/Layout/ProfileDropdown.tsx",
-                lineNumber: 16,
+                lineNumber: 17,
                 columnNumber: 7
             }, this),
             isOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -55,12 +56,12 @@ const ProfileDropdown = ()=>{
                                 children: "Profile"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/Layout/ProfileDropdown.tsx",
-                                lineNumber: 28,
+                                lineNumber: 29,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/Layout/ProfileDropdown.tsx",
-                            lineNumber: 27,
+                            lineNumber: 28,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -70,12 +71,12 @@ const ProfileDropdown = ()=>{
                                 children: "Dashboard"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/Layout/ProfileDropdown.tsx",
-                                lineNumber: 33,
+                                lineNumber: 34,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/Layout/ProfileDropdown.tsx",
-                            lineNumber: 32,
+                            lineNumber: 33,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -84,24 +85,24 @@ const ProfileDropdown = ()=>{
                             children: "Logout"
                         }, void 0, false, {
                             fileName: "[project]/src/components/Layout/ProfileDropdown.tsx",
-                            lineNumber: 37,
+                            lineNumber: 38,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/Layout/ProfileDropdown.tsx",
-                    lineNumber: 26,
+                    lineNumber: 27,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/Layout/ProfileDropdown.tsx",
-                lineNumber: 25,
+                lineNumber: 26,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/Layout/ProfileDropdown.tsx",
-        lineNumber: 15,
+        lineNumber: 16,
         columnNumber: 5
     }, this);
 };
@@ -278,9 +279,9 @@ const Nav = ()=>{
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                                href: "/contact",
+                                                href: "/cart",
                                                 className: "text-white hover:text-gray-300",
-                                                children: "Contact"
+                                                children: "Goto Cart"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/Layout/Nav.tsx",
                                                 lineNumber: 75,
@@ -411,9 +412,9 @@ const Nav = ()=>{
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                    href: "/contact",
+                                    href: "/cart",
                                     className: "block py-2 px-3 rounded text-white hover:bg-gray-700",
-                                    children: "Contact"
+                                    children: "Goto Cart"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Layout/Nav.tsx",
                                     lineNumber: 136,

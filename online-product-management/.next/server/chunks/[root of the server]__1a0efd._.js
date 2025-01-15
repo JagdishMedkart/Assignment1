@@ -94,6 +94,7 @@ var { r: __turbopack_require__, f: __turbopack_module_context__, i: __turbopack_
 {
 __turbopack_esm__({
     "DELETE": (()=>DELETE),
+    "GET": (()=>GET),
     "PATCH": (()=>PATCH)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/server.js [app-route] (ecmascript)");
@@ -257,6 +258,45 @@ async function PATCH(req, { params }) {
             message: "Failed to update product",
             success: false,
             error: error.message
+        }, {
+            status: 500
+        });
+    }
+}
+async function GET(req, { params }) {
+    try {
+        const { wsCode } = params;
+        const wsCodeNumber = Number(wsCode);
+        if (!wsCode || isNaN(wsCodeNumber)) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                message: "wsCode is required and must be a valid number",
+                success: false
+            }, {
+                status: 400
+            });
+        }
+        const product = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].product.findUnique({
+            where: {
+                wsCode: wsCodeNumber
+            }
+        });
+        if (!product) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                message: `Product with wsCode ${wsCodeNumber} not found`,
+                success: false
+            }, {
+                status: 404
+            });
+        }
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+            success: true,
+            product
+        });
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+            success: false,
+            message: "Failed to fetch products."
         }, {
             status: 500
         });

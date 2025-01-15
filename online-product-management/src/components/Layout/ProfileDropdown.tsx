@@ -7,6 +7,7 @@ const ProfileDropdown: React.FC = () => {
 
   const handleLogout = () => {
     document.cookie = 'session-us=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    localStorage.removeItem("cart");
     // Optionally, you might want to redirect the user or update app state
     window.location.href = '/';
   };

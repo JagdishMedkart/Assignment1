@@ -1,6 +1,16 @@
 {
-  "/viewproducts/page": "app/viewproducts/page.js",
+  "/page": "app/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/viewproducts/page": "app/viewproducts/page.js",
   "/api/products/route": "app/api/products/route.js",
-  "/page": "app/page.js"
+  "/viewproducts/[wsCode]/page": "app/viewproducts/[wsCode]/page.js",
+  "/api/products/[wsCode]/route": "app/api/products/[wsCode]/route.js",
+  "/cart/page": "app/cart/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/auth/signup/page": "app/auth/signup/page.js",
+  "/auth/signin/page": "app/auth/signin/page.js",
+  "/api/auth/signin/route": "app/api/auth/signin/route.js",
+  "/dashboard/home/page": "app/dashboard/home/page.js",
+  "/dashboard/products/page": "app/dashboard/products/page.js",
+  "/api/categories/route": "app/api/categories/route.js"
 }

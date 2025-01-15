@@ -72,8 +72,8 @@ const Nav: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-white hover:text-gray-300">
-                  Contact
+                <Link href="/cart" className="text-white hover:text-gray-300">
+                  Goto Cart
                 </Link>
               </li>
             </ul>
@@ -133,8 +133,8 @@ const Nav: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link href="/contact" className="block py-2 px-3 rounded text-white hover:bg-gray-700">
-                Contact
+              <Link href="/cart" className="block py-2 px-3 rounded text-white hover:bg-gray-700">
+                Goto Cart
               </Link>
             </li>
           </ul>

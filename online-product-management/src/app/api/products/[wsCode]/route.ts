@@ -171,3 +171,42 @@ export async function PATCH(
     );
   }
 }
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { wsCode: string } }
+) {
+  try {
+    const { wsCode } = params;
+    const wsCodeNumber = Number(wsCode);
+
+    if (!wsCode || isNaN(wsCodeNumber)) {
+      return NextResponse.json(
+        { message: "wsCode is required and must be a valid number", success: false },
+        { status: 400 }
+      );
+    }
+
+    const product = await prisma.product.findUnique({
+      where: { wsCode: wsCodeNumber },
+    });
+
+    if (!product) {
+      return NextResponse.json(
+        { message: `Product with wsCode ${wsCodeNumber} not found`, success: false },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      product,
+    });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to fetch products." },
+      { status: 500 }
+    );
+  }
+}

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file://C%3A/Users/HP/Assignment1/online-product-management/src/app/dashboard/layout.tsx"],"sourcesContent":["import React, { Component, ReactNode } from 'react';\r\n\r\nimport TopNavBar from '@/components/DashBoard/TopNavBar';\r\nimport { SidebarDataView } from '../../components/DashBoard/Sidebar/SidebarDataView';\r\nimport SideNavBar from '@/components/DashBoard/SideNavBar';\r\ninterface Props {\r\n  children: ReactNode;\r\n}\r\n\r\nconst DashboardLayout: React.FC<Props> = ({ children }) => {\r\n  return (\r\n    <div className=\"flex\">\r\n      <SideNavBar />\r\n      <div className=\"flex flex-col max-h-screen overflow-y-hidden w-full\">\r\n        {children}\r\n      </div>\r\n    </div>\r\n  );\r\n};\r\n\r\nexport default DashboardLayout;"],"names":[],"mappings":";;;;;;;;;;;AASA,MAAM,kBAAmC,CAAC,EAAE,QAAQ,EAAE;IACpD,qBACE,8OAAC;QAAI,WAAU;;0BACb,8OAAC;;;;;0BACD,8OAAC;gBAAI,WAAU;0BACZ;;;;;;;;;;;;AAIT;uCAEe"}},
-    {"offset": {"line": 43, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
-}

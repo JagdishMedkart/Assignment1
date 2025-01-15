@@ -479,6 +479,7 @@ __turbopack_esm__({
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/image.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/navigation.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$fuse$2e$js$2f$dist$2f$fuse$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/fuse.js/dist/fuse.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/react-icons/fa/index.mjs [app-ssr] (ecmascript)");
 "use client";
@@ -487,7 +488,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$ico
 ;
 ;
 ;
+;
 const ProductSearch = ()=>{
+    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRouter"])();
     const [searchQuery, setSearchQuery] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [filteredProducts, setFilteredProducts] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [randomProducts, setRandomProducts] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
@@ -542,7 +545,7 @@ const ProductSearch = ()=>{
                 children: part
             }, index, false, {
                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                lineNumber: 77,
+                lineNumber: 79,
                 columnNumber: 9
             }, this) : part);
     };
@@ -562,10 +565,8 @@ const ProductSearch = ()=>{
         setSelectedProduct(null);
     };
     const handleProductClick = (product)=>{
-        // Select the clicked product and show only that card
-        setSelectedProduct(product);
-        setSearchQuery(product.name);
-        setShowDropdown(false);
+        console.log(`${product} is cliekced`);
+        router.push(`/viewproducts/${product.wsCode}`);
     };
     const getRandomImage = (images)=>{
         if (images.length > 0) {
@@ -677,7 +678,8 @@ const ProductSearch = ()=>{
                                             alt: product.name,
                                             layout: "fill",
                                             objectFit: "cover",
-                                            className: "rounded-t-lg"
+                                            className: "rounded-t-lg",
+                                            onClick: ()=>handleProductClick(product)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
                                             lineNumber: 167,
@@ -696,7 +698,7 @@ const ProductSearch = ()=>{
                                                 children: highlightText(product.name, searchQuery)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                                lineNumber: 176,
+                                                lineNumber: 177,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -707,7 +709,7 @@ const ProductSearch = ()=>{
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                                lineNumber: 179,
+                                                lineNumber: 180,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -718,7 +720,7 @@ const ProductSearch = ()=>{
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                                lineNumber: 180,
+                                                lineNumber: 181,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -729,7 +731,7 @@ const ProductSearch = ()=>{
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                                lineNumber: 181,
+                                                lineNumber: 182,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -740,7 +742,7 @@ const ProductSearch = ()=>{
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                                lineNumber: 182,
+                                                lineNumber: 183,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -750,18 +752,18 @@ const ProductSearch = ()=>{
                                                         children: tag
                                                     }, index, false, {
                                                         fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                                        lineNumber: 187,
+                                                        lineNumber: 188,
                                                         columnNumber: 21
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                                lineNumber: 185,
+                                                lineNumber: 186,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                        lineNumber: 175,
+                                        lineNumber: 176,
                                         columnNumber: 15
                                     }, this)
                                 ]

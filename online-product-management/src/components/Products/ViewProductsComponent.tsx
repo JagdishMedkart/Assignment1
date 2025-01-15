@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Fuse from "fuse.js";
 import { FaSearch, FaSync } from "react-icons/fa";
+import { useRouter } from 'next/navigation'
 
 // Define types for product and API response
 interface Product {
@@ -21,6 +22,7 @@ interface ApiResponse {
 }
 
 const ProductSearch: React.FC = () => {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [randomProducts, setRandomProducts] = useState<Product[]>([]);
@@ -99,10 +101,8 @@ const ProductSearch: React.FC = () => {
   };
 
   const handleProductClick = (product: Product) => {
-    // Select the clicked product and show only that card
-    setSelectedProduct(product);
-    setSearchQuery(product.name);
-    setShowDropdown(false);
+    console.log(`${product} is cliekced`)
+    router.push(`/viewproducts/${product.wsCode}`);
   };
 
   const getRandomImage = (images: string[]): string => {
@@ -170,6 +170,7 @@ const ProductSearch: React.FC = () => {
                   layout="fill"
                   objectFit="cover"
                   className="rounded-t-lg"
+                  onClick={() => handleProductClick(product)}
                 />
               </div>
               <div className="p-4">
