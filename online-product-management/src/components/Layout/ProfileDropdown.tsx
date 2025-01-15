@@ -1,10 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const ProfileDropdown: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);  // User state to hold user info
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
+
+  // Toggle the dropdown menu
   const toggleDropdown = () => setIsOpen(!isOpen);
 
+  // Fetch user data
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch("/api/auth/check", { method: "GET" });
+        const data = await response.json();
+        setIsLoggedIn(data.isLoggedIn);
+        setUser(data.user);  // Assuming `user` is the returned object
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  // Handle logout
   const handleLogout = () => {
     document.cookie = 'session-us=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     localStorage.removeItem("cart");
@@ -30,9 +53,16 @@ const ProfileDropdown: React.FC = () => {
                 Profile
               </div>
             </Link>
-            <Link href="/dashboard/home">
+            {user?.isSuperAdmin && (
+              <Link href="/dashboard/home">
+                <div className="block px-4 py-2 text-white hover:bg-gray-800">
+                  Dashboard
+                </div>
+              </Link>
+            )}
+            <Link href="/orders">
               <div className="block px-4 py-2 text-white hover:bg-gray-800">
-                Dashboard
+                Orders
               </div>
             </Link>
             <button

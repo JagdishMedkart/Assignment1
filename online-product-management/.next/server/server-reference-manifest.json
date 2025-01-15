@@ -1,5 +1,22 @@
 {
-  "node": {},
+  "node": {
+    "7ff7e6b022b9c23d7b8a2a4447dd54d90d61607ae0": {
+      "workers": {
+        "app/dashboard/home/page": {
+          "moduleId": "[project]/.next-internal/server/app/dashboard/home/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/components/Dashboard/Sidebar/SidebarDataView.tsx [app-rsc] (ecmascript)\" } [app-rsc] (ecmascript)",
+          "async": false
+        },
+        "app/dashboard/products/page": {
+          "moduleId": "[project]/.next-internal/server/app/dashboard/products/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/components/Dashboard/Sidebar/SidebarDataView.tsx [app-rsc] (ecmascript)\" } [app-rsc] (ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/dashboard/home/page": "rsc",
+        "app/dashboard/products/page": "rsc"
+      }
+    }
+  },
   "edge": {},
   "encryptionKey": "k1Pv2glfnTdk4oqJdlk3PvdwE/KZzXITOZyBbSBkuqI="
 }

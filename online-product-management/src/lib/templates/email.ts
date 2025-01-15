@@ -213,10 +213,10 @@ export const ContactToClient = (name: string) => `
         <p>Thank you for reaching out to us. We have received your message and appreciate you taking the time to contact us.</p>
         <p>Our team will review your message and get back to you as soon as possible.</p>
         <p>Thank you once again for contacting us. We look forward to assisting you.</p>
-        <p>ZeroCodeSQL</p>
+        <p>ProductEase</p>
         <hr/>
         <div class="footer">
-            <p>&copy; ZeroCodeSQL. All rights reserved.</p>
+            <p>&copy; ProdcutEase. All rights reserved.</p>
         </div>
     </div>
 </body>
