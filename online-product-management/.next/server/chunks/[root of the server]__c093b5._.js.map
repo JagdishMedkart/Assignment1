@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 47, "column": 0}, "map": {"version":3,"sources":["file://C%3A/Users/Medkart/Project1/Assignment1/online-product-management/src/app/api/admin/orders/route.ts"],"sourcesContent":["import { NextApiRequest, NextApiResponse } from \"next\";\r\nimport prisma from \"@/lib/prisma\";\r\n\r\nexport default async function handler(req: NextApiRequest, res: NextApiResponse) {\r\n  if (req.method === \"GET\") {\r\n    const orders = await prisma.order.findMany({\r\n      include: {\r\n        customer: { select: { name: true } },\r\n      },\r\n      orderBy: { createdAt: \"desc\" },\r\n    });\r\n    res.json({ orders });\r\n  }\r\n}\r\n"],"names":[],"mappings":";;;;;;;;;AAGe,eAAe,QAAQ,GAAmB,EAAE,GAAoB;IAC7E,IAAI,IAAI,MAAM,KAAK,OAAO;QACxB,MAAM,SAAS,MAAM,OAAO,KAAK,CAAC,QAAQ,CAAC;YACzC,SAAS;gBACP,UAAU;oBAAE,QAAQ;wBAAE,MAAM;oBAAK;gBAAE;YACrC;YACA,SAAS;gBAAE,WAAW;YAAO;QAC/B;QACA,IAAI,IAAI,CAAC;YAAE;QAAO;IACpB;AACF"}},
+    {"offset": {"line": 75, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}

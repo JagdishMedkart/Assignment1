@@ -212,8 +212,8 @@ async function PATCH(req, { params }) {
             });
         }
         const body = await req.json();
-        const { name, salesPrice, mrp, packageSize, categoryId, tags, images } = body;
-        if (!name || !salesPrice || !mrp || !packageSize || !categoryId) {
+        const { name, mrp, packageSize, categoryId, tags, images } = body;
+        if (!name || !mrp || !packageSize || !categoryId) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 message: "Missing required fields",
                 success: false
@@ -236,7 +236,7 @@ async function PATCH(req, { params }) {
             },
             data: {
                 name,
-                salesPrice: parseFloat(salesPrice),
+                // salesPrice: parseFloat(salesPrice),
                 mrp: parseFloat(mrp),
                 packageSize: parseFloat(packageSize),
                 categoryId: parseInt(categoryId, 10),

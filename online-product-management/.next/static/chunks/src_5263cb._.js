@@ -750,7 +750,7 @@ const ProductSearch = ()=>{
                                                 className: "text-xl font-semibold text-green-600",
                                                 children: [
                                                     "$",
-                                                    product.salesPrice
+                                                    product.mrp * 0.9
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",

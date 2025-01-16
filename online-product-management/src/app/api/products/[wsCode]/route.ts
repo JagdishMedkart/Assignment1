@@ -128,9 +128,9 @@ export async function PATCH(
     }
 
     const body = await req.json();
-    const { name, salesPrice, mrp, packageSize, categoryId, tags, images } = body;
+    const { name, mrp, packageSize, categoryId, tags, images } = body;
 
-    if (!name || !salesPrice || !mrp || !packageSize || !categoryId) {
+    if (!name  || !mrp || !packageSize || !categoryId) {
       return NextResponse.json(
         { message: "Missing required fields", success: false },
         { status: 400 }
@@ -150,7 +150,7 @@ export async function PATCH(
       where: { wsCode: wsCodeNumber },
       data: {
         name,
-        salesPrice: parseFloat(salesPrice),
+        // salesPrice: parseFloat(salesPrice),
         mrp: parseFloat(mrp),
         packageSize: parseFloat(packageSize),
         categoryId: parseInt(categoryId, 10),

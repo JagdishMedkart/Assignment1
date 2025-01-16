@@ -20,7 +20,7 @@ export const SideNavBarContainer = ({ children, dataView }: { children: React.Re
           {children}
           {isOpen ? dataView :
             <div className="flex py-1 px-2 mt-1 hover:bg-gray-400 hover:rounded-md cursor-pointer" onClick={() => setIsOpen(true)}>
-              <div className='flex-2 pt-1 pr-3'><AiOutlineDatabase /></div>
+              {/* <div className='flex-2 pt-1 pr-3'><AiOutlineDatabase /></div> */}
             </div>}
         </div>
       </div>

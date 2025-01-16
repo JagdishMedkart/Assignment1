@@ -59,7 +59,7 @@ const ProductList: React.FC = () => {
   const EditModal = ({ isOpen, product, onCancel }) => {
     const [formData, setFormData] = useState({
       name: product?.name || "",
-      salesPrice: product?.salesPrice || "",
+      // salesPrice: product?.salesPrice || "",
       mrp: product?.mrp || "",
       packageSize: product?.packageSize || "",
       categoryId: product?.categoryId || "",
@@ -82,9 +82,9 @@ const ProductList: React.FC = () => {
 
       console.log(formData);
 
-      const { name, salesPrice, mrp, packageSize, categoryId, tags, images } = formData;
+      const { name, mrp, packageSize, categoryId, tags, images } = formData;
 
-      if (!name || !salesPrice || !mrp || !packageSize || !categoryId) {
+      if (!name || !mrp || !packageSize || !categoryId) {
         toast.error("Please fill all required fields!");
         return;
       }
@@ -117,7 +117,7 @@ const ProductList: React.FC = () => {
           },
           body: JSON.stringify({
             name,
-            salesPrice: parseFloat(salesPrice),
+            // salesPrice: parseFloat(salesPrice),
             mrp: parseFloat(mrp),
             packageSize: parseFloat(packageSize),
             categoryId: parseInt(categoryId),
@@ -162,7 +162,7 @@ const ProductList: React.FC = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded"
               />
             </div>
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label className="block text-gray-700 mb-2">Sales Price</label>
               <input
                 type="number"
@@ -171,7 +171,7 @@ const ProductList: React.FC = () => {
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded"
               />
-            </div>
+            </div> */}
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">MRP</label>
               <input
@@ -325,8 +325,8 @@ const ProductList: React.FC = () => {
         <table className="table-auto w-full border-collapse border border-gray-300">
           <thead className="bg-gray-800 text-white">
             <tr>
-              <th className="border border-gray-300 px-4 py-2">Product Name</th>
               <th className="border border-gray-300 px-4 py-2">WS Code</th>
+              <th className="border border-gray-300 px-4 py-2">Product Name</th>
               <th className="border border-gray-300 px-4 py-2">Sales Price</th>
               <th className="border border-gray-300 px-4 py-2">MRP</th>
               <th className="border border-gray-300 px-4 py-2">Package Size</th>
@@ -340,9 +340,9 @@ const ProductList: React.FC = () => {
             {products.length > 0 ? (
               products.map((product) => (
                 <tr key={product.wsCode} className="text-center">
-                  <td className="border border-gray-300 px-4 py-2">{product.name}</td>
                   <td className="border border-gray-300 px-4 py-2">{product.wsCode}</td>
-                  <td className="border border-gray-300 px-4 py-2">${product.salesPrice}</td>
+                  <td className="border border-gray-300 px-4 py-2">{product.name}</td>
+                  <td className="border border-gray-300 px-4 py-2">${0.90 * product.mrp}</td>
                   <td className="border border-gray-300 px-4 py-2">${product.mrp}</td>
                   <td className="border border-gray-300 px-4 py-2">{product.packageSize}</td>
                   <td className="border border-gray-300 px-4 py-2">

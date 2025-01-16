@@ -8,7 +8,7 @@ import prisma from '../../../prisma/client';
 import { SideNavBarContainer } from './Sidebar/SidebarContainer';
 import { SidebarLogout } from './Sidebar/SidebarLogout';
 import { SidebarBtn } from "./Sidebar/SidebarButton";
-import { SiFormspree } from "react-icons/si";
+import { FaShoppingCart } from "react-icons/fa";
 
 
 async function SideNavBar() {
@@ -34,11 +34,12 @@ async function SideNavBar() {
       <SidebarBtn text="Products" clickLink="/dashboard/products" icon={<FaFilePen />} />
       {/* <SidebarBtn text="APIs" clickLink="/dashboard/api" icon={<FaCogs />} /> */}
       {/*Role */}
-      <hr className="my-2 h-0.5 bg-neutral-700" />
       {(usr?.isSuperAdmin) && <SidebarBtn text="Users" clickLink="/dashboard/users" icon={<FaUserShield />} />}
+      {(usr?.isSuperAdmin) && <SidebarBtn text="Orders" clickLink="/dashboard/orders" icon={<FaShoppingCart />} />}
       {/* {(usr?.isSuperAdmin) && <SidebarBtn text="Roles" clickLink="/dashboard/roles" icon={<FaShieldAlt />} />} */}
       {/* {(usr?.isSuperAdmin) && <SidebarBtn text="Audit Logs" clickLink="/dashboard/auditlog" icon={<SiFormspree />} />} */}
       {/* <SidebarBtn text="Settings" clickLink="/dashboard/settings" icon={<FaCog />} /> */}
+      <hr className="my-2 h-0.5 bg-neutral-700" />
       <SidebarLogout />
       <hr className="my-2 h-0.5 bg-neutral-700" />
     </SideNavBarContainer>

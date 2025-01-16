@@ -1,0 +1,16 @@
+{
+  "node": {
+    "7ff7e6b022b9c23d7b8a2a4447dd54d90d61607ae0": {
+      "workers": {
+        "app/dashboard/orders/page": {
+          "moduleId": "[project]/.next-internal/server/app/dashboard/orders/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/components/Dashboard/Sidebar/SidebarDataView.tsx [app-rsc] (ecmascript)\" } [app-rsc] (ecmascript)",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/dashboard/orders/page": "rsc"
+      }
+    }
+  },
+  "edge": {}
+}

@@ -19,6 +19,6 @@ export const ProfilePage = async () => {
   if (!usr) return <p>User not found</p>;
 
   return (
-      <Profile Username={usr.Username} Email={usr.Email} />
+      <Profile Username={usr.name} Email={usr.email} />
   );
 };

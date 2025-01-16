@@ -8,8 +8,8 @@ import toast, { Toaster } from "react-hot-toast";
 const ProductBuilder: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
-  const [wsCode, setWsCode] = useState("");
-  const [salesPrice, setSalesPrice] = useState("");
+  // const [wsCode, setWsCode] = useState("");
+  // const [salesPrice, setSalesPrice] = useState("");
   const [mrp, setMrp] = useState("");
   const [packageSize, setPackageSize] = useState("");
   const [categoryId, setCategoryId] = useState("");
@@ -20,8 +20,8 @@ const ProductBuilder: React.FC = () => {
 
   const resetForm = () => {
     setName("");
-    setWsCode("");
-    setSalesPrice("");
+    // setWsCode("");
+    // setSalesPrice("");
     setMrp("");
     setPackageSize("");
     setCategoryId("");
@@ -43,7 +43,7 @@ const ProductBuilder: React.FC = () => {
   };
 
   const handleAddProduct = async () => {
-    if (!name || !wsCode || !salesPrice || !mrp || !packageSize || !categoryId) {
+    if (!name  || !mrp || !packageSize || !categoryId) {
       toast.error("Please fill all required fields!");
       return;
     }
@@ -76,8 +76,8 @@ const ProductBuilder: React.FC = () => {
         },
         body: JSON.stringify({
           name,
-          wsCode: parseInt(wsCode),
-          salesPrice: parseFloat(salesPrice),
+          // wsCode: parseInt(wsCode),
+          // salesPrice: parseFloat(salesPrice),
           mrp: parseFloat(mrp),
           packageSize: parseFloat(packageSize),
           categoryId: parseInt(categoryId),
@@ -149,7 +149,7 @@ const ProductBuilder: React.FC = () => {
                   className="input input-bordered w-full text-black"
                 />
               </div>
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <label className="block text-sm font-medium text-black">WS Code</label>
                 <input
                   type="number"
@@ -168,7 +168,7 @@ const ProductBuilder: React.FC = () => {
                   onChange={(e) => setSalesPrice(e.target.value)}
                   className="input input-bordered w-full text-black"
                 />
-              </div>
+              </div> */}
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-black">MRP</label>
                 <input

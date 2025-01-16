@@ -1,19 +1,12 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/api/auth/check/route": "app/api/auth/check/route.js",
-  "/auth/signup/page": "app/auth/signup/page.js",
-  "/auth/signin/page": "app/auth/signin/page.js",
-  "/api/auth/signin/route": "app/api/auth/signin/route.js",
-  "/viewproducts/page": "app/viewproducts/page.js",
-  "/api/products/route": "app/api/products/route.js",
-  "/viewproducts/[wsCode]/page": "app/viewproducts/[wsCode]/page.js",
-  "/api/products/[wsCode]/route": "app/api/products/[wsCode]/route.js",
-  "/cart/page": "app/cart/page.js",
-  "/api/order/place/route": "app/api/order/place/route.js",
   "/dashboard/home/page": "app/dashboard/home/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/dashboard/orders/page": "app/dashboard/orders/page.js",
+  "/api/admin/orders/stats/route": "app/api/admin/orders/stats/route.js",
+  "/api/admin/orders/route": "app/api/admin/orders/route.js",
+  "/api/admin/orders/[id]/route": "app/api/admin/orders/[id]/route.js",
+  "/api/admin/orders/total-count/route": "app/api/admin/orders/total-count/route.js",
   "/dashboard/products/page": "app/dashboard/products/page.js",
-  "/api/categories/route": "app/api/categories/route.js",
-  "/orders/page": "app/orders/page.js"
+  "/api/products/route": "app/api/products/route.js",
+  "/_not-found/page": "app/_not-found/page.js"
 }

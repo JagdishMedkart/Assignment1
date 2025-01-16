@@ -6,7 +6,7 @@ import React from 'react'
 const Products = () => {
   return (
     <>
-      <TopNavBar title='Forms' breadcrumbs={[]} />
+      <TopNavBar title='Products' breadcrumbs={[]} />
       <div className='overflow-y-scroll'>
         <ProductPage />
       </div>

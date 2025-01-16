@@ -37,7 +37,7 @@ const ProductDetail: React.FC = () => {
   // Update totalPrice when quantity or product price changes
   useEffect(() => {
     if (product) {
-      setTotalPrice(product.salesPrice * quantity);
+      setTotalPrice(product.mrp * quantity* 0.9);
     }
   }, [quantity, product]);
 
@@ -49,13 +49,15 @@ const ProductDetail: React.FC = () => {
       console.log("Adding to cart: ", { ...product, quantity });
 
       // Add to cart using the addToCart function
-      await addToCart({
+      addToCart({
         productId: product.wsCode.toString(),
         name: product.name,
-        price: product.salesPrice,
+        price: Number(product.mrp * 0.9),
         quantity: quantity,
         image: product.images[0] || "/default-image.jpg",
       });
+
+      console.log(cart);
 
       toast.success("Item added to cart!");
     } catch (error) {
@@ -103,7 +105,7 @@ const ProductDetail: React.FC = () => {
         {/* Product Details */}
         <div className="space-y-6">
           <h2 className="text-3xl font-bold text-gray-900">{product.name}</h2>
-          <p className="text-lg text-gray-700">Sales Price: ${product.salesPrice}</p>
+          <p className="text-lg text-gray-700">Sales Price: ${product.mrp * 0.9}</p>
           <p className="text-sm text-gray-500">Package Size: {product.packageSize}</p>
           <p className="text-sm text-gray-600">Category: {product.categoryId}</p>
 

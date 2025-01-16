@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
+import { PrismaClient } from "@prisma/client";
 import path from "path";
-import prisma from "../../../../prisma/client";
+import fs from "fs";
+
+const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest) {
   try {
     const {
       name,
-      wsCode,
-      salesPrice,
       mrp,
       packageSize,
       categoryId,
@@ -16,8 +16,6 @@ export async function POST(req: NextRequest) {
       images,
     }: {
       name: string;
-      wsCode: number;
-      salesPrice: number;
       mrp: number;
       packageSize: number;
       categoryId: number;
@@ -26,16 +24,16 @@ export async function POST(req: NextRequest) {
     } = await req.json();
 
     // Validate required fields
-    if (!name || !wsCode || !salesPrice || !mrp || !packageSize || !categoryId) {
+    if (!name || !mrp || !packageSize || !categoryId) {
       return NextResponse.json(
-        { message: "All fields are required!", success: false },
+        { message: "All fields except images and tags are required!", success: false },
         { status: 400 }
       );
     }
 
     // Check category existence
     const categoryExists = await prisma.category.findUnique({
-      where: { categoryId: categoryId },
+      where: { categoryId },
     });
 
     if (!categoryExists) {
@@ -46,14 +44,21 @@ export async function POST(req: NextRequest) {
     }
 
     // Validate image count
-    if (images.length > 5) {
+    if (images && images.length > 5) {
       return NextResponse.json(
         { message: "A maximum of 5 images is allowed!", success: false },
         { status: 400 }
       );
     }
 
-    // Create upload directory
+    // Get the next wsCode by finding the largest existing wsCode
+    const lastProduct = await prisma.product.findFirst({
+      orderBy: { wsCode: "desc" },
+      select: { wsCode: true },
+    });
+    const wsCode = lastProduct ? lastProduct.wsCode + 1 : 1;
+
+    // Create upload directory for the product
     const uploadDir = path.join(process.cwd(), "public", "uploads", wsCode.toString());
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
@@ -61,34 +66,38 @@ export async function POST(req: NextRequest) {
 
     // Save images and get paths
     const imagePaths: string[] = [];
-    for (const [index, base64Image] of images.entries()) {
-      const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, "");
-      const buffer = Buffer.from(base64Data, "base64");
-      const imagePath = path.join(uploadDir, `${index + 1}.jpg`);
-      fs.writeFileSync(imagePath, buffer);
-      imagePaths.push(`/uploads/${wsCode}/${index + 1}.jpg`);
+    if (images) {
+      for (const [index, base64Image] of images.entries()) {
+        const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, "");
+        const buffer = Buffer.from(base64Data, "base64");
+        const imagePath = path.join(uploadDir, `${index + 1}.jpg`); // Save images as 1.jpg, 2.jpg, etc.
+        fs.writeFileSync(imagePath, buffer);
+        imagePaths.push(`/uploads/${wsCode}/${index + 1}.jpg`);
+      }
     }
 
-    // Insert product into database
-    await prisma.product.create({
+    // Insert product into the database
+    const newProduct = await prisma.product.create({
       data: {
         name,
         wsCode,
-        salesPrice,
         mrp,
         packageSize,
         categoryId,
-        tags,
+        tags: tags || [],
         images: imagePaths,
       },
     });
 
-    return NextResponse.json({ message: "Product added successfully!", success: true });
+    return NextResponse.json({
+      message: "Product added successfully!",
+      success: true,
+      product: newProduct,
+    });
   } catch (error) {
-    if (error instanceof Error){
-      console.log("Error: ", error.stack)
-  }
-    console.error("Error saving product:", error);
+    if (error instanceof Error) {
+      console.error("Error saving product:", error.stack);
+    }
     return NextResponse.json(
       { message: "Failed to add product", success: false, error: error.message },
       { status: 500 }

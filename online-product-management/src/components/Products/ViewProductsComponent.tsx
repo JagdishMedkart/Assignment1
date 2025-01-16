@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation'
 interface Product {
   wsCode: string;
   name: string;
-  salesPrice: number;
   mrp: number;
   packageSize: number;
   categoryId: string;
@@ -177,7 +176,7 @@ const ProductSearch: React.FC = () => {
                 <h3 className="text-lg font-semibold text-gray-900">
                   {highlightText(product.name, searchQuery)}
                 </h3>
-                <p className="text-xl font-semibold text-green-600">${product.salesPrice}</p>
+                <p className="text-xl font-semibold text-green-600">${product.mrp * 0.9}</p>
                 <p className="text-sm text-gray-600">MRP: ${product.mrp}</p>
                 <p className="text-sm text-gray-600">Package Size: {product.packageSize}</p>
                 <p className="text-sm text-gray-600">Category: {product.categoryId}</p>

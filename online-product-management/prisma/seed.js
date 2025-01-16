@@ -1,25 +1,22 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const categories = [
-    { name: "Electronics" },
-    { name: "Fashion" },
-    { name: "Home Appliances" },
-    { name: "Books" },
-    { name: "Sports Equipment" },
-  ];
+  const newPassword = "admin123"; // Replace with the new password if needed
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-  for (const category of categories) {
-    await prisma.category.upsert({
-      where: { name: category.name },
-      update: {},
-      create: category,
-    });
-  }
+  // Update the admin user's password hash
+  await prisma.user.update({
+    where: { email: "admin@example.com" },
+    data: {
+      passwordHash: hashedPassword, // Update the password hash
+      updatedAt: new Date(), // Update the timestamp for the record
+    },
+  });
 
-  console.log("Categories added successfully!");
+  console.log("Admin user's password updated successfully!");
 }
 
 main()

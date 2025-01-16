@@ -50,6 +50,8 @@ const CartPage = () => {
         router.push(`/auth/signin`);
         return;
       }
+
+      console.log(cart);
   
       // Proceed with order placement
       const updatedOrderDetails = cart.map((item) => ({
