@@ -183,6 +183,8 @@ const ProductList: React.FC = () => {
           )
         );
 
+        console.log(base64Images);
+
         const response = await fetch(`/api/products/${product.wsCode}`, {
           method: "PATCH",
           headers: {
@@ -209,6 +211,8 @@ const ProductList: React.FC = () => {
             )
           );
           setIsEditModalOpen(false);
+          fetchProducts(currentPage);
+          window.location.reload();
         } else {
           toast.error(result.message || "Failed to update product.");
         }
@@ -375,9 +379,9 @@ const ProductList: React.FC = () => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchProducts(1)
-  // }, []);
+  useEffect(() => {
+    fetchProducts(1)
+  }, []);
 
   const handlePageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
@@ -385,6 +389,7 @@ const ProductList: React.FC = () => {
   };
 
   const handleViewDetails = (product: Product) => {
+    fetchProducts(currentPage);
     setDetailedViewProduct(product);
   };
 

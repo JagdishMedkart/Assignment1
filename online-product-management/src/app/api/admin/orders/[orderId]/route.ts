@@ -61,13 +61,13 @@ export async function GET(req: NextRequest, { params }: { params: { orderId: str
   }
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: { orderId: string } }) {
   try {
-    const { id } = params;
+    const { orderId } = params;
     const { status, paymentStatus } = await req.json();
 
     const updatedOrder = await prisma.order.update({
-      where: { orderId: Number(id) },
+      where: { orderId: Number(orderId) },
       data: { status, paymentStatus },
     });
 

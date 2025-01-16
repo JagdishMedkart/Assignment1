@@ -147,7 +147,7 @@ const SignInPage = ()=>{
                 }).then((d)=>d.json());
                 if (response.success) {
                     localStorage.setItem('incomingToast', 'Successfully signed in!');
-                    if (response.data === "admin") window.location.href = '/dashboard/home';
+                    if (response.data === "admin") window.location.href = '/dashboard/orders';
                     else window.location.href = "/";
                 } else {
                     setSubmitting(false);

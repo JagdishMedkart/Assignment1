@@ -174,15 +174,75 @@ async function DELETE(req, { params }) {
         });
     }
 }
+async function GET(req, { params }) {
+    try {
+        const { wsCode } = params;
+        const wsCodeNumber = Number(wsCode);
+        if (!wsCode || isNaN(wsCodeNumber)) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                message: "wsCode is required and must be a valid number",
+                success: false
+            }, {
+                status: 400
+            });
+        }
+        const product = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].product.findUnique({
+            where: {
+                wsCode: wsCodeNumber
+            }
+        });
+        if (!product) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                message: `Product with wsCode ${wsCodeNumber} not found`,
+                success: false
+            }, {
+                status: 404
+            });
+        }
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+            success: true,
+            product
+        });
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+            success: false,
+            message: "Failed to fetch products."
+        }, {
+            status: 500
+        });
+    }
+}
+const deleteOldImages = (wsCode)=>{
+    const uploadDir = __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(process.cwd(), "public", "uploads", wsCode);
+    // Check if the directory exists
+    if (__TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].existsSync(uploadDir)) {
+        const files = __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].readdirSync(uploadDir);
+        // Delete all the files inside the wsCode folder
+        for (const file of files){
+            const filePath = __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(uploadDir, file);
+            __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].unlinkSync(filePath); // Delete the file
+        }
+        __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].rmdirSync(uploadDir); // Remove the directory after deleting the files
+    }
+};
+// Helper function to save the new images
 const saveImages = async (wsCode, base64Images)=>{
-    const uploadDir = __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(process.cwd(), "public", "uploads", wsCode.toString());
+    const uploadDir = __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(process.cwd(), "public", "uploads", wsCode);
+    // Create the product-specific directory if it doesn't exist
+    if (!__TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].existsSync(uploadDir)) {
+        __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].mkdirSync(uploadDir, {
+            recursive: true
+        });
+    }
     const imagePaths = [];
+    // Process and save each base64 image
     for (const [index, base64Image] of base64Images.entries()){
         const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, "");
         const buffer = Buffer.from(base64Data, "base64");
         const imagePath = __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(uploadDir, `${index + 1}.jpg`);
-        __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].writeFileSync(imagePath, buffer);
-        imagePaths.push(`/uploads/${wsCode}/${index + 1}.jpg`);
+        __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].writeFileSync(imagePath, buffer); // Write the image to the file system
+        imagePaths.push(`/uploads/${wsCode}/${index + 1}.jpg`); // Store the path for response
     }
     return imagePaths;
 };
@@ -229,21 +289,28 @@ async function PATCH(req, { params }) {
                 status: 400
             });
         }
-        const imagePaths = await saveImages(wsCode, images);
+        // If new images are provided, delete the old ones and save the new ones
+        let imagePaths = [];
+        if (images.length > 0) {
+            // Delete old images
+            deleteOldImages(wsCode);
+            // Save new images and get their paths
+            imagePaths = await saveImages(wsCode, images);
+        }
+        // Update the product in the database
         await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].product.update({
             where: {
                 wsCode: wsCodeNumber
             },
             data: {
                 name,
-                // salesPrice: parseFloat(salesPrice),
                 mrp: parseFloat(mrp),
                 packageSize: parseFloat(packageSize),
                 categoryId: parseInt(categoryId, 10),
                 tags: Array.isArray(tags) ? tags : [
                     tags
                 ],
-                images: imagePaths.length > 0 ? imagePaths : undefined
+                images: imagePaths.length > 0 ? imagePaths : product.images
             }
         });
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
@@ -258,45 +325,6 @@ async function PATCH(req, { params }) {
             message: "Failed to update product",
             success: false,
             error: error.message
-        }, {
-            status: 500
-        });
-    }
-}
-async function GET(req, { params }) {
-    try {
-        const { wsCode } = params;
-        const wsCodeNumber = Number(wsCode);
-        if (!wsCode || isNaN(wsCodeNumber)) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                message: "wsCode is required and must be a valid number",
-                success: false
-            }, {
-                status: 400
-            });
-        }
-        const product = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].product.findUnique({
-            where: {
-                wsCode: wsCodeNumber
-            }
-        });
-        if (!product) {
-            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                message: `Product with wsCode ${wsCodeNumber} not found`,
-                success: false
-            }, {
-                status: 404
-            });
-        }
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            success: true,
-            product
-        });
-    } catch (error) {
-        console.error("Error fetching products:", error);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            success: false,
-            message: "Failed to fetch products."
         }, {
             status: 500
         });

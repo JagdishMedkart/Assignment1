@@ -228,6 +228,7 @@ const ProductList = ()=>{
                         reader.onerror = reject;
                         reader.readAsDataURL(image);
                     })));
+                console.log(base64Images);
                 const response = await fetch(`/api/products/${product.wsCode}`, {
                     method: "PATCH",
                     headers: {
@@ -251,6 +252,8 @@ const ProductList = ()=>{
                                 ...formData
                             } : p));
                     setIsEditModalOpen(false);
+                    fetchProducts(currentPage);
+                    window.location.reload();
                 } else {
                     __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hot$2d$toast$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].error(result.message || "Failed to update product.");
                 }
@@ -271,7 +274,7 @@ const ProductList = ()=>{
                         children: "Edit Product"
                     }, void 0, false, {
                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                        lineNumber: 226,
+                        lineNumber: 230,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -285,7 +288,7 @@ const ProductList = ()=>{
                                         children: "Product Name"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 229,
+                                        lineNumber: 233,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -296,13 +299,13 @@ const ProductList = ()=>{
                                         className: "w-full px-4 py-2 border border-gray-300 rounded"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 230,
+                                        lineNumber: 234,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                lineNumber: 228,
+                                lineNumber: 232,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -313,7 +316,7 @@ const ProductList = ()=>{
                                         children: "MRP"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 239,
+                                        lineNumber: 243,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -324,13 +327,13 @@ const ProductList = ()=>{
                                         className: "w-full px-4 py-2 border border-gray-300 rounded"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 240,
+                                        lineNumber: 244,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                lineNumber: 238,
+                                lineNumber: 242,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -341,7 +344,7 @@ const ProductList = ()=>{
                                         children: "Package Size"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 249,
+                                        lineNumber: 253,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -352,13 +355,13 @@ const ProductList = ()=>{
                                         className: "w-full px-4 py-2 border border-gray-300 rounded"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 250,
+                                        lineNumber: 254,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                lineNumber: 248,
+                                lineNumber: 252,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -369,7 +372,7 @@ const ProductList = ()=>{
                                         children: "Tags"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 259,
+                                        lineNumber: 263,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -380,13 +383,13 @@ const ProductList = ()=>{
                                         className: "w-full px-4 py-2 border border-gray-300 rounded"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 260,
+                                        lineNumber: 264,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                lineNumber: 258,
+                                lineNumber: 262,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -397,7 +400,7 @@ const ProductList = ()=>{
                                         children: "Images"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 269,
+                                        lineNumber: 273,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -407,13 +410,13 @@ const ProductList = ()=>{
                                         className: "w-full px-4 py-2 border border-gray-300 rounded"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 270,
+                                        lineNumber: 274,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                lineNumber: 268,
+                                lineNumber: 272,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -425,7 +428,7 @@ const ProductList = ()=>{
                                         children: "Submit"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 278,
+                                        lineNumber: 282,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -435,30 +438,30 @@ const ProductList = ()=>{
                                         children: "Cancel"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 284,
+                                        lineNumber: 288,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                lineNumber: 277,
+                                lineNumber: 281,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                        lineNumber: 227,
+                        lineNumber: 231,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                lineNumber: 225,
+                lineNumber: 229,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-            lineNumber: 224,
+            lineNumber: 228,
             columnNumber: 7
         }, this) : null;
     };
@@ -533,14 +536,15 @@ const ProductList = ()=>{
             setLoading(false);
         }
     };
-    // useEffect(() => {
-    //   fetchProducts(1)
-    // }, []);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        fetchProducts(1);
+    }, []);
     const handlePageChange = (page)=>{
         if (page < 1 || page > totalPages) return;
         fetchProducts(page);
     };
     const handleViewDetails = (product)=>{
+        fetchProducts(currentPage);
         setDetailedViewProduct(product);
     };
     const handleCloseDetails = ()=>{
@@ -555,12 +559,12 @@ const ProductList = ()=>{
                 children: "Product List"
             }, void 0, false, {
                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                lineNumber: 398,
+                lineNumber: 403,
                 columnNumber: 7
             }, this),
             loading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Layout$2f$Spinner$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                lineNumber: 401,
+                lineNumber: 406,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
                 className: "table-auto w-full border-collapse border border-gray-300",
@@ -574,7 +578,7 @@ const ProductList = ()=>{
                                     children: "WS Code"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                    lineNumber: 406,
+                                    lineNumber: 411,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -582,7 +586,7 @@ const ProductList = ()=>{
                                     children: "Product Name"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                    lineNumber: 407,
+                                    lineNumber: 412,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -590,7 +594,7 @@ const ProductList = ()=>{
                                     children: "Sales Price"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                    lineNumber: 408,
+                                    lineNumber: 413,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -598,7 +602,7 @@ const ProductList = ()=>{
                                     children: "MRP"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                    lineNumber: 409,
+                                    lineNumber: 414,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -606,7 +610,7 @@ const ProductList = ()=>{
                                     children: "Package Size"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                    lineNumber: 410,
+                                    lineNumber: 415,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -614,7 +618,7 @@ const ProductList = ()=>{
                                     children: "Tags"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                    lineNumber: 411,
+                                    lineNumber: 416,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -622,7 +626,7 @@ const ProductList = ()=>{
                                     children: "Category"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                    lineNumber: 412,
+                                    lineNumber: 417,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -630,18 +634,18 @@ const ProductList = ()=>{
                                     children: "Action"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                    lineNumber: 413,
+                                    lineNumber: 418,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                            lineNumber: 405,
+                            lineNumber: 410,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                        lineNumber: 404,
+                        lineNumber: 409,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -653,7 +657,7 @@ const ProductList = ()=>{
                                         children: product.wsCode
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 420,
+                                        lineNumber: 425,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -661,7 +665,7 @@ const ProductList = ()=>{
                                         children: product.name
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 421,
+                                        lineNumber: 426,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -672,7 +676,7 @@ const ProductList = ()=>{
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 422,
+                                        lineNumber: 427,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -683,7 +687,7 @@ const ProductList = ()=>{
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 423,
+                                        lineNumber: 428,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -691,7 +695,7 @@ const ProductList = ()=>{
                                         children: product.packageSize
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 424,
+                                        lineNumber: 429,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -701,7 +705,7 @@ const ProductList = ()=>{
                                         ]).join(", ")
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 425,
+                                        lineNumber: 430,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -709,7 +713,7 @@ const ProductList = ()=>{
                                         children: product.categoryName
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 428,
+                                        lineNumber: 433,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -726,12 +730,12 @@ const ProductList = ()=>{
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                    lineNumber: 434,
+                                                    lineNumber: 439,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                lineNumber: 430,
+                                                lineNumber: 435,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -745,12 +749,12 @@ const ProductList = ()=>{
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                    lineNumber: 440,
+                                                    lineNumber: 445,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                lineNumber: 436,
+                                                lineNumber: 441,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -764,24 +768,24 @@ const ProductList = ()=>{
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                    lineNumber: 446,
+                                                    lineNumber: 451,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                lineNumber: 442,
+                                                lineNumber: 447,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 429,
+                                        lineNumber: 434,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, product.wsCode, true, {
                                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                lineNumber: 419,
+                                lineNumber: 424,
                                 columnNumber: 17
                             }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -790,23 +794,23 @@ const ProductList = ()=>{
                                 children: "No products available"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                lineNumber: 453,
+                                lineNumber: 458,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                            lineNumber: 452,
+                            lineNumber: 457,
                             columnNumber: 15
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                        lineNumber: 416,
+                        lineNumber: 421,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                lineNumber: 403,
+                lineNumber: 408,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(DeleteModal, {
@@ -815,7 +819,7 @@ const ProductList = ()=>{
                 onCancel: handleCancelDelete
             }, void 0, false, {
                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                lineNumber: 465,
+                lineNumber: 470,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(EditModal, {
@@ -824,7 +828,7 @@ const ProductList = ()=>{
                 onCancel: handleCancelEdit
             }, void 0, false, {
                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                lineNumber: 471,
+                lineNumber: 476,
                 columnNumber: 7
             }, this),
             products.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -837,7 +841,7 @@ const ProductList = ()=>{
                         children: "Previous"
                     }, void 0, false, {
                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                        lineNumber: 480,
+                        lineNumber: 485,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -849,7 +853,7 @@ const ProductList = ()=>{
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                        lineNumber: 487,
+                        lineNumber: 492,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -859,13 +863,13 @@ const ProductList = ()=>{
                         children: "Next"
                     }, void 0, false, {
                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                        lineNumber: 490,
+                        lineNumber: 495,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                lineNumber: 479,
+                lineNumber: 484,
                 columnNumber: 9
             }, this),
             detailedViewProduct && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -879,7 +883,7 @@ const ProductList = ()=>{
                             children: "Close"
                         }, void 0, false, {
                             fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                            lineNumber: 503,
+                            lineNumber: 508,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -906,17 +910,17 @@ const ProductList = ()=>{
                                                             className: "w-full h-full object-cover"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                            lineNumber: 523,
+                                                            lineNumber: 528,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, index, false, {
                                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                        lineNumber: 515,
+                                                        lineNumber: 520,
                                                         columnNumber: 23
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                lineNumber: 513,
+                                                lineNumber: 518,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -926,23 +930,23 @@ const ProductList = ()=>{
                                                         onClick: ()=>setCurrentSlideIndex(index)
                                                     }, index, false, {
                                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                        lineNumber: 535,
+                                                        lineNumber: 540,
                                                         columnNumber: 23
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                lineNumber: 533,
+                                                lineNumber: 538,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                        lineNumber: 512,
+                                        lineNumber: 517,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                    lineNumber: 511,
+                                    lineNumber: 516,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -953,7 +957,7 @@ const ProductList = ()=>{
                                             children: detailedViewProduct.name
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                            lineNumber: 550,
+                                            lineNumber: 555,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -963,7 +967,7 @@ const ProductList = ()=>{
                                                     children: "WS Code:"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                    lineNumber: 554,
+                                                    lineNumber: 559,
                                                     columnNumber: 19
                                                 }, this),
                                                 " ",
@@ -971,7 +975,7 @@ const ProductList = ()=>{
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                            lineNumber: 553,
+                                            lineNumber: 558,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -985,7 +989,7 @@ const ProductList = ()=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                    lineNumber: 557,
+                                                    lineNumber: 562,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -996,13 +1000,13 @@ const ProductList = ()=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                    lineNumber: 560,
+                                                    lineNumber: 565,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                            lineNumber: 556,
+                                            lineNumber: 561,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1014,7 +1018,7 @@ const ProductList = ()=>{
                                                             children: "Package Size:"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                            lineNumber: 566,
+                                                            lineNumber: 571,
                                                             columnNumber: 21
                                                         }, this),
                                                         " ",
@@ -1022,7 +1026,7 @@ const ProductList = ()=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                    lineNumber: 565,
+                                                    lineNumber: 570,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1031,7 +1035,7 @@ const ProductList = ()=>{
                                                             children: "Tags:"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                            lineNumber: 569,
+                                                            lineNumber: 574,
                                                             columnNumber: 21
                                                         }, this),
                                                         " ",
@@ -1039,42 +1043,42 @@ const ProductList = ()=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                                    lineNumber: 568,
+                                                    lineNumber: 573,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                            lineNumber: 564,
+                                            lineNumber: 569,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                                    lineNumber: 549,
+                                    lineNumber: 554,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                            lineNumber: 509,
+                            lineNumber: 514,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                    lineNumber: 502,
+                    lineNumber: 507,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-                lineNumber: 501,
+                lineNumber: 506,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard.tsx",
-        lineNumber: 397,
+        lineNumber: 402,
         columnNumber: 5
     }, this);
 };
