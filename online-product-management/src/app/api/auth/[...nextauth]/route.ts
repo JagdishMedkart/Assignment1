@@ -65,7 +65,7 @@ const handler = NextAuth({
     },
 
     async redirect({ baseUrl }) {
-      return `${baseUrl}/dashboard/home`;
+      return `${baseUrl}/`;
     },
 
     async session({ session }) {
