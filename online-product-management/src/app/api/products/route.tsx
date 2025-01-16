@@ -112,13 +112,28 @@ export async function GET(req: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "5");
 
-    const products = await prisma.product.findMany({
-      skip: (page - 1) * limit,
-      take: limit,
-      orderBy: { createdAt: "desc" },
+    // Step 1: Get all wsCode values of products
+    const wsCodes = await prisma.product.findMany({
+      select: { wsCode: true },
     });
 
-    const total = await prisma.product.count();
+    // If there are less than `limit` products, return a message
+    if (wsCodes.length < limit) {
+      return NextResponse.json({
+        success: false,
+        message: `There are less than ${limit} products available.`,
+      });
+    }
+
+    // Step 2: Randomly select `limit` number of wsCodes
+    const randomWsCodes = getRandomWsCodes(wsCodes, limit);
+
+    // Step 3: Fetch products using the randomly selected wsCodes
+    const products = await prisma.product.findMany({
+      where: { wsCode: { in: randomWsCodes } },
+    });
+
+    const total = wsCodes.length;
 
     return NextResponse.json({
       success: true,
@@ -134,4 +149,20 @@ export async function GET(req: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+// Helper function to generate random wsCodes
+function getRandomWsCodes(wsCodes: { wsCode: number }[], limit: number): number[] {
+  const randomWsCodes: number[] = [];
+  const availableWsCodes = wsCodes.map((product) => product.wsCode);
+
+  while (randomWsCodes.length < limit) {
+    const randomIndex = Math.floor(Math.random() * availableWsCodes.length);
+    const randomWsCode = availableWsCodes[randomIndex];
+    if (!randomWsCodes.includes(randomWsCode)) {
+      randomWsCodes.push(randomWsCode);
+    }
+  }
+
+  return randomWsCodes;
 }
