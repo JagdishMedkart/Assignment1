@@ -54,7 +54,7 @@ const ProfileDropdown: React.FC = () => {
               </div>
             </Link>
             {user?.isSuperAdmin && (
-              <Link href="/dashboard/home">
+              <Link href="/dashboard/orders">
                 <div className="block px-4 py-2 text-white hover:bg-gray-800">
                   Dashboard
                 </div>

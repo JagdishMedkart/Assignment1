@@ -248,11 +248,11 @@ async function SideNavBar() {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Dashboard$2f$Sidebar$2f$SidebarButton$2e$tsx__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["SidebarBtn"], {
                 text: "Home",
-                clickLink: "/dashboard/home",
+                clickLink: "/",
                 icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["FaHome"], {}, void 0, false, {
                     fileName: "[project]/src/components/Dashboard/SideNav.tsx",
                     lineNumber: 32,
-                    columnNumber: 65
+                    columnNumber: 51
                 }, void 0)
             }, void 0, false, {
                 fileName: "[project]/src/components/Dashboard/SideNav.tsx",

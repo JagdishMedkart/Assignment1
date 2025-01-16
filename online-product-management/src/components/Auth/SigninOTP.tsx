@@ -165,7 +165,7 @@ const SignInOTP: React.FC = () => {
         if (response.success) {
           localStorage.setItem('incomingToast', 'Successfully signed in!');
           if (response.data === "admin")
-            window.location.href = '/dashboard/home';
+            window.location.href = '/dashboard/orders';
           else window.location.href = "/";
         } else {
           setSubmitting(false);

@@ -29,7 +29,7 @@ async function SideNavBar() {
   return (
     <SideNavBarContainer dataView={<SidebarDataView />}>
       {/*General Setting */}
-      <SidebarBtn text="Home" clickLink="/dashboard/home" icon={<FaHome />} />
+      <SidebarBtn text="Home" clickLink="/" icon={<FaHome />} />
       {/*Form */}
       <SidebarBtn text="Products" clickLink="/dashboard/products" icon={<FaFilePen />} />
       {/* <SidebarBtn text="APIs" clickLink="/dashboard/api" icon={<FaCogs />} /> */}
