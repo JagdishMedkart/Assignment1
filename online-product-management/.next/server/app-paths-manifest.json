@@ -1,12 +1,10 @@
 {
-  "/dashboard/home/page": "app/dashboard/home/page.js",
+  "/page": "app/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/dashboard/orders/page": "app/dashboard/orders/page.js",
-  "/api/admin/orders/stats/route": "app/api/admin/orders/stats/route.js",
-  "/api/admin/orders/route": "app/api/admin/orders/route.js",
-  "/api/admin/orders/[id]/route": "app/api/admin/orders/[id]/route.js",
-  "/api/admin/orders/total-count/route": "app/api/admin/orders/total-count/route.js",
+  "/api/auth/check/route": "app/api/auth/check/route.js",
+  "/cart/page": "app/cart/page.js",
+  "/dashboard/home/page": "app/dashboard/home/page.js",
   "/dashboard/products/page": "app/dashboard/products/page.js",
   "/api/products/route": "app/api/products/route.js",
-  "/_not-found/page": "app/_not-found/page.js"
+  "/api/categories/route": "app/api/categories/route.js"
 }

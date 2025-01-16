@@ -36,4 +36,4 @@ async function TopNavBar({ title, breadcrumbs }: { title: string, breadcrumbs: {
     </nav>
   )
 };
-export default TopNavBar
+export default TopNavBar;

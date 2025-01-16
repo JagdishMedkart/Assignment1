@@ -10,6 +10,7 @@ export function SidebarLogout() {
   const handleLogOut = () => {
     deleteCookie("session-us");
     localStorage.setItem('incomingToast', 'Successfully logged out!');
+    localStorage.removeItem("cart");
     router.push('/auth/signin');
   }
 

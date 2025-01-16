@@ -62,11 +62,6 @@ const Nav: React.FC = () => {
                 <Link href="/" className="text-white hover:text-gray-300">Home</Link>
               </li>
               <li>
-                <Link href="/productservices" className="text-white hover:text-gray-300">
-                  Services
-                </Link>
-              </li>
-              <li>
                 <Link href="/viewproducts" className="text-white hover:text-gray-300">
                   Products
                 </Link>
@@ -120,11 +115,6 @@ const Nav: React.FC = () => {
                 className="block py-2 px-3 text-white rounded bg-slate-400"
                 aria-current="page">
                 Home
-              </Link>
-            </li>
-            <li>
-              <Link href="/productservices" className="block py-2 px-3 rounded text-white hover:bg-gray-700">
-                Services
               </Link>
             </li>
             <li>

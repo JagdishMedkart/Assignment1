@@ -4,8 +4,9 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Spinner from "@/components/Layout/Spinner";
 import toast from "react-hot-toast";
-import { FaTrash } from "react-icons/fa";
+import { FaEye, FaTrash } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
+import { IoInformationCircle } from "react-icons/io5";
 
 // Type for the Product
 interface Product {
@@ -18,6 +19,12 @@ interface Product {
   tags: string[];
   images: string[];
   categoryId: number;
+  categoryName?: string; // Added to map category name
+}
+
+interface Category {
+  id: number;
+  name: string;
 }
 
 const ProductList: React.FC = () => {
@@ -29,6 +36,32 @@ const ProductList: React.FC = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [productToEdit, setProductToEdit] = useState<Product | null>(null);
   const [productToDelete, setProductToDelete] = useState<number>(-1);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [detailedViewProduct, setDetailedViewProduct] = useState<Product | null>(null);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch("/api/categories");
+      const data = await response.json();
+      if (data.success) {
+        setCategories(data.categories);
+      } else {
+        toast.error(data.message || "Failed to fetch categories");
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      toast.error("An error occurred while fetching categories.");
+    }
+  };
+
+  const mapCategoriesToProducts = (products: Product[], categories: Category[]) => {
+    return products.map((product) => ({
+      ...product,
+      categoryName: categories.find((cat) => cat.id === product.categoryId)?.name || "Unknown",
+    }));
+  };
 
   // Delete Modal
   const DeleteModal = ({ isOpen, onConfirm, onCancel }) => {
@@ -77,7 +110,7 @@ const ProductList: React.FC = () => {
       setFormData((prev) => ({ ...prev, images: files }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
       e.preventDefault();
 
       console.log(formData);
@@ -121,7 +154,7 @@ const ProductList: React.FC = () => {
             mrp: parseFloat(mrp),
             packageSize: parseFloat(packageSize),
             categoryId: parseInt(categoryId),
-            tags: tags.split(",").map((tag) => tag.trim()),
+            tags: tags.split(",").map((tag: string) => tag.trim()),
             images: base64Images,
           }),
         });
@@ -248,21 +281,21 @@ const ProductList: React.FC = () => {
 
   // Delete Product API
   async function deleteProduct(wsCode: number) {
-      try {
-        const response = await fetch(`/api/products/${wsCode}`, {
-          method: "DELETE",
-        });
-        if (!response.ok) {
-          throw new Error("Failed to delete product");
-        }
-        setProducts((prev) => prev.filter((product) => product.wsCode !== wsCode));
-        toast.success("Product deleted successfully!");
-        window.location.reload();
-      } catch (error) {
-        console.error(error);
-        toast.error("An error occurred while deleting the product.");
+    try {
+      const response = await fetch(`/api/products/${wsCode}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete product");
       }
+      setProducts((prev) => prev.filter((product) => product.wsCode !== wsCode));
+      toast.success("Product deleted successfully!");
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while deleting the product.");
     }
+  }
 
   const handleDeleteClick = (wsCode: number) => {
     setProductToDelete(wsCode);
@@ -292,7 +325,8 @@ const ProductList: React.FC = () => {
       const response = await fetch(`/api/products?page=${page}&limit=5`);
       const data = await response.json();
       if (data.success) {
-        setProducts(data.products);
+        const mappedProducts = mapCategoriesToProducts(data.products, categories);
+        setProducts(mappedProducts);
         setTotalPages(data.totalPages);
         setCurrentPage(data.currentPage);
       } else {
@@ -307,12 +341,21 @@ const ProductList: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchProducts(1);
+    fetchCategories().then(() => fetchProducts(1));
   }, []);
 
   const handlePageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
     fetchProducts(page);
+  };
+
+  const handleViewDetails = (product: Product) => {
+    setDetailedViewProduct(product);
+  };
+
+  const handleCloseDetails = () => {
+    setDetailedViewProduct(null);
+    setCurrentSlideIndex(0);
   };
 
   return (
@@ -332,7 +375,7 @@ const ProductList: React.FC = () => {
               <th className="border border-gray-300 px-4 py-2">Package Size</th>
               <th className="border border-gray-300 px-4 py-2">Tags</th>
               <th className="border border-gray-300 px-4 py-2">Category</th>
-              <th className="border border-gray-300 px-4 py-2">Images</th>
+              {/* <th className="border border-gray-300 px-4 py-2">Images</th> */}
               <th className="border border-gray-300 px-4 py-2">Action</th>
             </tr>
           </thead>
@@ -346,10 +389,10 @@ const ProductList: React.FC = () => {
                   <td className="border border-gray-300 px-4 py-2">${product.mrp}</td>
                   <td className="border border-gray-300 px-4 py-2">{product.packageSize}</td>
                   <td className="border border-gray-300 px-4 py-2">
-                  {(Array.isArray(product.tags) ? product.tags : [product.tags]).join(", ")}
+                    {(Array.isArray(product.tags) ? product.tags : [product.tags]).join(", ")}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2">{product.categoryId}</td>
-                  <td className="border border-gray-300 px-4 py-2">
+                  <td className="border border-gray-300 px-4 py-2">{product.categoryName}</td>
+                  {/* <td className="border border-gray-300 px-4 py-2">
                     <div className="flex justify-center items-center gap-2">
                       {product.images.map((image, index) => (
                         <div key={index} className="relative w-16 h-16">
@@ -363,19 +406,25 @@ const ProductList: React.FC = () => {
                         </div>
                       ))}
                     </div>
-                  </td>
+                  </td> */}
                   <td className="text-center">
+                    <button
+                      className="btn btn-sm bg-blue-500 text-white mr-2"
+                      onClick={() => handleViewDetails(product)}
+                    >
+                      <IoInformationCircle size={25} style={{ fill: "black", background: "white" }} />
+                    </button>
                     <button
                       className="btn btn-sm bg-red-500 text-white hover:text-black mr-2"
                       onClick={() => handleDeleteClick(product.wsCode)}
                     >
-                      <FaTrash size={25} style={{fill: "black", background: "white"}}/>
+                      <FaTrash size={25} style={{ fill: "black", background: "white" }} />
                     </button>
                     <button
                       className="btn btn-sm bg-blue-500 text-white hover:text-black"
                       onClick={() => handleEditClick(product)}
                     >
-                      <MdEdit size={25}  style={{fill: "black", background: "white"}}/>
+                      <MdEdit size={25} style={{ fill: "black", background: "white" }} />
                     </button>
                   </td>
                 </tr>
@@ -426,6 +475,84 @@ const ProductList: React.FC = () => {
           >
             Next
           </button>
+        </div>
+      )}
+
+      {detailedViewProduct && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-lg shadow-lg w-3/4 max-w-4xl p-8 relative">
+            <button
+              onClick={handleCloseDetails}
+              className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-full text-sm hover:bg-red-600"
+            >
+              Close
+            </button>
+            <div className="flex">
+              {/* Left Section - Sliding Images */}
+              <div className="w-1/2 flex items-center">
+                <div className="relative w-full">
+                  <div className="slider flex overflow-hidden rounded-lg border border-gray-300">
+                    {detailedViewProduct.images.map((image, index) => (
+                      <div
+                        key={index}
+                        className="w-full flex-shrink-0"
+                        style={{
+                          transform: `translateX(-${currentSlideIndex * 100}%)`,
+                          transition: "transform 0.5s ease-in-out",
+                        }}
+                      >
+                        <Image
+                          src={image}
+                          alt={`Image ${index + 1}`}
+                          width={400}
+                          height={400}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                    {detailedViewProduct.images.map((_, index) => (
+                      <button
+                        key={index}
+                        className={`w-3 h-3 rounded-full ${currentSlideIndex === index
+                            ? "bg-blue-600"
+                            : "bg-gray-300"
+                          }`}
+                        onClick={() => setCurrentSlideIndex(index)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Section - Product Details */}
+              <div className="w-1/2 pl-8">
+                <h1 className="text-2xl font-bold text-gray-800 mb-4">
+                  {detailedViewProduct.name}
+                </h1>
+                <p className="text-sm text-gray-500 mb-4">
+                  <strong>WS Code:</strong> {detailedViewProduct.wsCode}
+                </p>
+                <div className="flex items-baseline mb-4">
+                  <p className="text-3xl font-bold text-green-600">
+                    ${0.9 * detailedViewProduct.mrp}
+                  </p>
+                  <p className="text-lg text-gray-400 line-through ml-3">
+                    ${detailedViewProduct.mrp}
+                  </p>
+                </div>
+                <div className="text-gray-700 space-y-3">
+                  <p>
+                    <strong>Package Size:</strong> {detailedViewProduct.packageSize}
+                  </p>
+                  <p>
+                    <strong>Tags:</strong> {detailedViewProduct.tags.join(", ")}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
