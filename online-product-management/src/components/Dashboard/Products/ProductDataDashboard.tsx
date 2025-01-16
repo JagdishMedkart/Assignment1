@@ -23,8 +23,9 @@ interface Product {
 }
 
 interface Category {
-  id: number;
+  categoryId: number;
   name: string;
+  createdAt: unknown
 }
 
 const ProductList: React.FC = () => {
@@ -45,6 +46,7 @@ const ProductList: React.FC = () => {
     try {
       const response = await fetch("/api/categories");
       const data = await response.json();
+      console.log("Categories Response:", data); // Debug response
       if (data.success) {
         setCategories(data.categories);
       } else {
@@ -57,11 +59,49 @@ const ProductList: React.FC = () => {
   };
 
   const mapCategoriesToProducts = (products: Product[], categories: Category[]) => {
+    console.log("Mapping Categories:", categories);
     return products.map((product) => ({
       ...product,
-      categoryName: categories.find((cat) => cat.id === product.categoryId)?.name || "Unknown",
+      categoryName:
+        categories.find((cat) => Number(cat.categoryId) === Number(product.categoryId))?.name || "Unknown",
     }));
   };
+
+  // Fetch categories first, then fetch products after categories are set
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchCategories(); // Fetch categories first
+    };
+    fetchData();
+  }, []); // Empty dependency array ensures it runs only once on mount
+
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      const fetchProducts = async () => {
+        setLoading(true);
+        try {
+          const response = await fetch(`/api/products?page=${currentPage}&limit=5`);
+          const data = await response.json();
+          if (data.success) {
+            const mappedProducts = mapCategoriesToProducts(data.products, categories);
+            setProducts(mappedProducts);
+            setTotalPages(data.totalPages);
+            setCurrentPage(data.currentPage);
+          } else {
+            toast.error(data.message || "Failed to fetch products");
+          }
+        } catch (error) {
+          console.error("Error fetching products:", error);
+          toast.error("An error occurred while fetching products.");
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchProducts(); // Fetch products only after categories are fetched
+    }
+  }, [categories, currentPage]);
+
 
   // Delete Modal
   const DeleteModal = ({ isOpen, onConfirm, onCancel }) => {
@@ -195,16 +235,6 @@ const ProductList: React.FC = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded"
               />
             </div>
-            {/* <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Sales Price</label>
-              <input
-                type="number"
-                name="salesPrice"
-                value={formData.salesPrice}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded"
-              />
-            </div> */}
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">MRP</label>
               <input
@@ -275,9 +305,14 @@ const ProductList: React.FC = () => {
     setProductToEdit(null);
   };
 
-  useEffect(() => {
-    fetchProducts(1);
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await fetchCategories(); // Fetch categories first
+  //     fetchProducts(1); // Then fetch products
+  //   };
+
+  //   fetchData();
+  // }, []); // Empty 
 
   // Delete Product API
   async function deleteProduct(wsCode: number) {
@@ -340,9 +375,9 @@ const ProductList: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCategories().then(() => fetchProducts(1));
-  }, []);
+  // useEffect(() => {
+  //   fetchProducts(1)
+  // }, []);
 
   const handlePageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
@@ -375,7 +410,6 @@ const ProductList: React.FC = () => {
               <th className="border border-gray-300 px-4 py-2">Package Size</th>
               <th className="border border-gray-300 px-4 py-2">Tags</th>
               <th className="border border-gray-300 px-4 py-2">Category</th>
-              {/* <th className="border border-gray-300 px-4 py-2">Images</th> */}
               <th className="border border-gray-300 px-4 py-2">Action</th>
             </tr>
           </thead>
@@ -392,21 +426,6 @@ const ProductList: React.FC = () => {
                     {(Array.isArray(product.tags) ? product.tags : [product.tags]).join(", ")}
                   </td>
                   <td className="border border-gray-300 px-4 py-2">{product.categoryName}</td>
-                  {/* <td className="border border-gray-300 px-4 py-2">
-                    <div className="flex justify-center items-center gap-2">
-                      {product.images.map((image, index) => (
-                        <div key={index} className="relative w-16 h-16">
-                          <Image
-                            src={image}
-                            alt={`Product ${index + 1}`}
-                            fill
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            className="object-cover rounded"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </td> */}
                   <td className="text-center">
                     <button
                       className="btn btn-sm bg-blue-500 text-white mr-2"
@@ -516,8 +535,8 @@ const ProductList: React.FC = () => {
                       <button
                         key={index}
                         className={`w-3 h-3 rounded-full ${currentSlideIndex === index
-                            ? "bg-blue-600"
-                            : "bg-gray-300"
+                          ? "bg-blue-600"
+                          : "bg-gray-300"
                           }`}
                         onClick={() => setCurrentSlideIndex(index)}
                       />

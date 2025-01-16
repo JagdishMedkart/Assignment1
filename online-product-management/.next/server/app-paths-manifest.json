@@ -2,9 +2,9 @@
   "/page": "app/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/api/auth/check/route": "app/api/auth/check/route.js",
-  "/cart/page": "app/cart/page.js",
+  "/viewproducts/page": "app/viewproducts/page.js",
+  "/api/products/route": "app/api/products/route.js",
   "/dashboard/home/page": "app/dashboard/home/page.js",
   "/dashboard/products/page": "app/dashboard/products/page.js",
-  "/api/products/route": "app/api/products/route.js",
   "/api/categories/route": "app/api/categories/route.js"
 }
