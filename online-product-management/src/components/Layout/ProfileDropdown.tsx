@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+"use client";
 
-const ProfileDropdown: React.FC = () => {
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);  // User state to hold user info
+  const [user, setUser] = useState<any>(null); // User state to hold user info
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
 
@@ -18,7 +20,7 @@ const ProfileDropdown: React.FC = () => {
         const response = await fetch("/api/auth/check", { method: "GET" });
         const data = await response.json();
         setIsLoggedIn(data.isLoggedIn);
-        setUser(data.user);  // Assuming `user` is the returned object
+        setUser(data.user); // Assuming `user` is the returned object
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -28,11 +30,28 @@ const ProfileDropdown: React.FC = () => {
   }, []);
 
   // Handle logout
-  const handleLogout = () => {
-    document.cookie = 'session-us=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.ok) {
+        router.push("/"); // Redirect to the homepage
+      } else {
+        const data = await response.json();
+        console.error("Failed to logout:", data.message);
+        alert(data.message || "An error occurred during logout.");
+      }
+    } catch (error) {
+      console.error("Error logging out:", error);
+      alert("An unexpected error occurred. Please try again.");
+    }
+
+    // Clear session manually
+    document.cookie = "session-us=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     localStorage.removeItem("cart");
-    // Optionally, you might want to redirect the user or update app state
-    window.location.href = '/';
   };
 
   return (

@@ -170,8 +170,8 @@ const AdminOrdersPage: React.FC = () => {
                                 <p>{format(new Date(order.createdAt), "PPP")}</p>
                             </div>
                             <div className="flex justify-between items-center mt-2">
-                                <p>{order.user.name}</p>
-                                <p>${order.totalAmount}</p>
+                                <p className="w-32 truncate">{order.user.name}</p>
+                                <p className="w-20 text-right">${order.totalAmount.toFixed(2)}</p>
                                 <div className="flex gap-4">
                                     <select
                                         value={order.status}
@@ -232,7 +232,7 @@ const AdminOrdersPage: React.FC = () => {
                         </div>
                     ))}
                     {/* Pagination */}
-                    <div className="flex justify-between mt-6">
+                    <div className="flex justify-center items-center mt-4 gap-4">
                         <button
                             disabled={currentPage === 1}
                             onClick={() => setCurrentPage((prev) => prev - 1)}

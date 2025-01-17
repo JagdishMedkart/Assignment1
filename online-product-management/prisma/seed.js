@@ -16,7 +16,7 @@ async function main() {
     },
   });
 
-  console.log("Admin user's password updated successfully!");
+  // console.log("Admin user's password updated successfully!");
 }
 
 main()

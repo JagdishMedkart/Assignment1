@@ -31,7 +31,7 @@ interface Category {
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(1);
   const [loading, setLoading] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -40,13 +40,15 @@ const ProductList: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [detailedViewProduct, setDetailedViewProduct] = useState<Product | null>(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const productsPerPage = 5;
+  const [totalPages, setTotalPages] = useState();
 
 
   const fetchCategories = async () => {
     try {
       const response = await fetch("/api/categories");
       const data = await response.json();
-      console.log("Categories Response:", data); // Debug response
+      // console.log("Categories Response:", data); // Debug response
       if (data.success) {
         setCategories(data.categories);
       } else {
@@ -59,7 +61,7 @@ const ProductList: React.FC = () => {
   };
 
   const mapCategoriesToProducts = (products: Product[], categories: Category[]) => {
-    console.log("Mapping Categories:", categories);
+    // console.log("Mapping Categories:", categories);
     return products.map((product) => ({
       ...product,
       categoryName:
@@ -81,15 +83,24 @@ const ProductList: React.FC = () => {
       const fetchProducts = async () => {
         setLoading(true);
         try {
-          const response = await fetch(`/api/products?page=${currentPage}&limit=5`);
-          const data = await response.json();
-          if (data.success) {
-            const mappedProducts = mapCategoriesToProducts(data.products, categories);
+          const [ordersRes] = await Promise.all([
+            fetch(`/api/admin/products?page=${currentPage}`),
+            // fetch("/api/admin/products/total-count"),
+          ]);
+
+          console.log(ordersRes);
+          // console.log(totalCountRes);
+          // const response = await fetch(`/api/admin/products?page=${currentPage}`);
+          // const data = await response.json();
+          if (ordersRes.ok) {
+            const ordersData = await ordersRes.json();
+            const mappedProducts = mapCategoriesToProducts(ordersData.products, categories);
             setProducts(mappedProducts);
-            setTotalPages(data.totalPages);
-            setCurrentPage(data.currentPage);
+            setTotalProducts(ordersData.totalProducts);
+
+            // setCurrentPage(data.currentPage);
           } else {
-            toast.error(data.message || "Failed to fetch products");
+            toast.error("Failed to fetch Products");
           }
         } catch (error) {
           console.error("Error fetching products:", error);
@@ -153,7 +164,7 @@ const ProductList: React.FC = () => {
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
       e.preventDefault();
 
-      console.log(formData);
+      // console.log(formData);
 
       const { name, mrp, packageSize, categoryId, tags, images } = formData;
 
@@ -183,7 +194,7 @@ const ProductList: React.FC = () => {
           )
         );
 
-        console.log(base64Images);
+        // console.log(base64Images);
 
         const response = await fetch(`/api/products/${product.wsCode}`, {
           method: "PATCH",
@@ -363,6 +374,7 @@ const ProductList: React.FC = () => {
     try {
       const response = await fetch(`/api/products?page=${page}&limit=5`);
       const data = await response.json();
+      console.log("data = ", data);
       if (data.success) {
         const mappedProducts = mapCategoriesToProducts(data.products, categories);
         setProducts(mappedProducts);
@@ -408,30 +420,30 @@ const ProductList: React.FC = () => {
         <table className="table-auto w-full border-collapse border border-gray-300">
           <thead className="bg-gray-800 text-white">
             <tr>
-              <th className="border border-gray-300 px-4 py-2">WS Code</th>
-              <th className="border border-gray-300 px-4 py-2">Product Name</th>
-              <th className="border border-gray-300 px-4 py-2">Sales Price</th>
-              <th className="border border-gray-300 px-4 py-2">MRP</th>
-              <th className="border border-gray-300 px-4 py-2">Package Size</th>
-              <th className="border border-gray-300 px-4 py-2">Tags</th>
-              <th className="border border-gray-300 px-4 py-2">Category</th>
-              <th className="border border-gray-300 px-4 py-2">Action</th>
+              <th className="border border-gray-300 px-4 py-2 text-lg font-semibold">WS Code</th>
+              <th className="border border-gray-300 px-4 py-2 text-lg font-semibold">Product Name</th>
+              <th className="border border-gray-300 px-4 py-2 text-lg font-semibold">Sales Price</th>
+              <th className="border border-gray-300 px-4 py-2 text-lg font-semibold">MRP</th>
+              <th className="border border-gray-300 px-4 py-2 text-lg font-semibold">Package Size</th>
+              <th className="border border-gray-300 px-4 py-2 text-lg font-semibold">Tags</th>
+              <th className="border border-gray-300 px-4 py-2 text-lg font-semibold">Category</th>
+              <th className="border border-gray-300 px-4 py-2 text-lg font-semibold">Action</th>
             </tr>
           </thead>
           <tbody>
             {products.length > 0 ? (
               products.map((product) => (
                 <tr key={product.wsCode} className="text-center">
-                  <td className="border border-gray-300 px-4 py-2">{product.wsCode}</td>
-                  <td className="border border-gray-300 px-4 py-2">{product.name}</td>
-                  <td className="border border-gray-300 px-4 py-2">${0.90 * product.mrp}</td>
-                  <td className="border border-gray-300 px-4 py-2">${product.mrp}</td>
-                  <td className="border border-gray-300 px-4 py-2">{product.packageSize}</td>
-                  <td className="border border-gray-300 px-4 py-2">
+                  <td className="border border-gray-300 px-4 py-4">{product.wsCode}</td>
+                  <td className="border border-gray-300 px-4 py-4">{product.name}</td>
+                  <td className="border border-gray-300 px-4 py-4">${0.90 * product.mrp}</td>
+                  <td className="border border-gray-300 px-4 py-4">${product.mrp}</td>
+                  <td className="border border-gray-300 px-4 py-4">{product.packageSize}</td>
+                  <td className="border border-gray-300 px-4 py-4">
                     {(Array.isArray(product.tags) ? product.tags : [product.tags]).join(", ")}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2">{product.categoryName}</td>
-                  <td className="text-center">
+                  <td className="border border-gray-300 px-4 py-4">{product.categoryName}</td>
+                  <td className="border border-gray-300 px-6 py-8 flex justify-center gap-2">
                     <button
                       className="btn btn-sm bg-blue-500 text-white mr-2"
                       onClick={() => handleViewDetails(product)}
@@ -481,25 +493,23 @@ const ProductList: React.FC = () => {
 
       {/* Pagination */}
       {products.length > 0 && (
-        <div className="flex justify-between items-center mt-6">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
+        <div className="flex justify-between mt-6">
+        <button
             disabled={currentPage === 1}
-            className="bg-gray-700 text-white px-4 py-2 rounded disabled:opacity-50"
-          >
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+            className="px-4 py-2 bg-black text-white rounded disabled:opacity-50 hover:bg-gray-800 transition-all"
+        >
             Previous
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
+        </button>
+        <span className="text-lg font-semibold">{currentPage} of {totalPages}</span>
+        <button
             disabled={currentPage === totalPages}
-            className="bg-gray-700 text-white px-4 py-2 rounded disabled:opacity-50"
-          >
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+            className="px-4 py-2 bg-black text-white rounded disabled:opacity-50 hover:bg-gray-800 transition-all"
+        >
             Next
-          </button>
-        </div>
+        </button>
+    </div>
       )}
 
       {detailedViewProduct && (

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { FaShoppingCart, FaSearch, FaClipboardList, FaUserShield } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const features = [
   {
@@ -27,6 +28,8 @@ const features = [
 ];
 
 function Home() {
+  const router = useRouter();
+  
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Section */}
@@ -37,7 +40,8 @@ function Home() {
             Simplify your product and order management with an intuitive and powerful platform.
           </p>
           <div className="flex justify-center gap-4">
-            <button className="bg-white text-blue-500 py-3 px-6 rounded-full font-semibold hover:bg-gray-200 transition">
+            <button className="bg-white text-blue-500 py-3 px-6 rounded-full font-semibold hover:bg-gray-200 transition"
+            onClick={() => router.push("/viewproducts")}>
               Get Started
             </button>
             <button className="bg-blue-700 text-white py-3 px-6 rounded-full font-semibold hover:bg-blue-800 transition">
@@ -84,11 +88,11 @@ function Home() {
       </section>
 
       {/* Footer Section */}
-      <footer className="shadow bg-gray-900 text-gray-400 py-8">
+      {/* <footer className="shadow bg-gray-900 text-gray-400 py-8">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <p className="text-sm">© 2025 ProductEase. All rights reserved.</p>
         </div>
-      </footer>
+      </footer> */}
 
       <style jsx>{`
         .animate-fade-in {

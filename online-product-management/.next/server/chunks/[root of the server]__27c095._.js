@@ -249,7 +249,7 @@ async function POST(req) {
                     email: email
                 }
             });
-            console.log(user);
+            // console.log(user);
             if (!user) {
                 return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                     message: "Invalid credentials",
@@ -269,22 +269,16 @@ async function POST(req) {
             }
             if (email != null) {
                 const sessionToken = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$util$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["randomString"])(32);
-                const now = new Date();
                 const futureDate = new Date(Date.now() + 1000 * 60 * 60 * 6); // 6 hours into the future
+                // Remove only expired sessions
                 await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].session.deleteMany({
                     where: {
-                        OR: [
-                            {
-                                expires: {
-                                    lt: now.toISOString().replace("T", " ")
-                                }
-                            },
-                            {
-                                userId: user.userId
-                            }
-                        ]
+                        expires: {
+                            lt: new Date().toISOString().replace("T", " ")
+                        }
                     }
                 });
+                // Create a new session for the user
                 await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].session.create({
                     data: {
                         sessionToken: sessionToken,
@@ -292,6 +286,7 @@ async function POST(req) {
                         expires: futureDate.toISOString().replace("T", " ")
                     }
                 });
+                // Set the session token in cookies
                 (await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$headers$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["cookies"])()).set({
                     name: "session-us",
                     value: sessionToken,

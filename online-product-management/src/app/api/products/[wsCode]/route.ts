@@ -177,7 +177,7 @@ export async function GET(
   { params }: { params: { wsCode: string } }
 ) {
   try {
-    const { wsCode } = params;
+    const { wsCode } = await params;
     const wsCodeNumber = Number(wsCode);
 
     if (!wsCode || isNaN(wsCodeNumber)) {

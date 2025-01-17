@@ -93,7 +93,6 @@ __turbopack_esm__({
     "SidebarLogout": (()=>SidebarLogout)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$cookies$2d$next$2f$lib$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/cookies-next/lib/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/navigation.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$io$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/react-icons/io/index.mjs [app-client] (ecmascript)");
 ;
@@ -101,30 +100,51 @@ var _s = __turbopack_refresh__.signature();
 "use client";
 ;
 ;
-;
 function SidebarLogout() {
     _s();
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
-    const handleLogOut = ()=>{
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$cookies$2d$next$2f$lib$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["deleteCookie"])("session-us");
-        localStorage.setItem('incomingToast', 'Successfully logged out!');
+    const handleLogout = async ()=>{
+        try {
+            // Make a POST request to the logout API
+            const response = await fetch("/api/auth/logout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            if (response.ok) {
+                // Clear local state or context if using any
+                // Example: authContext.setUser(null);
+                // Redirect to login or home page
+                router.push("/");
+            } else {
+                console.error("Failed to logout");
+                const data = await response.json();
+                alert(data.message || "An error occurred during logout.");
+            }
+        } catch (error) {
+            console.error("Error logging out:", error);
+            alert("An unexpected error occurred. Please try again.");
+        }
+        document.cookie = 'session-us=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         localStorage.removeItem("cart");
-        router.push('/auth/signin');
+        // Optionally, you might want to redirect the user or update app state
+        window.location.href = '/';
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "flex py-1 px-2 mt-1 hover:bg-red-600 text-red-600 hover:text-white hover:rounded-md rounded-md cursor-pointer transition-colors duration-300",
-        onClick: handleLogOut,
+        onClick: async ()=>handleLogout,
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "flex-2 pr-3 items-center flex",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$io$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["IoMdLogOut"], {}, void 0, false, {
                     fileName: "[project]/src/components/Dashboard/Sidebar/SidebarLogout.tsx",
-                    lineNumber: 18,
+                    lineNumber: 41,
                     columnNumber: 52
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/Dashboard/Sidebar/SidebarLogout.tsx",
-                lineNumber: 18,
+                lineNumber: 41,
                 columnNumber: 5
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -132,13 +152,13 @@ function SidebarLogout() {
                 children: "Log Out"
             }, void 0, false, {
                 fileName: "[project]/src/components/Dashboard/Sidebar/SidebarLogout.tsx",
-                lineNumber: 19,
+                lineNumber: 42,
                 columnNumber: 5
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/Dashboard/Sidebar/SidebarLogout.tsx",
-        lineNumber: 17,
+        lineNumber: 40,
         columnNumber: 10
     }, this);
 }

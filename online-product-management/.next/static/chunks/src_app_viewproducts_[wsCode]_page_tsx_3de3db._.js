@@ -34,6 +34,7 @@ const ProductDetail = ()=>{
     const [quantity, setQuantity] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(1);
     const [isAdding, setIsAdding] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false); // Track adding state
     const [totalPrice, setTotalPrice] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0); // Track total price
+    const [categories, setCategories] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({});
     // Fetch product data on load
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "ProductDetail.useEffect": ()=>{
@@ -49,7 +50,23 @@ const ProductDetail = ()=>{
                         }
                     }
                 }["ProductDetail.useEffect.fetchProduct"];
+                const fetchCategories = {
+                    "ProductDetail.useEffect.fetchCategories": async ()=>{
+                        const response = await fetch("/api/categories");
+                        const data = await response.json();
+                        console.log("categories = ", data);
+                        // Create a mapping of category IDs to names
+                        const categoryMap = {};
+                        data.categories.forEach({
+                            "ProductDetail.useEffect.fetchCategories": (category)=>{
+                                categoryMap[category.categoryId] = category.name;
+                            }
+                        }["ProductDetail.useEffect.fetchCategories"]);
+                        setCategories(categoryMap);
+                    }
+                }["ProductDetail.useEffect.fetchCategories"];
                 fetchProduct();
+                fetchCategories();
             }
         }
     }["ProductDetail.useEffect"], [
@@ -71,10 +88,7 @@ const ProductDetail = ()=>{
             if (isAdding || !product) return; // Prevent adding if already in process
             setIsAdding(true); // Disable button while adding
             try {
-                console.log("Adding to cart: ", {
-                    ...product,
-                    quantity
-                });
+                // console.log("Adding to cart: ", { ...product, quantity });
                 // Add to cart using the addToCart function
                 addToCart({
                     productId: product.wsCode.toString(),
@@ -83,7 +97,7 @@ const ProductDetail = ()=>{
                     quantity: quantity,
                     image: product.images[0] || "/default-image.jpg"
                 });
-                console.log(cart);
+                // console.log(cart);
                 __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hot$2d$toast$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].success("Item added to cart!");
             } catch (error) {
                 console.error("Error adding to cart", error);
@@ -101,10 +115,10 @@ const ProductDetail = ()=>{
     if (!product) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "text-center py-10",
-            children: "Loading product details..."
+            children: "Loading Product Details..."
         }, void 0, false, {
             fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-            lineNumber: 72,
+            lineNumber: 86,
             columnNumber: 12
         }, this);
     }
@@ -120,14 +134,14 @@ const ProductDetail = ()=>{
                         className: "mr-2"
                     }, void 0, false, {
                         fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                        lineNumber: 82,
+                        lineNumber: 96,
                         columnNumber: 9
                     }, this),
                     "Back to Products"
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                lineNumber: 78,
+                lineNumber: 92,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -148,22 +162,22 @@ const ProductDetail = ()=>{
                                         className: "object-cover rounded-lg"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                                        lineNumber: 92,
+                                        lineNumber: 106,
                                         columnNumber: 17
                                     }, this)
                                 }, index, false, {
                                     fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                                    lineNumber: 91,
+                                    lineNumber: 105,
                                     columnNumber: 15
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                            lineNumber: 89,
+                            lineNumber: 103,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                        lineNumber: 88,
+                        lineNumber: 102,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -174,7 +188,7 @@ const ProductDetail = ()=>{
                                 children: product.name
                             }, void 0, false, {
                                 fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                                lineNumber: 107,
+                                lineNumber: 121,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -185,7 +199,7 @@ const ProductDetail = ()=>{
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                                lineNumber: 108,
+                                lineNumber: 122,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -196,18 +210,18 @@ const ProductDetail = ()=>{
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                                lineNumber: 109,
+                                lineNumber: 123,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "text-sm text-gray-600",
                                 children: [
                                     "Category: ",
-                                    product.categoryId
+                                    categories[product?.categoryId] || "Unknown"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                                lineNumber: 110,
+                                lineNumber: 124,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -217,12 +231,12 @@ const ProductDetail = ()=>{
                                         children: tag
                                     }, index, false, {
                                         fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                                        lineNumber: 115,
+                                        lineNumber: 129,
                                         columnNumber: 15
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                                lineNumber: 113,
+                                lineNumber: 127,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -234,7 +248,7 @@ const ProductDetail = ()=>{
                                         children: "Quantity"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                                        lineNumber: 126,
+                                        lineNumber: 140,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -246,13 +260,13 @@ const ProductDetail = ()=>{
                                         className: "w-16 py-2 px-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                                        lineNumber: 129,
+                                        lineNumber: 143,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                                lineNumber: 125,
+                                lineNumber: 139,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -263,7 +277,7 @@ const ProductDetail = ()=>{
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                                lineNumber: 140,
+                                lineNumber: 154,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -273,19 +287,19 @@ const ProductDetail = ()=>{
                                 children: isAdding ? "Adding..." : "Add to Cart"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                                lineNumber: 143,
+                                lineNumber: 157,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                        lineNumber: 106,
+                        lineNumber: 120,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                lineNumber: 86,
+                lineNumber: 100,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hot$2d$toast$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Toaster"], {
@@ -293,17 +307,17 @@ const ProductDetail = ()=>{
                 reverseOrder: false
             }, void 0, false, {
                 fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-                lineNumber: 152,
+                lineNumber: 166,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
-        lineNumber: 76,
+        lineNumber: 90,
         columnNumber: 5
     }, this);
 };
-_s(ProductDetail, "3I68ocFT/ISoiwXPjsEtPZRu97E=", false, function() {
+_s(ProductDetail, "S+bmXhXY56/zy7mpTtoBe3vFMgY=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"],
@@ -317,6 +331,170 @@ __turbopack_refresh__.register(_c, "ProductDetail");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_refresh__.registerExports(module, globalThis.$RefreshHelpers$);
 }
+ // "use client";
+ // import React, { useEffect, useState, useCallback } from "react";
+ // import { useRouter, useParams } from "next/navigation";
+ // import { useCart } from "../../../components/CartContext"; // Assuming CartContext will be updated
+ // import Image from "next/image";
+ // import { Product } from "@prisma/client";
+ // import toast, { Toaster } from "react-hot-toast";
+ // import { FaArrowLeft } from "react-icons/fa";
+ // const ProductDetail: React.FC = () => {
+ //   const router = useRouter();
+ //   const params = useParams();
+ //   const wsCode = params.wsCode;
+ //   const { addToCart } = useCart(); // Update to use CartContext that works with DB now
+ //   const [product, setProduct] = useState<Product | null>(null);
+ //   const [quantity, setQuantity] = useState(1);
+ //   const [isAdding, setIsAdding] = useState(false); // Track adding state
+ //   const [totalPrice, setTotalPrice] = useState(0); // Track total price
+ //   const [categories, setCategories] = useState<Record<string, string>>({});
+ //   // Fetch product data on load
+ //   useEffect(() => {
+ //     if (wsCode) {
+ //       const fetchProduct = async () => {
+ //         try {
+ //           const response = await fetch(`/api/products/${wsCode}`);
+ //           const data = await response.json();
+ //           setProduct(data.product);
+ //         } catch (error) {
+ //           console.error("Error fetching product details:", error);
+ //         }
+ //       };
+ //       const fetchCategories = async () => {
+ //         try {
+ //           const response = await fetch("/api/categories");
+ //           const data = await response.json();
+ //           // Create a mapping of category IDs to names
+ //           const categoryMap: Record<string, string> = {};
+ //           data.categories.forEach((category: { categoryId: string | number; name: string; createdAt: unknown }) => {
+ //             categoryMap[category.categoryId] = category.name;
+ //           });
+ //           setCategories(categoryMap);
+ //         } catch (error) {
+ //           console.error("Error fetching categories:", error);
+ //         }
+ //       };
+ //       fetchProduct();
+ //       fetchCategories();
+ //     }
+ //   }, [wsCode]);
+ //   // Update totalPrice when quantity or product price changes
+ //   useEffect(() => {
+ //     if (product) {
+ //       setTotalPrice(product.mrp * quantity * 0.9); // Apply a 10% discount if needed
+ //     }
+ //   }, [quantity, product]);
+ //   const handleAddToCart = useCallback(async () => {
+ //     if (isAdding || !product) return; // Prevent adding if already in process
+ //     setIsAdding(true); // Disable button while adding
+ //     try {
+ //       // Add to cart using the addToCart function from context (which interacts with the DB)
+ //       const cartItem = {
+ //         productId: product.wsCode,
+ //         name: product.name,
+ //         price: Number(product.mrp * 0.9), // Apply a discount if needed
+ //         quantity: quantity,
+ //         image: product.images[0] || "/default-image.jpg", // Fallback image
+ //       };
+ //       // Sending the cart item data to the API (Backend)
+ //       const data = await fetch("/api/cart/add", {
+ //         method: "POST",
+ //         headers: {
+ //           "Content-Type": "application/json",
+ //         },
+ //         body: JSON.stringify(cartItem),
+ //       });
+ //       console.log(data);
+ //       // Optionally, you can update local cart context here if needed (just as a fallback)
+ //       addToCart(cartItem);
+ //       toast.success("Item added to cart!");
+ //     } catch (error) {
+ //       console.error("Error adding to cart", error);
+ //       toast.error("Failed to add item to cart");
+ //     } finally {
+ //       setIsAdding(false); // Re-enable button after adding
+ //     }
+ //   }, [isAdding, addToCart, product, quantity]);
+ //   if (!product) {
+ //     return <div className="text-center py-10">Loading Product Details...</div>;
+ //   }
+ //   return (
+ //     <div className="p-6 max-w-7xl mx-auto">
+ //       {/* Back Button */}
+ //       <button
+ //         onClick={() => router.push("/viewproducts")}
+ //         className="flex items-center text-blue-500 mb-6 hover:text-blue-700"
+ //       >
+ //         <FaArrowLeft size={20} className="mr-2" />
+ //         Back to Products
+ //       </button>
+ //       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+ //         {/* Product Image Slider */}
+ //         <div className="relative w-full h-80 sm:h-96 lg:h-full rounded-lg overflow-hidden">
+ //           <div className="flex space-x-4 overflow-x-auto py-4">
+ //             {product.images.map((image, index) => (
+ //               <div key={index} className="flex-shrink-0 w-full lg:w-1/2">
+ //                 <Image
+ //                   src={image}
+ //                   alt={`Product Image ${index + 1}`}
+ //                   layout="responsive"
+ //                   width={500}
+ //                   height={500}
+ //                   className="object-cover rounded-lg"
+ //                 />
+ //               </div>
+ //             ))}
+ //           </div>
+ //         </div>
+ //         {/* Product Details */}
+ //         <div className="space-y-6">
+ //           <h2 className="text-3xl font-bold text-gray-900">{product.name}</h2>
+ //           <p className="text-lg text-gray-700">Sales Price: ${product.mrp * 0.9}</p>
+ //           <p className="text-sm text-gray-500">Package Size: {product.packageSize}</p>
+ //           <p className="text-sm text-gray-600">Category: {categories[product?.categoryId] || "Unknown"}</p>
+ //           {/* Product Tags */}
+ //           <div className="flex gap-2">
+ //             {product.tags.map((tag, index) => (
+ //               <span
+ //                 key={index}
+ //                 className="px-3 py-1 text-xs font-semibold text-white bg-blue-500 rounded-full"
+ //               >
+ //                 {tag}
+ //               </span>
+ //             ))}
+ //           </div>
+ //           {/* Quantity Selector */}
+ //           <div className="flex items-center gap-4">
+ //             <label htmlFor="quantity" className="text-lg font-semibold">
+ //               Quantity
+ //             </label>
+ //             <input
+ //               type="number"
+ //               id="quantity"
+ //               value={quantity}
+ //               onChange={(e) => setQuantity(Number(e.target.value))}
+ //               min="1"
+ //               className="w-16 py-2 px-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+ //             />
+ //           </div>
+ //           {/* Total Price */}
+ //           <p className="text-xl font-bold text-gray-900">Total: ${totalPrice.toFixed(2)}</p>
+ //           {/* Add to Cart Button */}
+ //           <button
+ //             onClick={handleAddToCart}
+ //             disabled={isAdding} // Disable the button when adding
+ //             className={`w-full py-3 px-6 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition duration-300 ${isAdding ? "opacity-50 cursor-not-allowed" : ""}`}
+ //           >
+ //             {isAdding ? "Adding..." : "Add to Cart"}
+ //           </button>
+ //         </div>
+ //       </div>
+ //       <Toaster position="top-center" reverseOrder={false} />
+ //     </div>
+ //   );
+ // };
+ // export default ProductDetail;
 }}),
 "[project]/src/app/viewproducts/[wsCode]/page.tsx [app-rsc] (ecmascript, Next.js server component, client modules)": ((__turbopack_context__) => {
 

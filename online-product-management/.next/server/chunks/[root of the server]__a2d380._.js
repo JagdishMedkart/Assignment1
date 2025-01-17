@@ -276,7 +276,7 @@ const handler = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules
                         email: user.email
                     }
                 });
-                console.log(dbUser);
+                // console.log(dbUser);
                 if (!dbUser) {
                     console.error(`User not found: ${user.email}`);
                     return false;
@@ -319,7 +319,7 @@ const handler = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules
             }
         },
         async redirect ({ baseUrl }) {
-            return `${baseUrl}/dashboard/home`;
+            return `${baseUrl}/`;
         },
         async session ({ session }) {
             try {

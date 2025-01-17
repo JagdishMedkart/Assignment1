@@ -28,7 +28,7 @@ const Footer = () => {
             </ul>
         </div>
         <hr className="my-6  sm:mx-auto border-gray-700 lg:my-8" />
-        <span className="block text-sm  sm:text-center text-gray-400">© 2025ProductEase - All Rights Reserved.</span>
+        <span className="block text-sm  sm:text-center text-gray-400">© 2025 ProductEase - All Rights Reserved.</span>
     </div>
 </footer>
 

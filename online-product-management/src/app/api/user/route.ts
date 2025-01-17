@@ -29,17 +29,17 @@ export async function DELETE(req: NextRequest) {
 export async function PATCH(req: NextRequest) {
     try {
         const usrId = await Auth.authenticate();
-        console.log(usrId);
+        // console.log(usrId);
         if (!usrId) return NextResponse.json("Invalid credentials", { status: 401 });
 
         const body = await req.json();
         const validation = userSchema.safeParse(body);
-        console.log(validation);
+        // console.log(validation);
         if (!validation.success) return NextResponse.json({ message: "Invalid credentials" }, { status: 401 });
         const sess = (await cookies()).get("session-us")?.value;
-        console.log(sess);
+        // console.log(sess);
         const usr = await prisma.session.findFirst({ where: { sessionToken: sess } });
-        console.log(usr);
+        // console.log(usr);
         const hash = hashSync(validation.data.password, 10);
         const user = await prisma.user.update({
             data: {
@@ -47,7 +47,7 @@ export async function PATCH(req: NextRequest) {
             },
             where: { userId: usr.userId },
         });
-        console.log(user);
+        // console.log(user);
         return NextResponse.json("Success", { status: 200 });
     } catch (error) {
         if (error instanceof Error) {

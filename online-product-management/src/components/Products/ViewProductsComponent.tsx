@@ -28,19 +28,35 @@ const ProductSearch: React.FC = () => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [categories, setCategories] = useState<Record<string, string>>({});
 
   // Fetch all products from the database (for search)
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await fetch("/api/products");
-      const data: ApiResponse = await response.json();
+      const data = await response.json();
       setAllProducts(data.products);
 
       // Show 5 random products initially
       const randomSelection = getRandomProducts(data.products, 5);
       setRandomProducts(randomSelection);
     };
+
+    const fetchCategories = async () => {
+      const response = await fetch("/api/categories");
+      const data = await response.json();
+      console.log("categories = ", data);
+
+      // Create a mapping of category IDs to names
+      const categoryMap: Record<string, string> = {};
+      data.categories.forEach((category: { categoryId: string | number; name: string; createdAt: unknown }) => {
+        categoryMap[category.categoryId] = category.name;
+      });
+      setCategories(categoryMap);
+    };
+
     fetchProducts();
+    fetchCategories();
   }, []);
 
   // Function to select random products from all products
@@ -100,7 +116,7 @@ const ProductSearch: React.FC = () => {
   };
 
   const handleProductClick = (product: Product) => {
-    console.log(`${product} is cliekced`)
+    // console.log(`${product} is clicked`)
     router.push(`/viewproducts/${product.wsCode}`);
   };
 
@@ -179,7 +195,7 @@ const ProductSearch: React.FC = () => {
                 <p className="text-xl font-semibold text-green-600">${product.mrp * 0.9}</p>
                 <p className="text-sm text-gray-600">MRP: ${product.mrp}</p>
                 <p className="text-sm text-gray-600">Package Size: {product.packageSize}</p>
-                <p className="text-sm text-gray-600">Category: {product.categoryId}</p>
+                <p className="text-sm text-gray-600">Category: {categories[product.categoryId] || "Unknown"}</p>
 
                 {/* Tags */}
                 <div className="mt-2 flex flex-wrap gap-2">

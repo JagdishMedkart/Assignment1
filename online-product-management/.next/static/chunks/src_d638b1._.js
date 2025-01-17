@@ -313,7 +313,7 @@ const SignUpPage = ()=>{
         };
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        console.log(validate());
+        // console.log(validate());
         if (validate()) {
             try {
                 setSubmitting(true);
@@ -322,7 +322,7 @@ const SignUpPage = ()=>{
                     Email: email,
                     password: confirmPassword
                 };
-                console.log(data);
+                // console.log(data);
                 const response = await fetch('/api/auth/signup', {
                     method: "POST",
                     body: JSON.stringify(data),

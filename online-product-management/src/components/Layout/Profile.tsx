@@ -128,7 +128,7 @@ const Profile = (props: { Username: string, Email: string }) => {
         'Content-Type': 'application/json',
       }
     });
-    console.log(response);
+    // console.log(response);
     if (response.ok) {
       setNewPassword('');
       setConfirmPassword('');

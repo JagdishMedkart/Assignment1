@@ -7,14 +7,14 @@ export async function POST(req: NextRequest) {
   try{
     if (req.method === 'POST') {
         const body= await req.json();
-        console.log(body);
+        // console.log(body);
         const validation = authSchema.safeParse(body);
-        console.log(validation);
-        console.log(validation.success)
+        // console.log(validation);
+        // console.log(validation.success)
         if (!validation.success)
             return NextResponse.json({ message: 'User registration failed', success: false },{status:500});
         const hash = hashSync(body.password,10);
-        console.log(hash);
+        // console.log(hash);
         const newUser= await prisma.user.create({
             data:{
               name:body.Username,

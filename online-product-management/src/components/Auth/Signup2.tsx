@@ -256,7 +256,7 @@ const SignUpPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(validate());
+    // console.log(validate());
     if (validate()) {
       try {
         setSubmitting(true);
@@ -265,7 +265,7 @@ const SignUpPage: React.FC = () => {
           Email: email,
           password: confirmPassword,
         }
-        console.log(data);
+        // console.log(data);
         const response = await fetch('/api/auth/signup', {
           method: "POST",
           body: JSON.stringify(data),

@@ -33,7 +33,7 @@ const ProductBuilder: React.FC = () => {
     try {
       const response = await fetch("/api/categories");
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       if (data.success) setCategories(data.categories);
       else toast.error("Failed to load categories.");
     } catch (error) {
@@ -68,7 +68,7 @@ const ProductBuilder: React.FC = () => {
     setLoading(true);
   
     try {
-      console.log(categories);
+      // console.log(categories);
       const response = await fetch("/api/products", {
         method: "POST",
         headers: {
