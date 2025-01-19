@@ -1,16 +1,20 @@
 {
   "/page": "app/page.js",
   "/api/auth/check/route": "app/api/auth/check/route.js",
-  "/cart/page": "app/cart/page.js",
   "/api/cart/index/route": "app/api/cart/index/route.js",
+  "/cart/page": "app/cart/page.js",
+  "/api/cart/update/route": "app/api/cart/update/route.js",
+  "/api/order/place/route": "app/api/order/place/route.js",
+  "/api/cart/clear/route": "app/api/cart/clear/route.js",
+  "/orders/page": "app/orders/page.js",
+  "/api/orders/route": "app/api/orders/route.js",
   "/viewproducts/page": "app/viewproducts/page.js",
   "/api/categories/route": "app/api/categories/route.js",
   "/api/products/route": "app/api/products/route.js",
   "/viewproducts/[wsCode]/page": "app/viewproducts/[wsCode]/page.js",
   "/api/products/[wsCode]/route": "app/api/products/[wsCode]/route.js",
-  "/api/order/place/route": "app/api/order/place/route.js",
-  "/orders/page": "app/orders/page.js",
-  "/api/orders/route": "app/api/orders/route.js",
+  "/api/cart/add/route": "app/api/cart/add/route.js",
+  "/api/cart/remove/[id]/[userId]/route": "app/api/cart/remove/[id]/[userId]/route.js",
   "/api/auth/check-superadmin/route": "app/api/auth/check-superadmin/route.js",
   "/dashboard/orders/page": "app/dashboard/orders/page.js",
   "/api/admin/orders/route": "app/api/admin/orders/route.js",
@@ -19,7 +23,5 @@
   "/api/admin/orders/[orderId]/route": "app/api/admin/orders/[orderId]/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/dashboard/products/page": "app/dashboard/products/page.js",
-  "/api/admin/products/route": "app/api/admin/products/route.js",
-  "/dashboard/users/page": "app/dashboard/users/page.js",
-  "/api/admin/users/route": "app/api/admin/users/route.js"
+  "/api/admin/products/route": "app/api/admin/products/route.js"
 }

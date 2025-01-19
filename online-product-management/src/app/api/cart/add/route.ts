@@ -1,5 +1,3 @@
-// src/app/api/cart/add/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../prisma/client";
 import { withAuth } from "../../../../middleware/authMiddleware"; // Import the authentication middleware
@@ -43,13 +41,13 @@ export async function POST(req: NextRequest) {
 
     // Check if the product already exists in the user's cart
     const existingItem = await prisma.cartItem.findFirst({
-      where: { userId: user?.userId, productId },
+      where: { userId: user.userId, productId },
     });
 
     if (existingItem) {
       // Update the quantity if the product is already in the cart
       const updatedItem = await prisma.cartItem.update({
-        where: { cartItemId: existingItem.cartItemId },
+        where: { userId_productId: { userId: user.userId, productId } }, // Correct composite key usage
         data: { quantity: existingItem.quantity + quantity },
       });
 

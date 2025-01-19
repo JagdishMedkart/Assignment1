@@ -94,7 +94,7 @@ async function GET(req) {
                 status: 401
             });
         }
-        let user = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].user.findFirst({
+        const user = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].user.findFirst({
             where: {
                 sessions: {
                     some: {

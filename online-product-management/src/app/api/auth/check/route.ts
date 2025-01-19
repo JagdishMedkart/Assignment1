@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    let user = await prisma.user.findFirst({
+    const user = await prisma.user.findFirst({
       where: {
         sessions: {
           some: {

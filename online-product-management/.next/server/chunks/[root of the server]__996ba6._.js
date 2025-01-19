@@ -127,7 +127,6 @@ async function withAuth(req, res) {
 
 var { r: __turbopack_require__, f: __turbopack_module_context__, i: __turbopack_import__, s: __turbopack_esm__, v: __turbopack_export_value__, n: __turbopack_export_namespace__, c: __turbopack_cache__, M: __turbopack_modules__, l: __turbopack_load__, j: __turbopack_dynamic__, P: __turbopack_resolve_absolute_path__, U: __turbopack_relative_url__, R: __turbopack_resolve_module_id_path__, b: __turbopack_worker_blob_url__, g: global, __dirname, x: __turbopack_external_require__, y: __turbopack_external_import__, z: __turbopack_require_stub__ } = __turbopack_context__;
 {
-// src/app/api/cart/remove/[id]/route.ts
 __turbopack_esm__({
     "DELETE": (()=>DELETE),
     "config": (()=>config)
@@ -149,7 +148,8 @@ async function DELETE(req, { params }) {
                 status: 401
             });
         }
-        let user = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].user.findFirst({
+        // Find the authenticated user based on the session token
+        const user = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].user.findFirst({
             where: {
                 sessions: {
                     some: {
@@ -166,14 +166,26 @@ async function DELETE(req, { params }) {
                 status: 401
             });
         }
-        const { id, userId } = params; // Get cartItemId from URL parameters
+        const { id } = params; // Get productId from URL parameters
+        const userId = user.userId; // Use userId from session
+        if (!id) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                message: "Product ID is required",
+                success: false
+            }, {
+                status: 400
+            });
+        }
+        // Find the cart item using the composite key (userId and productId)
         const cartItem = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].cartItem.findUnique({
             where: {
-                productId: Number(id),
-                userId: Number(userId)
+                userId_productId: {
+                    userId,
+                    productId: Number(id)
+                }
             }
         });
-        if (!cartItem || cartItem.userId !== user.userId) {
+        if (!cartItem) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 message: "Cart item not found or unauthorized",
                 success: false
@@ -181,10 +193,13 @@ async function DELETE(req, { params }) {
                 status: 404
             });
         }
+        // Delete the cart item
         await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].cartItem.delete({
             where: {
-                productId: Number(id),
-                userId: Number(userId)
+                userId_productId: {
+                    userId,
+                    productId: Number(id)
+                }
             }
         });
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({

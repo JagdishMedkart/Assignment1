@@ -127,7 +127,6 @@ async function withAuth(req, res) {
 
 var { r: __turbopack_require__, f: __turbopack_module_context__, i: __turbopack_import__, s: __turbopack_esm__, v: __turbopack_export_value__, n: __turbopack_export_namespace__, c: __turbopack_cache__, M: __turbopack_modules__, l: __turbopack_load__, j: __turbopack_dynamic__, P: __turbopack_resolve_absolute_path__, U: __turbopack_relative_url__, R: __turbopack_resolve_module_id_path__, b: __turbopack_worker_blob_url__, g: global, __dirname, x: __turbopack_external_require__, y: __turbopack_external_import__, z: __turbopack_require_stub__ } = __turbopack_context__;
 {
-// src/app/api/cart/add/route.ts
 __turbopack_esm__({
     "POST": (()=>POST),
     "config": (()=>config)
@@ -178,7 +177,7 @@ async function POST(req) {
         // Check if the product already exists in the user's cart
         const existingItem = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].cartItem.findFirst({
             where: {
-                userId: user?.userId,
+                userId: user.userId,
                 productId
             }
         });
@@ -186,7 +185,10 @@ async function POST(req) {
             // Update the quantity if the product is already in the cart
             const updatedItem = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].cartItem.update({
                 where: {
-                    cartItemId: existingItem.cartItemId
+                    userId_productId: {
+                        userId: user.userId,
+                        productId
+                    }
                 },
                 data: {
                     quantity: existingItem.quantity + quantity

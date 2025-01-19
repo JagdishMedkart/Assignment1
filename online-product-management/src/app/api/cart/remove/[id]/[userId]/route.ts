@@ -13,7 +13,8 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       );
     }
 
-    let user = await prisma.user.findFirst({
+    // Find the authenticated user based on the session token
+    const user = await prisma.user.findFirst({
       where: {
         sessions: {
           some: {
@@ -33,9 +34,16 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     const { id } = params; // Get productId from URL parameters
     const userId = user.userId; // Use userId from session
 
-    // Look for the cart item with both productId and userId (composite key)
+    if (!id) {
+      return NextResponse.json(
+        { message: "Product ID is required", success: false },
+        { status: 400 }
+      );
+    }
+
+    // Find the cart item using the composite key (userId and productId)
     const cartItem = await prisma.cartItem.findUnique({
-      where: { productId_userId: { productId: Number(id), userId: userId } },
+      where: { userId_productId: { userId, productId: Number(id) } },
     });
 
     if (!cartItem) {
@@ -47,7 +55,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
 
     // Delete the cart item
     await prisma.cartItem.delete({
-      where: { productId_userId: { productId: Number(id), userId: userId } },
+      where: { userId_productId: { userId, productId: Number(id) } },
     });
 
     return NextResponse.json(
