@@ -12,7 +12,7 @@ const features = [
   },
   {
     title: "Advanced Search",
-    headline: "Search products by name, code, or category for faster access.",
+    headline: "Search products by name or product code for faster access.",
     icon: <FaSearch size={40} />,
   },
   {
@@ -40,13 +40,13 @@ function Home() {
             Simplify your product and order management with an intuitive and powerful platform.
           </p>
           <div className="flex justify-center gap-4">
-            <button className="bg-white text-blue-500 py-3 px-6 rounded-full font-semibold hover:bg-gray-200 transition"
+            <button className="bg-blue-700 text-white py-3 px-6 rounded-full font-semibold hover:bg-blue-800 transition"
             onClick={() => router.push("/viewproducts")}>
               Get Started
             </button>
-            <button className="bg-blue-700 text-white py-3 px-6 rounded-full font-semibold hover:bg-blue-800 transition">
+            {/* <button className="bg-blue-700 text-white py-3 px-6 rounded-full font-semibold hover:bg-blue-800 transition">
               Learn More
-            </button>
+            </button> */}
           </div>
         </div>
       </header>
@@ -81,9 +81,9 @@ function Home() {
           <p className="text-lg font-medium mb-8">
             Get started today and experience effortless product and order management.
           </p>
-          <button className="bg-white text-blue-500 py-3 px-6 rounded-full font-semibold hover:bg-gray-200 transition">
+          {/* <button className="bg-white text-blue-500 py-3 px-6 rounded-full font-semibold hover:bg-gray-200 transition">
             Start Now
-          </button>
+          </button> */}
         </div>
       </section>
 

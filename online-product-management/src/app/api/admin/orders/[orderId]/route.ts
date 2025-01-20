@@ -37,7 +37,7 @@ export async function GET(req: NextRequest, { params }: { params: { orderId: str
 
     // Calculate total amount from the order items
     const totalAmount = order.orderItems.reduce(
-      (acc, item) => acc + item.totalPrice,
+      (acc, item) => acc + (item.totalPrice * 0.9),
       0
     );
 

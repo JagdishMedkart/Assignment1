@@ -128,12 +128,12 @@ const AdminOrdersPage: React.FC = () => {
                     <div className="bg-green-500 text-white p-6 rounded-lg shadow-md text-center hover:bg-green-600 transition-all flex flex-col items-center">
                         <FaDollarSign size={36} />
                         <h4 className="text-lg font-semibold mt-2">Total Sales Today</h4>
-                        <p className="text-3xl">${dashboardStats.totalSalesToday}</p>
+                        <p className="text-3xl">${(0.9 * dashboardStats.totalSalesToday)}</p>
                     </div>
                     <div className="bg-red-500 text-white p-6 rounded-lg shadow-md text-center hover:bg-red-600 transition-all flex flex-col items-center">
                         <FaDollarSign size={36} />
                         <h4 className="text-lg font-semibold mt-2">Pending Payments</h4>
-                        <p className="text-3xl">${dashboardStats.pendingPayments}</p>
+                        <p className="text-3xl">${(0.9 * dashboardStats.pendingPayments)}</p>
                     </div>
                     {dashboardStats.mostPurchasedProduct && (
                         <div className="bg-purple-500 text-white p-6 rounded-lg shadow-md text-center hover:bg-purple-600 transition-all flex flex-col items-center">
@@ -171,7 +171,7 @@ const AdminOrdersPage: React.FC = () => {
                             </div>
                             <div className="flex justify-between items-center mt-2">
                                 <p className="w-32 truncate">{order.user.name}</p>
-                                <p className="w-20 text-right">${order.totalAmount.toFixed(2)}</p>
+                                <p className="w-20 text-right">${0.9 * Number(order.totalAmount.toFixed(2))}</p>
                                 <div className="flex gap-4">
                                     <select
                                         value={order.status}
@@ -213,8 +213,8 @@ const AdminOrdersPage: React.FC = () => {
                                                 <tr key={item.orderItemId}>
                                                     <td>{item.product.name}</td>
                                                     <td>{item.quantity}</td>
-                                                    <td>${item.unitPrice}</td>
-                                                    <td>${item.totalPrice}</td>
+                                                    <td>${0.9 * item.unitPrice}</td>
+                                                    <td>${0.9 * item.totalPrice}</td>
                                                 </tr>
                                             ))}
                                         </tbody>

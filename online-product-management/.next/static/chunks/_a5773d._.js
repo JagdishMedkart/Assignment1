@@ -109,10 +109,10 @@ const CartProvider = ({ children })=>{
     // Fetch the cart from the database
     const fetchCart = async ()=>{
         try {
-            const response = await fetch("/api/cart/index");
-            if (!response.ok) throw new Error("Failed to fetch cart.");
-            const data = await response.json();
-            setCart(data.cart || []);
+        // const response = await fetch("/api/cart/index");
+        // if (!response.ok) throw new Error("Failed to fetch cart.");
+        // const data = await response.json();
+        // setCart(data.cart || []);
         } catch (error) {
             console.error("Error fetching cart:", error);
         }

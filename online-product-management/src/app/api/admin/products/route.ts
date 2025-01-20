@@ -46,11 +46,13 @@ export async function GET(req: NextRequest) {
 
     // Count total products for pagination calculation
     const totalProducts = await prisma.product.count();
+    const totalPages = Math.ceil(totalProducts / productsPerPage);
 
     return NextResponse.json({
       message: "Products fetched successfully",
       products,
-      totalProducts,
+      page,
+      totalPages,
     });
   } catch (error) {
     console.error("Error fetching products:", error);

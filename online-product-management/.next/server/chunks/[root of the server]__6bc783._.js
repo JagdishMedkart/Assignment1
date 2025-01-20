@@ -188,8 +188,11 @@ async function GET(req) {
         const { searchParams } = new URL(req.url);
         const page = parseInt(searchParams.get("page") || "1");
         const limit = parseInt(searchParams.get("limit") || "5");
-        // Step 1: Get all wsCode values of products
+        // Step 1: Get all wsCode values of products that are not deleted
         const wsCodes = await prisma.product.findMany({
+            where: {
+                deletedAt: null
+            },
             select: {
                 wsCode: true
             }
@@ -208,7 +211,8 @@ async function GET(req) {
             where: {
                 wsCode: {
                     in: randomWsCodes
-                }
+                },
+                deletedAt: null
             }
         });
         const total = wsCodes.length;

@@ -112,8 +112,9 @@ export async function GET(req: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "5");
 
-    // Step 1: Get all wsCode values of products
+    // Step 1: Get all wsCode values of products that are not deleted
     const wsCodes = await prisma.product.findMany({
+      where: { deletedAt: null }, // Exclude soft-deleted products
       select: { wsCode: true },
     });
 
@@ -130,7 +131,7 @@ export async function GET(req: NextRequest) {
 
     // Step 3: Fetch products using the randomly selected wsCodes
     const products = await prisma.product.findMany({
-      where: { wsCode: { in: randomWsCodes } },
+      where: { wsCode: { in: randomWsCodes }, deletedAt: null }, // Ensure to filter again
     });
 
     const total = wsCodes.length;

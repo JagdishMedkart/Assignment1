@@ -354,7 +354,7 @@ const Nav = ()=>{
                                         columnNumber: 18
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "button",
-                                        onClick: ()=>router.push("/auth/signup"),
+                                        onClick: ()=>router.push("/auth/signin"),
                                         className: "bg-white text-black font-medium rounded-lg text-sm px-5 py-1 text-center",
                                         children: "Login"
                                     }, void 0, false, {
@@ -383,7 +383,7 @@ const Nav = ()=>{
                                     columnNumber: 18
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     type: "button",
-                                    onClick: ()=>router.push("/auth/signup"),
+                                    onClick: ()=>router.push("/auth/signin"),
                                     className: "bg-white text-black font-medium rounded-lg text-sm px-5 py-1 text-center",
                                     children: "Login"
                                 }, void 0, false, {
@@ -527,7 +527,7 @@ const features = [
     },
     {
         title: "Advanced Search",
-        headline: "Search products by name, code, or category for faster access.",
+        headline: "Search products by name or product code for faster access.",
         icon: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaSearch"], {
             size: 40
         }, void 0, false, {
@@ -588,26 +588,16 @@ function Home() {
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "jsx-9eca077013032144" + " " + "flex justify-center gap-4",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    onClick: ()=>router.push("/viewproducts"),
-                                    className: "jsx-9eca077013032144" + " " + "bg-white text-blue-500 py-3 px-6 rounded-full font-semibold hover:bg-gray-200 transition",
-                                    children: "Get Started"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/Layout/Home.tsx",
-                                    lineNumber: 43,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    className: "jsx-9eca077013032144" + " " + "bg-blue-700 text-white py-3 px-6 rounded-full font-semibold hover:bg-blue-800 transition",
-                                    children: "Learn More"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/components/Layout/Home.tsx",
-                                    lineNumber: 47,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: ()=>router.push("/viewproducts"),
+                                className: "jsx-9eca077013032144" + " " + "bg-blue-700 text-white py-3 px-6 rounded-full font-semibold hover:bg-blue-800 transition",
+                                children: "Get Started"
+                            }, void 0, false, {
+                                fileName: "[project]/src/components/Layout/Home.tsx",
+                                lineNumber: 43,
+                                columnNumber: 13
+                            }, this)
+                        }, void 0, false, {
                             fileName: "[project]/src/components/Layout/Home.tsx",
                             lineNumber: 42,
                             columnNumber: 11
@@ -706,14 +696,6 @@ function Home() {
                         }, void 0, false, {
                             fileName: "[project]/src/components/Layout/Home.tsx",
                             lineNumber: 81,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            className: "jsx-9eca077013032144" + " " + "bg-white text-blue-500 py-3 px-6 rounded-full font-semibold hover:bg-gray-200 transition",
-                            children: "Start Now"
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/Layout/Home.tsx",
-                            lineNumber: 84,
                             columnNumber: 11
                         }, this)
                     ]

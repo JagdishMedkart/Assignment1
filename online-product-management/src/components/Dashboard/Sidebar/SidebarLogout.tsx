@@ -37,7 +37,7 @@ export function SidebarLogout() {
     window.location.href = '/';
   }
 
-  return <div className="flex py-1 px-2 mt-1 hover:bg-red-600 text-red-600 hover:text-white hover:rounded-md rounded-md cursor-pointer transition-colors duration-300" onClick={async () => handleLogout}>
+  return <div className="flex py-1 px-2 mt-1 hover:bg-red-600 text-red-600 hover:text-white hover:rounded-md rounded-md cursor-pointer transition-colors duration-300" onClick={handleLogout}>
     <div className='flex-2 pr-3 items-center flex'><IoMdLogOut /></div>
     <div className='flex-1 whitespace-nowrap'>Log Out</div>
   </div>

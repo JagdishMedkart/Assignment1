@@ -220,7 +220,7 @@ const ProductBuilder: React.FC = () => {
                 <input
                   type="file"
                   multiple
-                  accept=".png, .jpeg, .webp"
+                  accept="image/png, image/jpeg, image/webp"
                   onChange={(e) =>
                     setImages(e.target.files ? Array.from(e.target.files) : [])
                   }

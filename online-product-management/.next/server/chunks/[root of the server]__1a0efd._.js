@@ -122,9 +122,8 @@ const deleteDirectoryRecursive = (dirPath)=>{
 };
 async function DELETE(req, { params }) {
     try {
-        // Await params to access wsCode correctly
-        const { wsCode } = await params; // Awaiting to access wsCode
-        const wsCodeNumber = Number(wsCode); // Convert to number
+        const { wsCode } = params; // Access wsCode directly
+        const wsCodeNumber = Number(wsCode); // Convert wsCode to a number
         // Validate wsCode
         if (!wsCodeNumber) {
             return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
@@ -148,25 +147,34 @@ async function DELETE(req, { params }) {
                 status: 404
             });
         }
-        // Delete images and the directory from the server
-        const uploadDir = __TURBOPACK__imported__module__$5b$externals$5d2f$path__$5b$external$5d$__$28$path$2c$__cjs$29$__["default"].join(process.cwd(), "public", "uploads", wsCodeNumber.toString());
-        deleteDirectoryRecursive(uploadDir); // Delete images and the folder
-        // Delete the product from the database
-        await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].product.delete({
+        // Soft delete: Update the deletedAt field instead of deleting the product
+        const deletedAt = new Date();
+        await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].product.update({
             where: {
                 wsCode: wsCodeNumber
+            },
+            data: {
+                deletedAt
             }
         });
+        // Optional: Delete images and directories if needed
+        // const uploadDir = path.join(
+        //   process.cwd(),
+        //   "public",
+        //   "uploads",
+        //   wsCodeNumber.toString()
+        // );
+        // deleteDirectoryRecursive(uploadDir); // Delete images and folder
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            message: `Product with wsCode ${wsCodeNumber} deleted successfully`,
+            message: `Product with wsCode ${wsCodeNumber} soft-deleted successfully`,
             success: true
         }, {
             status: 200
         });
     } catch (error) {
-        console.error("Error deleting product:", error);
+        console.error("Error soft deleting product:", error);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-            message: "Failed to delete product",
+            message: "Failed to soft delete product",
             success: false,
             error: error.message
         }, {

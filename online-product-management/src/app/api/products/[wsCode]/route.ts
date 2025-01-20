@@ -24,10 +24,8 @@ export async function DELETE(
   { params }: { params: { wsCode: string } }
 ) {
   try {
-    // Await params to access wsCode correctly
-    const { wsCode } = await params; // Awaiting to access wsCode
-
-    const wsCodeNumber = Number(wsCode); // Convert to number
+    const { wsCode } = params; // Access wsCode directly
+    const wsCodeNumber = Number(wsCode); // Convert wsCode to a number
 
     // Validate wsCode
     if (!wsCodeNumber) {
@@ -39,7 +37,7 @@ export async function DELETE(
 
     // Check if the product exists
     const product = await prisma.product.findUnique({
-      where: { wsCode: wsCodeNumber }, // Use the number type for wsCode
+      where: { wsCode: wsCodeNumber },
     });
 
     if (!product) {
@@ -52,32 +50,34 @@ export async function DELETE(
       );
     }
 
-    // Delete images and the directory from the server
-    const uploadDir = path.join(
-      process.cwd(),
-      "public",
-      "uploads",
-      wsCodeNumber.toString()
-    );
-    deleteDirectoryRecursive(uploadDir); // Delete images and the folder
-
-    // Delete the product from the database
-    await prisma.product.delete({
-      where: { wsCode: wsCodeNumber }, // Use the number type for wsCode
+    // Soft delete: Update the deletedAt field instead of deleting the product
+    const deletedAt = new Date();
+    await prisma.product.update({
+      where: { wsCode: wsCodeNumber },
+      data: { deletedAt },
     });
+
+    // Optional: Delete images and directories if needed
+    // const uploadDir = path.join(
+    //   process.cwd(),
+    //   "public",
+    //   "uploads",
+    //   wsCodeNumber.toString()
+    // );
+    // deleteDirectoryRecursive(uploadDir); // Delete images and folder
 
     return NextResponse.json(
       {
-        message: `Product with wsCode ${wsCodeNumber} deleted successfully`,
+        message: `Product with wsCode ${wsCodeNumber} soft-deleted successfully`,
         success: true,
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error deleting product:", error);
+    console.error("Error soft deleting product:", error);
     return NextResponse.json(
       {
-        message: "Failed to delete product",
+        message: "Failed to soft delete product",
         success: false,
         error: error.message,
       },
@@ -85,6 +85,7 @@ export async function DELETE(
     );
   }
 }
+
 
 // const saveImages = async (wsCode: string, base64Images: string[]) => {
 //   const uploadDir = path.join(process.cwd(), "public", "uploads", wsCode.toString());

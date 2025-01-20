@@ -281,7 +281,7 @@ const CartPage = ()=>{
                 }, {});
                 setQuantities(initialQuantities);
             } else {
-                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hot$2d$toast$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].error("Failed to fetch cart items");
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hot$2d$toast$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].error("Login to see your cart items!");
             }
         } catch (error) {
             console.error("Error fetching cart:", error);

@@ -115,10 +115,10 @@ async function POST(req) {
     try {
         if (req.method === 'POST') {
             const body = await req.json();
-            console.log(body);
+            // console.log(body);
             const validation = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$api$2f$auth$2f$authSchema$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["authSchema"].safeParse(body);
-            console.log(validation);
-            console.log(validation.success);
+            // console.log(validation);
+            // console.log(validation.success)
             if (!validation.success) return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
                 message: 'User registration failed',
                 success: false
@@ -126,7 +126,7 @@ async function POST(req) {
                 status: 500
             });
             const hash = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$bcrypt$2d$ts$2f$dist$2f$node$2e$mjs__$5b$app$2d$route$5d$__$28$ecmascript$29$__["hashSync"])(body.password, 10);
-            console.log(hash);
+            // console.log(hash);
             const newUser = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].user.create({
                 data: {
                     name: body.Username,

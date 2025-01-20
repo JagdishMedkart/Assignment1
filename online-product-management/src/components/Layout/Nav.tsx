@@ -78,7 +78,7 @@ const Nav: React.FC = () => {
               ) : (
                 <button
                   type="button"
-                  onClick={() => router.push("/auth/signup")}
+                  onClick={() => router.push("/auth/signin")}
                   className="bg-white text-black font-medium rounded-lg text-sm px-5 py-1 text-center"
                 >
                   Login
@@ -95,7 +95,7 @@ const Nav: React.FC = () => {
                   : (
                 <button
                   type="button"
-                  onClick={() => router.push("/auth/signup")}
+                  onClick={() => router.push("/auth/signin")}
                   className="bg-white text-black font-medium rounded-lg text-sm px-5 py-1 text-center"
                 >
                   Login

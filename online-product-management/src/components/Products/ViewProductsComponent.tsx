@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 
 // Define types for product and API response
 interface Product {
+  deletedAt: null;
   wsCode: string;
   name: string;
   mrp: number;
@@ -20,8 +21,14 @@ interface ApiResponse {
   products: Product[];
 }
 
+interface ProductIndex {
+  wsCode: string;
+  name: string;
+}
+
 const ProductSearch: React.FC = () => {
   const router = useRouter();
+  const [searchIndex, setSearchIndex] = useState<ProductIndex[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [randomProducts, setRandomProducts] = useState<Product[]>([]);
@@ -30,15 +37,29 @@ const ProductSearch: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [categories, setCategories] = useState<Record<string, string>>({});
 
+  useEffect(() => {
+    // Fetch the lightweight search index
+    const fetchSearchIndex = async () => {
+      try {
+        const response = await fetch("/api/products/search");
+        const data = await response.json();
+        setSearchIndex(data.products);
+      } catch (error) {
+        console.error("Error fetching search index:", error);
+      }
+    };
+    fetchSearchIndex();
+  }, []);
+
   // Fetch all products from the database (for search)
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch("/api/products");
+      const response = await fetch("/api/products?limit=8");
       const data = await response.json();
       setAllProducts(data.products);
 
       // Show 5 random products initially
-      const randomSelection = getRandomProducts(data.products, 5);
+      const randomSelection = getRandomProducts(data.products, 8);
       setRandomProducts(randomSelection);
     };
 
@@ -66,10 +87,11 @@ const ProductSearch: React.FC = () => {
   };
 
   // Initialize fuse.js for fuzzy searching
-  const fuse = new Fuse(allProducts, {
-    keys: ["name", "wsCode"], // Search by product name and wsCode
-    threshold: 0.3, // Fuzzy matching threshold
-  });
+  const fuse = new Fuse(searchIndex, // Only use active products
+    {
+      keys: ["name", "wsCode"], // Search by product name and wsCode
+      threshold: 0.3, // Fuzzy matching threshold
+    });
 
   // Perform search and filter products based on query
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,7 +137,7 @@ const ProductSearch: React.FC = () => {
     setSelectedProduct(null);
   };
 
-  const handleProductClick = (product: Product) => {
+  const handleProductClick = (product: ProductIndex) => {
     // console.log(`${product} is clicked`)
     router.push(`/viewproducts/${product.wsCode}`);
   };
@@ -129,7 +151,7 @@ const ProductSearch: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="max-w-7xl mx-auto p-6 mb-6">
       {/* Search Bar */}
       <div className="relative mb-6 flex items-center space-x-2">
         <input
@@ -176,38 +198,53 @@ const ProductSearch: React.FC = () => {
           {searchQuery.length > 0 || selectedProduct ? "Search Results" : "Recommended Products"}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {(searchQuery.length > 0 || selectedProduct ? filteredProducts : randomProducts).map((product) => (
-            <div key={product.wsCode} className="border rounded-lg overflow-hidden shadow-lg bg-white transition-transform duration-300 ease-in-out hover:scale-105">
-              <div className="w-full h-64 relative">
-                <Image
-                  src={getRandomImage(product.images)} // Random image from product images
-                  alt={product.name}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-t-lg"
-                  onClick={() => handleProductClick(product)}
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {highlightText(product.name, searchQuery)}
-                </h3>
-                <p className="text-xl font-semibold text-green-600">${product.mrp * 0.9}</p>
-                <p className="text-sm text-gray-600">MRP: ${product.mrp}</p>
-                <p className="text-sm text-gray-600">Package Size: {product.packageSize}</p>
-                <p className="text-sm text-gray-600">Category: {categories[product.categoryId] || "Unknown"}</p>
+          {(searchQuery.length > 0 || selectedProduct ? filteredProducts : randomProducts)
+            .filter((product) => product.deletedAt === null) // Exclude deleted products
+            .map((product) => (
+              <div
+                key={product.wsCode}
+                className="border rounded-lg overflow-hidden shadow-lg bg-white transition-transform duration-300 ease-in-out hover:scale-105"
+              >
+                <div className="w-full h-64 relative">
+                  <Image
+                    src={getRandomImage(product.images)} // Random image from product images
+                    alt={product.name}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    className="rounded-t-lg"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    onClick={() => handleProductClick(product)}
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {highlightText(product.name, searchQuery)}
+                  </h3>
+                  <div className="flex items-baseline mb-2">
+                    <p className="text-3xl font-bold text-green-600">
+                      ${0.9 * product.mrp}
+                    </p>
+                    <p className="text-lg text-gray-400 line-through ml-3">
+                      ${product.mrp}
+                    </p>
+                  </div>
+                  {/* <p className="text-sm text-gray-600">Package Size: {product.packageSize}</p> */}
+                  {/* <p className="text-sm text-gray-600">
+                    Category: {categories[product.categoryId] || "Unknown"}
+                  </p> */}
 
-                {/* Tags */}
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {product.tags && product.tags.map((tag, index) => (
-                    <span key={index} className="text-xs text-white bg-blue-500 px-2 py-1 rounded-full">
-                      {tag}
-                    </span>
-                  ))}
+                  {/* Tags */}
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {product.tags &&
+                      product.tags.map((tag, index) => (
+                        <span key={index} className="text-xs text-white bg-blue-500 px-2 py-1 rounded-full">
+                          {tag}
+                        </span>
+                      ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>

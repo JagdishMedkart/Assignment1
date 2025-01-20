@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { FaEye, FaTrash } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { IoInformationCircle } from "react-icons/io5";
+import { number } from "zod";
 
 // Type for the Product
 interface Product {
@@ -41,7 +42,8 @@ const ProductList: React.FC = () => {
   const [detailedViewProduct, setDetailedViewProduct] = useState<Product | null>(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const productsPerPage = 5;
-  const [totalPages, setTotalPages] = useState();
+  const [totalPages, setTotalPages] = useState(1);
+  const [pendingOrders, setPendingOrders] = useState<number>(0);
 
 
   const fetchCategories = async () => {
@@ -75,43 +77,7 @@ const ProductList: React.FC = () => {
       await fetchCategories(); // Fetch categories first
     };
     fetchData();
-  }, []); // Empty dependency array ensures it runs only once on mount
-
-
-  useEffect(() => {
-    if (categories.length > 0) {
-      const fetchProducts = async () => {
-        setLoading(true);
-        try {
-          const [ordersRes] = await Promise.all([
-            fetch(`/api/admin/products?page=${currentPage}`),
-            // fetch("/api/admin/products/total-count"),
-          ]);
-
-          console.log(ordersRes);
-          // console.log(totalCountRes);
-          // const response = await fetch(`/api/admin/products?page=${currentPage}`);
-          // const data = await response.json();
-          if (ordersRes.ok) {
-            const ordersData = await ordersRes.json();
-            const mappedProducts = mapCategoriesToProducts(ordersData.products, categories);
-            setProducts(mappedProducts);
-            setTotalProducts(ordersData.totalProducts);
-
-            // setCurrentPage(data.currentPage);
-          } else {
-            toast.error("Failed to fetch Products");
-          }
-        } catch (error) {
-          console.error("Error fetching products:", error);
-          toast.error("An error occurred while fetching products.");
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchProducts(); // Fetch products only after categories are fetched
-    }
-  }, [categories, currentPage]);
+  }, []); // Empty dependency array ensures it runs only once on moun
 
 
   // Delete Modal
@@ -124,13 +90,13 @@ const ProductList: React.FC = () => {
           <div className="flex justify-between">
             <button
               onClick={onConfirm}
-              className="btn btn-sm bg-red-600 text-white hover:text-black"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg"
             >
               Yes
             </button>
             <button
               onClick={onCancel}
-              className="btn btn-sm bg-gray-500 text-white hover:text-black"
+              className="px-4 py-2 bg-red-600 text-white rounded-lg"
             >
               Cancel
             </button>
@@ -223,7 +189,7 @@ const ProductList: React.FC = () => {
           );
           setIsEditModalOpen(false);
           fetchProducts(currentPage);
-          window.location.reload();
+          // window.location.reload();
         } else {
           toast.error(result.message || "Failed to update product.");
         }
@@ -372,14 +338,14 @@ const ProductList: React.FC = () => {
   const fetchProducts = async (page: number) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/products?page=${page}&limit=5`);
+      const response = await fetch(`/api/admin/products?page=${page}`);
       const data = await response.json();
       console.log("data = ", data);
-      if (data.success) {
+      if (response.ok) {
         const mappedProducts = mapCategoriesToProducts(data.products, categories);
         setProducts(mappedProducts);
         setTotalPages(data.totalPages);
-        setCurrentPage(data.currentPage);
+        setCurrentPage(data.page);
       } else {
         toast.error(data.message || "Failed to fetch products");
       }
@@ -392,22 +358,64 @@ const ProductList: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchProducts(1)
+    fetchProducts(1);
   }, []);
+
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      const fetchProducts = async () => {
+        setLoading(true);
+        try {
+          const ordersRes = await fetch(`/api/admin/products?page=${currentPage}`);
+          // fetch("/api/admin/products/total-count")
+
+          console.log(ordersRes);
+          // console.log(totalCountRes);
+          // const response = await fetch(`/api/admin/products?page=${currentPage}`);
+          // const data = await response.json();
+          if (ordersRes.ok) {
+            const ordersData = await ordersRes.json();
+            console.log("ordersData = ", ordersData);
+            const mappedProducts = mapCategoriesToProducts(ordersData.products, categories);
+            setProducts(mappedProducts);
+            setTotalPages(ordersData.totalPages);
+
+            // setCurrentPage(data.currentPage);
+          } else {
+            toast.error("Failed to fetch Products");
+          }
+        } catch (error) {
+          console.error("Error fetching products:", error);
+          toast.error("An error occurred while fetching products.");
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchProducts(); // Fetch products only after categories are fetched
+    }
+  }, [categories, currentPage]);
 
   const handlePageChange = (page: number) => {
     if (page < 1 || page > totalPages) return;
     fetchProducts(page);
   };
 
-  const handleViewDetails = (product: Product) => {
-    fetchProducts(currentPage);
+  const handleViewDetails = async (product: Product) => {
+    const count = (await fetch(`/api/admin/pending-orders?wsCode=${product.wsCode}`, { method: "GET" }));
+    const res = await count.json();
+    console.log(res);
+    if (res.success) {
+      setPendingOrders(res?.pendingOrders);
+    }
+    // fetchProducts(currentPage);
     setDetailedViewProduct(product);
   };
 
   const handleCloseDetails = () => {
     setDetailedViewProduct(null);
     setCurrentSlideIndex(0);
+    // fetchProducts(currentPage);
   };
 
   return (
@@ -432,39 +440,58 @@ const ProductList: React.FC = () => {
           </thead>
           <tbody>
             {products.length > 0 ? (
-              products.map((product) => (
-                <tr key={product.wsCode} className="text-center">
-                  <td className="border border-gray-300 px-4 py-4">{product.wsCode}</td>
-                  <td className="border border-gray-300 px-4 py-4">{product.name}</td>
-                  <td className="border border-gray-300 px-4 py-4">${0.90 * product.mrp}</td>
-                  <td className="border border-gray-300 px-4 py-4">${product.mrp}</td>
-                  <td className="border border-gray-300 px-4 py-4">{product.packageSize}</td>
-                  <td className="border border-gray-300 px-4 py-4">
-                    {(Array.isArray(product.tags) ? product.tags : [product.tags]).join(", ")}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-4">{product.categoryName}</td>
-                  <td className="border border-gray-300 px-6 py-8 flex justify-center gap-2">
-                    <button
-                      className="btn btn-sm bg-blue-500 text-white mr-2"
-                      onClick={() => handleViewDetails(product)}
-                    >
-                      <IoInformationCircle size={25} style={{ fill: "black", background: "white" }} />
-                    </button>
-                    <button
-                      className="btn btn-sm bg-red-500 text-white hover:text-black mr-2"
-                      onClick={() => handleDeleteClick(product.wsCode)}
-                    >
-                      <FaTrash size={25} style={{ fill: "black", background: "white" }} />
-                    </button>
-                    <button
-                      className="btn btn-sm bg-blue-500 text-white hover:text-black"
-                      onClick={() => handleEditClick(product)}
-                    >
-                      <MdEdit size={25} style={{ fill: "black", background: "white" }} />
-                    </button>
-                  </td>
-                </tr>
-              ))
+              products.map((product) => {
+                const isDeleted = product.deletedAt !== null; // Check if the product is soft-deleted
+                return (
+                  <tr
+                    key={product.wsCode}
+                    className={`text-center ${isDeleted ? "bg-gray-200 text-gray-500" : ""}`}
+                  >
+                    <td className="border border-gray-300 px-4 py-4">{product.wsCode}</td>
+                    <td className="border border-gray-300 px-4 py-4">{product.name}</td>
+                    <td className="border border-gray-300 px-4 py-4">
+                      ${isDeleted ? "N/A" : (0.9 * product.mrp).toFixed(2)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-4">
+                      ${isDeleted ? "N/A" : product.mrp}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-4">
+                      {isDeleted ? "N/A" : product.packageSize}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-4">
+                      {(Array.isArray(product.tags) ? product.tags : [product.tags]).join(", ")}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-4">
+                      {product.categoryName}
+                    </td>
+                    <td className="border border-gray-300 px-6 py-8 flex justify-center gap-2">
+                      <button
+                        className={`btn btn-sm bg-blue-500 text-white mr-2`}
+                        onClick={() => handleViewDetails(product)}
+                      // disabled={isDeleted}
+                      >
+                        <IoInformationCircle size={25} style={{ fill: "black", background: "white" }} />
+                      </button>
+                      <button
+                        className={`btn btn-sm bg-red-500 text-white hover:text-black mr-2 ${isDeleted ? "opacity-50 cursor-not-allowed" : ""
+                          }`}
+                        onClick={() => !isDeleted && handleDeleteClick(product.wsCode)}
+                        disabled={isDeleted}
+                      >
+                        <FaTrash size={25} style={{ fill: "black", background: "white" }} />
+                      </button>
+                      <button
+                        className={`btn btn-sm bg-blue-500 text-white hover:text-black ${isDeleted ? "opacity-50 cursor-not-allowed" : ""
+                          }`}
+                        onClick={() => !isDeleted && handleEditClick(product)}
+                        disabled={isDeleted}
+                      >
+                        <MdEdit size={25} style={{ fill: "black", background: "white" }} />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
             ) : (
               <tr>
                 <td
@@ -477,6 +504,7 @@ const ProductList: React.FC = () => {
             )}
           </tbody>
         </table>
+
       )}
 
       <DeleteModal
@@ -494,33 +522,36 @@ const ProductList: React.FC = () => {
       {/* Pagination */}
       {products.length > 0 && (
         <div className="flex justify-between mt-6">
-        <button
+          <button
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((prev) => prev - 1)}
             className="px-4 py-2 bg-black text-white rounded disabled:opacity-50 hover:bg-gray-800 transition-all"
-        >
+          >
             Previous
-        </button>
-        <span className="text-lg font-semibold">{currentPage} of {totalPages}</span>
-        <button
+          </button>
+          <span className="text-lg font-semibold">{currentPage} of {totalPages}</span>
+          <button
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((prev) => prev + 1)}
             className="px-4 py-2 bg-black text-white rounded disabled:opacity-50 hover:bg-gray-800 transition-all"
-        >
+          >
             Next
-        </button>
-    </div>
+          </button>
+        </div>
       )}
 
       {detailedViewProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg shadow-lg w-3/4 max-w-4xl p-8 relative">
+            {/* Close Button */}
             <button
               onClick={handleCloseDetails}
               className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-full text-sm hover:bg-red-600"
             >
               Close
             </button>
+
+            {/* Main Content */}
             <div className="flex">
               {/* Left Section - Sliding Images */}
               <div className="w-1/2 flex items-center">
@@ -545,6 +576,7 @@ const ProductList: React.FC = () => {
                       </div>
                     ))}
                   </div>
+                  {/* Dots for slider */}
                   <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
                     {detailedViewProduct.images.map((_, index) => (
                       <button
@@ -562,12 +594,16 @@ const ProductList: React.FC = () => {
 
               {/* Right Section - Product Details */}
               <div className="w-1/2 pl-8">
+                {/* Product Name */}
                 <h1 className="text-2xl font-bold text-gray-800 mb-4">
                   {detailedViewProduct.name}
                 </h1>
+                {/* WS Code */}
                 <p className="text-sm text-gray-500 mb-4">
                   <strong>WS Code:</strong> {detailedViewProduct.wsCode}
                 </p>
+
+                {/* Pricing */}
                 <div className="flex items-baseline mb-4">
                   <p className="text-3xl font-bold text-green-600">
                     ${0.9 * detailedViewProduct.mrp}
@@ -576,12 +612,24 @@ const ProductList: React.FC = () => {
                     ${detailedViewProduct.mrp}
                   </p>
                 </div>
-                <div className="text-gray-700 space-y-3">
+
+                {/* Additional Details */}
+                <div className="text-gray-700 space-y-3 mb-6">
                   <p>
                     <strong>Package Size:</strong> {detailedViewProduct.packageSize}
                   </p>
                   <p>
                     <strong>Tags:</strong> {detailedViewProduct.tags.join(", ")}
+                  </p>
+                </div>
+
+                {/* Pending Orders - Highlighted Section */}
+                <div className="bg-blue-100 border border-blue-300 p-4 rounded-lg shadow-md mb-6">
+                  <h2 className="text-xl font-bold text-blue-600 mb-2">
+                    Pending Orders
+                  </h2>
+                  <p className="text-2xl font-semibold text-blue-800">
+                    {pendingOrders || 0}
                   </p>
                 </div>
               </div>

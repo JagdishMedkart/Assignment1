@@ -13,13 +13,13 @@ async function main() {
     { name: "Sports Equipment" },
   ];
 
-  // for (const category of categories) {
-  //   await prisma.category.upsert({
-  //     where: { name: category.name },
-  //     update: {},
-  //     create: category,
-  //   });
-  // }
+  for (const category of categories) {
+    await prisma.category.upsert({
+      where: { name: category.name },
+      update: {},
+      create: category,
+    });
+  }
   const hashedPassword = await bcrypt.hash("admin123", 10);
   console.log("Categories added successfully!");
 

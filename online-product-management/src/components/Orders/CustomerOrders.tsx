@@ -119,7 +119,7 @@ const OrdersPage: React.FC = () => {
               <div className="bg-yellow-500 text-white p-6 rounded-lg shadow-md flex flex-col items-center">
                 <FaDollarSign size={24} className="mb-2" />
                 <h4 className="text-lg font-semibold">Total Orders Cost</h4>
-                <p>${stats.totalSpent.toFixed(2)}</p>
+                <p>${(0.9 * Number(stats.totalSpent.toFixed(2)))}</p>
               </div>
             </div>
           )}
@@ -165,8 +165,8 @@ const OrdersPage: React.FC = () => {
                           <tr key={item.orderItemId}>
                             <td>{item.product.name}</td>
                             <td>{item.quantity}</td>
-                            <td>${item.unitPrice}</td>
-                            <td>${item.totalPrice}</td>
+                            <td>${item.unitPrice * 0.9}</td>
+                            <td>${item.totalPrice * 0.9}</td>
                           </tr>
                         ))}
                       </tbody>
