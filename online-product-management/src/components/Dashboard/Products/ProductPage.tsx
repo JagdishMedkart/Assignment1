@@ -1,5 +1,5 @@
 import React from 'react'
-import ProductDataDashBoard from './ProductDataDashboard';
+import ProductDataDashBoard from './ProductDataDashboard2';
 import { cookies } from 'next/headers';
 import prisma from '../../../../prisma/client';
 import ProductBuilder from './ProductBuilder';

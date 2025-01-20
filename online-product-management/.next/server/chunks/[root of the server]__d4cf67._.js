@@ -76,29 +76,6 @@ const __TURBOPACK__default__export__ = prisma;
 
 var { r: __turbopack_require__, f: __turbopack_module_context__, i: __turbopack_import__, s: __turbopack_esm__, v: __turbopack_export_value__, n: __turbopack_export_namespace__, c: __turbopack_cache__, M: __turbopack_modules__, l: __turbopack_load__, j: __turbopack_dynamic__, P: __turbopack_resolve_absolute_path__, U: __turbopack_relative_url__, R: __turbopack_resolve_module_id_path__, b: __turbopack_worker_blob_url__, g: global, __dirname, x: __turbopack_external_require__, y: __turbopack_external_import__, z: __turbopack_require_stub__ } = __turbopack_context__;
 {
-// import { NextRequest, NextResponse } from "next/server";
-// import prisma from "../../../../../prisma/client";
-// export async function GET(req: NextRequest) {
-//   try {
-//     const orders = await prisma.order.findMany({
-//       include: {
-//         user: { select: { name: true } },
-//       },
-//       orderBy: { createdAt: "desc" },
-//     });
-//     return NextResponse.json(
-//       { message: "Orders fetched successfully", orders },
-//       { status: 200 }
-//     );
-//   } catch (error) {
-//     console.error("Error fetching orders:", error);
-//     return NextResponse.json(
-//       { message: "Internal server error", success: false },
-//       { status: 500 }
-//     );
-//   }
-// }
-// /pages/api/admin/orders/index.ts
 __turbopack_esm__({
     "GET": (()=>GET)
 });
@@ -139,9 +116,9 @@ async function GET(req) {
         const page = parseInt(req.nextUrl.searchParams.get("page") || "1", 10);
         const ordersPerPage = 5;
         const skip = (page - 1) * ordersPerPage;
-        // Fetch orders for admin with pagination
+        // Fetch orders with true total
         const orders = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].order.findMany({
-            skip: (page - 1) * ordersPerPage,
+            skip,
             take: ordersPerPage,
             include: {
                 user: {
@@ -165,11 +142,19 @@ async function GET(req) {
                 createdAt: "desc"
             }
         });
+        // Calculate true total for each order
+        const ordersWithTrueTotal = orders.map((order)=>{
+            const trueTotal = order.orderItems.reduce((sum, item)=>sum + item.totalPrice, 0);
+            return {
+                ...order,
+                trueTotal
+            };
+        });
         // Count total orders for pagination calculation
         const totalOrders = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].order.count();
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             message: "Orders fetched successfully",
-            orders,
+            orders: ordersWithTrueTotal,
             totalOrders
         });
     } catch (error) {

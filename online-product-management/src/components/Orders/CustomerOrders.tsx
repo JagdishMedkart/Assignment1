@@ -140,13 +140,14 @@ const OrdersPage: React.FC = () => {
                     <AiOutlineCaretUp
                       size={16}
                       className={`transform transition-transform ${expandedOrders.includes(order.orderId)
-                          ? "rotate-180"
-                          : "rotate-0"
+                        ? "rotate-180"
+                        : "rotate-0"
                         }`}
                     />
-                    {/* Display dynamic order number */}
                     <p className="font-semibold">Order #{orderNumber}</p>
+                    {/* Display dynamic order number */}
                   </div>
+                  <p className="w-20 text-right">${0.9 * Number(order.trueTotal)}</p>
                   <p>{format(new Date(order.createdAt), "PPP")}</p>
                 </div>
                 {expandedOrders.includes(order.orderId) && (
@@ -174,10 +175,10 @@ const OrdersPage: React.FC = () => {
                     <div className="mt-4 flex gap-4 justify-center items-center">
                       <div
                         className={`flex items-center gap-2 px-4 py-2 rounded ${order.status === "DELIVERED"
-                            ? "bg-green-500 text-white"
-                            : order.status === "PENDING"
-                              ? "bg-red-500 text-white"
-                              : "bg-yellow-500 text-black"
+                          ? "bg-green-500 text-white"
+                          : order.status === "PENDING"
+                            ? "bg-red-500 text-white"
+                            : "bg-yellow-500 text-black"
                           }`}
                       >
                         <FaTruck size={18} />
@@ -185,10 +186,10 @@ const OrdersPage: React.FC = () => {
                       </div>
                       <div
                         className={`flex items-center gap-2 px-4 py-2 rounded ${order.paymentStatus === "COMPLETED"
-                            ? "bg-green-500 text-white"
-                            : order.paymentStatus === "PENDING"
-                              ? "bg-red-500 text-white"
-                              : "bg-yellow-500 text-black"
+                          ? "bg-green-500 text-white"
+                          : order.paymentStatus === "PENDING"
+                            ? "bg-red-500 text-white"
+                            : "bg-yellow-500 text-black"
                           }`}
                       >
                         <FaDollarSign size={18} />

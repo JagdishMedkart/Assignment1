@@ -793,7 +793,7 @@ const OrdersPage = ()=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                    lineNumber: 148,
+                                                    lineNumber: 147,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
@@ -803,10 +803,21 @@ const OrdersPage = ()=>{
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "w-20 text-right",
+                                            children: [
+                                                "$",
+                                                0.9 * Number(order.trueTotal)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
+                                            lineNumber: 150,
+                                            columnNumber: 19
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$format$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["format"])(new Date(order.createdAt), "PPP")
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                            lineNumber: 150,
+                                            lineNumber: 151,
                                             columnNumber: 19
                                         }, this)
                                     ]
@@ -830,7 +841,7 @@ const OrdersPage = ()=>{
                                                                 children: "Product"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                                lineNumber: 157,
+                                                                lineNumber: 158,
                                                                 columnNumber: 27
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -838,7 +849,7 @@ const OrdersPage = ()=>{
                                                                 children: "Quantity"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                                lineNumber: 158,
+                                                                lineNumber: 159,
                                                                 columnNumber: 27
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -846,7 +857,7 @@ const OrdersPage = ()=>{
                                                                 children: "Unit Price"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                                lineNumber: 159,
+                                                                lineNumber: 160,
                                                                 columnNumber: 27
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -854,18 +865,18 @@ const OrdersPage = ()=>{
                                                                 children: "Total"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                                lineNumber: 160,
+                                                                lineNumber: 161,
                                                                 columnNumber: 27
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                        lineNumber: 156,
+                                                        lineNumber: 157,
                                                         columnNumber: 25
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                    lineNumber: 155,
+                                                    lineNumber: 156,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -875,14 +886,14 @@ const OrdersPage = ()=>{
                                                                     children: item.product.name
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                                    lineNumber: 166,
+                                                                    lineNumber: 167,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                                                     children: item.quantity
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                                    lineNumber: 167,
+                                                                    lineNumber: 168,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -892,7 +903,7 @@ const OrdersPage = ()=>{
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                                    lineNumber: 168,
+                                                                    lineNumber: 169,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -902,24 +913,24 @@ const OrdersPage = ()=>{
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                                    lineNumber: 169,
+                                                                    lineNumber: 170,
                                                                     columnNumber: 29
                                                                 }, this)
                                                             ]
                                                         }, item.orderItemId, true, {
                                                             fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                            lineNumber: 165,
+                                                            lineNumber: 166,
                                                             columnNumber: 27
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                    lineNumber: 163,
+                                                    lineNumber: 164,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                            lineNumber: 154,
+                                            lineNumber: 155,
                                             columnNumber: 21
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -932,14 +943,14 @@ const OrdersPage = ()=>{
                                                             size: 18
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                            lineNumber: 183,
+                                                            lineNumber: 184,
                                                             columnNumber: 25
                                                         }, this),
                                                         order.status
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                    lineNumber: 175,
+                                                    lineNumber: 176,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -949,26 +960,26 @@ const OrdersPage = ()=>{
                                                             size: 18
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                            lineNumber: 194,
+                                                            lineNumber: 195,
                                                             columnNumber: 25
                                                         }, this),
                                                         order.paymentStatus
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                                    lineNumber: 186,
+                                                    lineNumber: 187,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                            lineNumber: 174,
+                                            lineNumber: 175,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                    lineNumber: 153,
+                                    lineNumber: 154,
                                     columnNumber: 19
                                 }, this)
                             ]
@@ -988,7 +999,7 @@ const OrdersPage = ()=>{
                                 children: "Previous"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                lineNumber: 205,
+                                lineNumber: 206,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -996,7 +1007,7 @@ const OrdersPage = ()=>{
                                 children: currentPage
                             }, void 0, false, {
                                 fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                lineNumber: 212,
+                                lineNumber: 213,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1006,13 +1017,13 @@ const OrdersPage = ()=>{
                                 children: "Next"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                                lineNumber: 213,
+                                lineNumber: 214,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/Orders/CustomerOrders.tsx",
-                        lineNumber: 204,
+                        lineNumber: 205,
                         columnNumber: 11
                     }, this)
                 ]

@@ -96,8 +96,11 @@ async function GET(req) {
                 status: 400
             });
         }
-        // Fetch the total number of pending orders for the given product
-        const pendingOrdersCount = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].orderItem.count({
+        // Fetch the total quantity of the product in pending orders
+        const totalPendingQuantity = await __TURBOPACK__imported__module__$5b$project$5d2f$prisma$2f$client$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].orderItem.aggregate({
+            _sum: {
+                quantity: true
+            },
             where: {
                 productWsCode: parseInt(wsCode, 10),
                 order: {
@@ -105,16 +108,17 @@ async function GET(req) {
                 }
             }
         });
+        const totalQuantity = totalPendingQuantity._sum.quantity;
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,
             wsCode,
-            pendingOrders: pendingOrdersCount
+            pendingOrders: totalQuantity
         });
     } catch (error) {
-        console.error("Error fetching pending orders:", error);
+        console.error("Error fetching total pending quantity:", error);
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: false,
-            message: "Failed to fetch pending orders."
+            message: "Failed to fetch total pending quantity."
         }, {
             status: 500
         });

@@ -1,29 +1,3 @@
-// import { NextRequest, NextResponse } from "next/server";
-// import prisma from "../../../../../prisma/client";
-
-// export async function GET(req: NextRequest) {
-//   try {
-//     const orders = await prisma.order.findMany({
-//       include: {
-//         user: { select: { name: true } },
-//       },
-//       orderBy: { createdAt: "desc" },
-//     });
-
-//     return NextResponse.json(
-//       { message: "Orders fetched successfully", orders },
-//       { status: 200 }
-//     );
-//   } catch (error) {
-//     console.error("Error fetching orders:", error);
-//     return NextResponse.json(
-//       { message: "Internal server error", success: false },
-//       { status: 500 }
-//     );
-//   }
-// }
-
-// /pages/api/admin/orders/index.ts
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../prisma/client";
 
@@ -59,26 +33,36 @@ export async function GET(req: NextRequest) {
     const ordersPerPage = 5;
     const skip = (page - 1) * ordersPerPage;
 
-    // Fetch orders for admin with pagination
+    // Fetch orders with true total
     const orders = await prisma.order.findMany({
-        skip: (page - 1) * ordersPerPage,
-        take: ordersPerPage,
-        include: {
-          user: { select: { name: true } },
-          orderItems: {
-            include: {
-              product: { select: { name: true, mrp: true, images: true } },
-            },
+      skip,
+      take: ordersPerPage,
+      include: {
+        user: { select: { name: true } },
+        orderItems: {
+          include: {
+            product: { select: { name: true, mrp: true, images: true } },
           },
         },
-        orderBy: { createdAt: "desc" },
-      });
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    // Calculate true total for each order
+    const ordersWithTrueTotal = orders.map((order) => {
+      const trueTotal = order.orderItems.reduce(
+        (sum, item) => sum + item.totalPrice,
+        0
+      );
+      return { ...order, trueTotal };
+    });
+
     // Count total orders for pagination calculation
     const totalOrders = await prisma.order.count();
 
     return NextResponse.json({
       message: "Orders fetched successfully",
-      orders,
+      orders: ordersWithTrueTotal,
       totalOrders,
     });
   } catch (error) {
@@ -89,4 +73,3 @@ export async function GET(req: NextRequest) {
     );
   }
 }
-

@@ -627,7 +627,7 @@ const ProductList: React.FC = () => {
                 {/* Pending Orders - Highlighted Section */}
                 <div className="bg-blue-100 border border-blue-300 p-4 rounded-lg shadow-md mb-6">
                   <h2 className="text-xl font-bold text-blue-600 mb-2">
-                    Pending Orders
+                    Total Pending Quantitite
                   </h2>
                   <p className="text-2xl font-semibold text-blue-800">
                     {pendingOrders || 0}

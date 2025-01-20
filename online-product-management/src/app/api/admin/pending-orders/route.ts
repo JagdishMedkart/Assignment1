@@ -14,8 +14,11 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Fetch the total number of pending orders for the given product
-    const pendingOrdersCount = await prisma.orderItem.count({
+    // Fetch the total quantity of the product in pending orders
+    const totalPendingQuantity = await prisma.orderItem.aggregate({
+      _sum: {
+        quantity: true, // Sum up the quantity
+      },
       where: {
         productWsCode: parseInt(wsCode, 10), // Match the productWsCode
         order: {
@@ -24,15 +27,17 @@ export async function GET(req: NextRequest) {
       },
     });
 
+    const totalQuantity = totalPendingQuantity._sum.quantity;
+
     return NextResponse.json({
       success: true,
       wsCode,
-      pendingOrders: pendingOrdersCount,
+      pendingOrders: totalQuantity,
     });
   } catch (error) {
-    console.error("Error fetching pending orders:", error);
+    console.error("Error fetching total pending quantity:", error);
     return NextResponse.json(
-      { success: false, message: "Failed to fetch pending orders." },
+      { success: false, message: "Failed to fetch total pending quantity." },
       { status: 500 }
     );
   }

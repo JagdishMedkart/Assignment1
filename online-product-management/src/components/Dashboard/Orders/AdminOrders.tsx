@@ -62,6 +62,7 @@ const AdminOrdersPage: React.FC = () => {
                     const ordersData = await ordersRes.json();
                     const statsData = await statsRes.json();
                     const totalCountData = await totalCountRes.json();
+                    console.log(ordersData);
 
                     setOrders(ordersData.orders);
                     setDashboardStats(statsData.stats);
@@ -171,7 +172,7 @@ const AdminOrdersPage: React.FC = () => {
                             </div>
                             <div className="flex justify-between items-center mt-2">
                                 <p className="w-32 truncate">{order.user.name}</p>
-                                <p className="w-20 text-right">${0.9 * Number(order.totalAmount.toFixed(2))}</p>
+                                <p className="w-20 text-right">${0.9 * Number(order.trueTotal)}</p>
                                 <div className="flex gap-4">
                                     <select
                                         value={order.status}

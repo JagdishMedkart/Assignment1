@@ -147,7 +147,7 @@ const ProductList: React.FC = () => {
         };
 
 
-        const handleSubmit = async (e) => {
+        const handleSubmit = async (e: React.FormEvent) => {
             e.preventDefault();
             const { name, mrp, packageSize, categoryId, tags, existingImages, newImages } = formData;
 
@@ -157,21 +157,31 @@ const ProductList: React.FC = () => {
             }
 
             try {
-                console.log(existingImages)
-                console.log(newImages);
-                // Convert new images to Base64
+                // Fetch and convert existing images to Base64
                 const base64ExistingImages = await Promise.all(
-                    existingImages.map(
-                        (image: Blob) =>
-                            new Promise((resolve, reject) => {
+                    existingImages.map(async (imagePath) => {
+                        try {
+                            const response = await fetch(imagePath);
+                            const blob = await response.blob();
+                            return await new Promise((resolve, reject) => {
                                 const reader = new FileReader();
                                 reader.onload = () => resolve(reader.result);
                                 reader.onerror = reject;
-                                reader.readAsDataURL(image);
-                            })
-                    )
+                                reader.readAsDataURL(blob);
+                            });
+                        } catch (err) {
+                            console.error(`Failed to fetch existing image at ${imagePath}:`, err);
+                            return null; // Return null if fetching fails
+                        }
+                    })
                 );
 
+                console.log(base64ExistingImages)
+
+                // Remove nulls from the array if any fetch failed
+                const validBase64ExistingImages = base64ExistingImages.filter(Boolean);
+
+                // Convert new images to Base64
                 const base64NewImages = await Promise.all(
                     newImages.map(
                         (image) =>
@@ -184,17 +194,19 @@ const ProductList: React.FC = () => {
                     )
                 );
 
-                const allImages = [...base64ExistingImages, ...base64NewImages];
-                console.log(allImages)
+                console.log(base64NewImages)
+                // Combine all images
+                const allImages = [...validBase64ExistingImages, ...base64NewImages];
 
+                console.log(allImages);
+
+                // Validate image count
                 if (allImages.length > 5) {
                     toast.error("Maximum of 5 images allowed.");
                     return;
                 }
 
-
-                console.log(allImages);
-        
+                // Send the combined images to the server
                 const response = await fetch(`/api/products/${product.wsCode}`, {
                     method: "PATCH",
                     headers: {
@@ -206,7 +218,7 @@ const ProductList: React.FC = () => {
                         packageSize: parseFloat(packageSize),
                         categoryId: parseInt(categoryId),
                         tags: tags.split(",").map((tag) => tag.trim()),
-                        images:allImages, // Combine existing + new images
+                        images: allImages,
                     }),
                 });
 
@@ -224,87 +236,142 @@ const ProductList: React.FC = () => {
             }
         };
 
+
         return isOpen ? (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                <div className="bg-white p-6 rounded-lg w-1/2">
-                    <h2 className="text-xl mb-4">Edit Product</h2>
-                    <form onSubmit={handleSubmit}>
-                        {/* Form Fields */}
-                        <div className="mb-4">
-                            <label className="block text-gray-700 mb-2">Product Name</label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded"
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <label className="block text-gray-700 mb-2">MRP</label>
-                            <input
-                                type="number"
-                                name="mrp"
-                                value={formData.mrp}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded"
-                            />
-                        </div>
-                        {/* Image Upload Section */}
-                        <div className="mb-4">
-                            <label className="block text-gray-700 mb-2">Images</label>
-                            <div className="grid grid-cols-3 gap-4">
-                                {/* Existing Images */}
-                                {formData.existingImages.map((image, index) => (
-                                    <div key={index} className="relative">
-                                        <img src={image} alt="Product" className="h-20 w-20 object-cover rounded" />
-                                        <button
-                                            type="button"
-                                            onClick={() => removeImage("existing", index)}
-                                            className="absolute top-1 right-1 bg-red-500 text-white text-sm rounded-full px-1"
-                                        >
-                                            ✕
-                                        </button>
-                                    </div>
-                                ))}
-                                {/* New Images */}
-                                {formData.newImages.map((image, index) => (
-                                    <div key={index} className="relative">
-                                        <img
-                                            src={URL.createObjectURL(image)}
-                                            alt="New Upload"
-                                            className="h-20 w-20 object-cover rounded"
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => removeImage("new", index)}
-                                            className="absolute top-1 right-1 bg-red-500 text-white text-sm rounded-full px-1"
-                                        >
-                                            ✕
-                                        </button>
-                                    </div>
-                                ))}
+                <div className="bg-white p-8 rounded-lg w-full max-w-3xl shadow-lg">
+                    <h2 className="text-2xl font-semibold text-gray-800 mb-6">Edit Product</h2>
+                    <div className="overflow-y-scroll max-h-[70vh] pr-4"> {/* Scrollable content wrapper */}
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            {/* Product Name */}
+                            <div>
+                                <label className="block text-gray-600 font-medium mb-2">Product Name</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder="Enter product name"
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
                             </div>
-                            <input
-                                type="file"
-                                multiple
-                                onChange={handleImageChange}
-                                className="mt-4 block"
-                            />
-                        </div>
-                        <div className="flex justify-between">
-                            <button type="submit" className="bg-black text-white px-4 py-2 rounded">
-                                Submit
-                            </button>
-                            <button type="button" onClick={onCancel} className="bg-red-500 text-white px-4 py-2 rounded">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
+
+                            {/* MRP */}
+                            <div>
+                                <label className="block text-gray-600 font-medium mb-2">MRP</label>
+                                <input
+                                    type="number"
+                                    name="mrp"
+                                    value={formData.mrp}
+                                    onChange={handleChange}
+                                    placeholder="Enter product price"
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+
+                            {/* Package Size */}
+                            <div>
+                                <label className="block text-gray-600 font-medium mb-2">Package Size</label>
+                                <input
+                                    type="number"
+                                    name="packageSize"
+                                    value={formData.packageSize}
+                                    onChange={handleChange}
+                                    placeholder="Enter product size"
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+
+                            {/* Tags */}
+                            <div>
+                                <label className="block text-gray-600 font-medium mb-2">Tags</label>
+                                <input
+                                    type="text"
+                                    name="tags"
+                                    value={formData.tags}
+                                    onChange={handleChange}
+                                    placeholder="Enter product tags"
+                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                            </div>
+
+                            {/* Image Upload Section */}
+                            <div>
+                                <label className="block text-gray-600 font-medium mb-2">Images</label>
+                                <div className="grid grid-cols-3 gap-4">
+                                    {/* Existing Images */}
+                                    {formData.existingImages.map((image, index) => (
+                                        <div
+                                            key={index}
+                                            className="relative rounded-lg shadow-md border border-gray-200 p-2 bg-gray-50"
+                                        >
+                                            <img
+                                                src={image}
+                                                alt="Product"
+                                                className="w-full h-24 object-cover rounded-lg"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => removeImage("existing", index)}
+                                                className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full shadow-md hover:bg-red-600"
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    ))}
+                                    {/* New Images */}
+                                    {formData.newImages.map((image, index) => (
+                                        <div
+                                            key={index}
+                                            className="relative rounded-lg shadow-md border border-gray-200 p-2 bg-gray-50"
+                                        >
+                                            <img
+                                                src={URL.createObjectURL(image)}
+                                                alt="New Upload"
+                                                className="w-full h-24 object-cover rounded-lg"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => removeImage("new", index)}
+                                                className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full shadow-md hover:bg-red-600"
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="mt-4">
+                                    <input
+                                        type="file"
+                                        multiple
+                                        onChange={handleImageChange}
+                                        className="block w-full text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex justify-end gap-4">
+                                <button
+                                    type="submit"
+                                    className="px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition"
+                                >
+                                    Save Changes
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={onCancel}
+                                    className="px-6 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         ) : null;
-    };
+    }
 
     const handleEditClick = (product: Product) => {
         setProductToEdit(product);
@@ -438,8 +505,11 @@ const ProductList: React.FC = () => {
         if (res.success) {
             setPendingOrders(res?.pendingOrders);
         }
+        const data = await fetch(`/api/products/${product.wsCode}`, { method: "GET" });
+        const res2 = await data.json();
+        console.log(res2);
         // fetchProducts(currentPage);
-        setDetailedViewProduct(product);
+        setDetailedViewProduct(res2.product);
     };
 
     const handleCloseDetails = () => {
@@ -596,7 +666,7 @@ const ProductList: React.FC = () => {
                                                     transition: "transform 0.5s ease-in-out",
                                                 }}
                                             >
-                                                <Image
+                                                <img
                                                     src={image}
                                                     alt={`Image ${index + 1}`}
                                                     width={400}
@@ -656,7 +726,7 @@ const ProductList: React.FC = () => {
                                 {/* Pending Orders - Highlighted Section */}
                                 <div className="bg-blue-100 border border-blue-300 p-4 rounded-lg shadow-md mb-6">
                                     <h2 className="text-xl font-bold text-blue-600 mb-2">
-                                        Pending Orders
+                                        Pending Order Quantities
                                     </h2>
                                     <p className="text-2xl font-semibold text-blue-800">
                                         {pendingOrders || 0}
