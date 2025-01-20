@@ -148,6 +148,7 @@ const ProductList: React.FC = () => {
         setLoading(true);
 
         // Convert images to Base64
+        console.log(images);
         const base64Images = await Promise.all(
           images.map(
             (image: Blob) =>
