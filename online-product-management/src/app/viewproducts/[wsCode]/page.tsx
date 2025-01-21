@@ -179,7 +179,7 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { useCart } from "../../../components/CartContext"; // Assuming CartContext will be updated
 import Image from "next/image";
 import { Product } from "@prisma/client";
@@ -190,6 +190,8 @@ import Nav from "@/components/Layout/Nav";
 const ProductDetail: React.FC = () => {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
+  const categoryId = searchParams.get('category'); 
   const wsCode = params.wsCode;
   const { addToCart } = useCart(); // Update to use CartContext that works with DB now
   const [product, setProduct] = useState<Product | null>(null);
@@ -295,7 +297,7 @@ const ProductDetail: React.FC = () => {
       <div className="p-6 max-w-7xl mx-auto">
         {/* Back Button */}
         <button
-          onClick={() => router.push("/viewproducts")}
+          onClick={() => {categoryId ? router.push(`/viewproducts?category=${categoryId}`) : router.push("/viewproducts")}}
           className="flex items-center text-blue-500 mb-6 hover:text-blue-700"
         >
           <FaArrowLeft size={20} className="mr-2" />

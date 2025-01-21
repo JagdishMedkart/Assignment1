@@ -510,6 +510,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$ico
 ;
 const ProductSearch = ()=>{
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRouter"])();
+    const searchParams = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSearchParams"])();
+    const categoryIdFromUrl = searchParams.get("category");
     const [searchIndex, setSearchIndex] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [searchQuery, setSearchQuery] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
     const [filteredProducts, setFilteredProducts] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
@@ -518,7 +520,7 @@ const ProductSearch = ()=>{
     const [showDropdown, setShowDropdown] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [selectedProduct, setSelectedProduct] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [categories, setCategories] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({});
-    const [selectedCategory, setSelectedCategory] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
+    const [selectedCategory, setSelectedCategory] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(categoryIdFromUrl || "");
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         // Fetch the lightweight search index
         const fetchSearchIndex = async ()=>{
@@ -535,12 +537,22 @@ const ProductSearch = ()=>{
     // Fetch all products from the database (for search)
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         const fetchProducts = async ()=>{
-            const response = await fetch("/api/products?limit=8");
-            const data = await response.json();
-            setAllProducts(data.products);
-            // Show 5 random products initially
-            const randomSelection = getRandomProducts(data.products, 8);
-            setRandomProducts(randomSelection);
+            if (categoryIdFromUrl) {
+                router.push(`/viewproducts?category=${categoryIdFromUrl}`);
+                const response = await fetch(`/api/products/filter/${parseInt(categoryIdFromUrl)}`);
+                const data = await response.json();
+                if (data.success) {
+                    setFilteredProducts(data.products); // Update filtered products
+                } else {
+                    console.error("Failed to fetch filtered products:", data.message);
+                }
+            } else {
+                const response = await fetch("/api/products?limit=8");
+                const data = await response.json();
+                setAllProducts(data.products);
+                const randomSelection = getRandomProducts(data.products, 8);
+                setRandomProducts(randomSelection);
+            }
         };
         const fetchCategories = async ()=>{
             const response = await fetch("/api/categories");
@@ -555,7 +567,9 @@ const ProductSearch = ()=>{
         };
         fetchProducts();
         fetchCategories();
-    }, []);
+    }, [
+        categoryIdFromUrl
+    ]);
     // Function to select random products from all products
     const getRandomProducts = (products, count)=>{
         const shuffled = [
@@ -593,7 +607,7 @@ const ProductSearch = ()=>{
                 children: part
             }, index, false, {
                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                lineNumber: 119,
+                lineNumber: 133,
                 columnNumber: 9
             }, this) : part);
     };
@@ -616,7 +630,7 @@ const ProductSearch = ()=>{
     };
     const handleCategoryChange = async (categoryId)=>{
         try {
-            router.push(`/viewproducts?search=${searchQuery}&category=${categoryId}`);
+            router.push(`/viewproducts?category=${categoryId}`);
             setSelectedCategory(categoryId); // Update selectedCategory state
             if (!categoryId) {
                 setFilteredProducts([]); // Reset to default if no category selected
@@ -635,7 +649,7 @@ const ProductSearch = ()=>{
     };
     const handleProductClick = (product)=>{
         // console.log(`${product} is clicked`)
-        router.push(`/viewproducts/${product.wsCode}`);
+        selectedCategory ? router.push(`/viewproducts/${product.wsCode}?category=${selectedCategory}`) : router.push(`/viewproducts/${product.wsCode}`);
     };
     const getRandomImage = (images)=>{
         if (images.length > 0) {
@@ -658,7 +672,7 @@ const ProductSearch = ()=>{
                         className: "w-full py-3 px-4 border border-gray-300 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     }, void 0, false, {
                         fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                        lineNumber: 183,
+                        lineNumber: 198,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -680,7 +694,7 @@ const ProductSearch = ()=>{
                                 children: "All Categories"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                lineNumber: 204,
+                                lineNumber: 219,
                                 columnNumber: 11
                             }, this),
                             Object.entries(categories).map(([id, name])=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -688,13 +702,13 @@ const ProductSearch = ()=>{
                                     children: name
                                 }, id, false, {
                                     fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                    lineNumber: 206,
+                                    lineNumber: 221,
                                     columnNumber: 13
                                 }, this))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                        lineNumber: 190,
+                        lineNumber: 205,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -704,12 +718,12 @@ const ProductSearch = ()=>{
                             size: 24
                         }, void 0, false, {
                             fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                            lineNumber: 215,
+                            lineNumber: 230,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                        lineNumber: 211,
+                        lineNumber: 226,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -719,18 +733,18 @@ const ProductSearch = ()=>{
                             size: 24
                         }, void 0, false, {
                             fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                            lineNumber: 221,
+                            lineNumber: 236,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                        lineNumber: 217,
+                        lineNumber: 232,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                lineNumber: 182,
+                lineNumber: 197,
                 columnNumber: 7
             }, this),
             showDropdown && filteredProducts.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -747,17 +761,17 @@ const ProductSearch = ()=>{
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                            lineNumber: 235,
+                            lineNumber: 250,
                             columnNumber: 17
                         }, this)
                     }, product.wsCode, false, {
                         fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                        lineNumber: 230,
+                        lineNumber: 245,
                         columnNumber: 15
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                lineNumber: 228,
+                lineNumber: 243,
                 columnNumber: 11
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -783,12 +797,12 @@ const ProductSearch = ()=>{
                                     onClick: ()=>handleProductClick(product)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                    lineNumber: 260,
+                                    lineNumber: 275,
                                     columnNumber: 17
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                lineNumber: 259,
+                                lineNumber: 274,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -799,7 +813,7 @@ const ProductSearch = ()=>{
                                         children: highlightText(product.name, searchQuery)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                        lineNumber: 271,
+                                        lineNumber: 286,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -813,7 +827,7 @@ const ProductSearch = ()=>{
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                                lineNumber: 275,
+                                                lineNumber: 290,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -824,13 +838,13 @@ const ProductSearch = ()=>{
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                                lineNumber: 278,
+                                                lineNumber: 293,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                        lineNumber: 274,
+                                        lineNumber: 289,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -840,35 +854,35 @@ const ProductSearch = ()=>{
                                                 children: tag
                                             }, index, false, {
                                                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                                lineNumber: 285,
+                                                lineNumber: 300,
                                                 columnNumber: 23
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                        lineNumber: 282,
+                                        lineNumber: 297,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                                lineNumber: 270,
+                                lineNumber: 285,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, product.wsCode, true, {
                         fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                        lineNumber: 255,
+                        lineNumber: 270,
                         columnNumber: 13
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-                lineNumber: 245,
+                lineNumber: 260,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/Products/ViewProductsComponent.tsx",
-        lineNumber: 180,
+        lineNumber: 195,
         columnNumber: 5
     }, this);
 };

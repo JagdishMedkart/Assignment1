@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Fuse from "fuse.js";
 import { FaSearch, FaSync } from "react-icons/fa";
-import { useRouter, useSearchParams  } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 // Define types for product and API response
 interface Product {
@@ -28,6 +28,8 @@ interface ProductIndex {
 
 const ProductSearch: React.FC = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const categoryIdFromUrl = searchParams.get("category");
   const [searchIndex, setSearchIndex] = useState<ProductIndex[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -36,7 +38,9 @@ const ProductSearch: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [categories, setCategories] = useState<Record<string, string>>({});
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    categoryIdFromUrl || ""
+  );
 
   useEffect(() => {
     // Fetch the lightweight search index
@@ -55,13 +59,23 @@ const ProductSearch: React.FC = () => {
   // Fetch all products from the database (for search)
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch("/api/products?limit=8");
-      const data = await response.json();
-      setAllProducts(data.products);
-
-      // Show 5 random products initially
-      const randomSelection = getRandomProducts(data.products, 8);
-      setRandomProducts(randomSelection);
+      if (categoryIdFromUrl) {
+        router.push(`/viewproducts?category=${categoryIdFromUrl}`);
+        const response = await fetch(`/api/products/filter/${parseInt(categoryIdFromUrl)}`);
+        const data = await response.json();
+        if (data.success) {
+          setFilteredProducts(data.products); // Update filtered products
+        } else {
+          console.error("Failed to fetch filtered products:", data.message);
+        }
+      }
+      else {
+        const response = await fetch("/api/products?limit=8");
+        const data = await response.json();
+        setAllProducts(data.products);
+        const randomSelection = getRandomProducts(data.products, 8);
+        setRandomProducts(randomSelection);
+      }
     };
 
     const fetchCategories = async () => {
@@ -79,7 +93,7 @@ const ProductSearch: React.FC = () => {
 
     fetchProducts();
     fetchCategories();
-  }, []);
+  }, [categoryIdFromUrl]);
 
   // Function to select random products from all products
   const getRandomProducts = (products: Product[], count: number): Product[] => {
@@ -144,7 +158,7 @@ const ProductSearch: React.FC = () => {
 
   const handleCategoryChange = async (categoryId: string) => {
     try {
-      router.push(`/viewproducts?search=${searchQuery}&category=${categoryId}`);
+      router.push(`/viewproducts?category=${categoryId}`);
       setSelectedCategory(categoryId); // Update selectedCategory state
       if (!categoryId) {
         setFilteredProducts([]); // Reset to default if no category selected
@@ -165,7 +179,8 @@ const ProductSearch: React.FC = () => {
 
   const handleProductClick = (product: ProductIndex) => {
     // console.log(`${product} is clicked`)
-    router.push(`/viewproducts/${product.wsCode}`);
+    selectedCategory ? router.push(`/viewproducts/${product.wsCode}?category=${selectedCategory}`) :
+      router.push(`/viewproducts/${product.wsCode}`);
   };
 
   const getRandomImage = (images: string[]): string => {

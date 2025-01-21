@@ -7,8 +7,6 @@ import toast from "react-hot-toast";
 import { FaEye, FaTrash } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { IoInformationCircle } from "react-icons/io5";
-import { number } from "zod";
-
 // Type for the Product
 interface Product {
   productId: number;
@@ -451,7 +449,7 @@ const ProductList: React.FC = () => {
                     <td className="border border-gray-300 px-4 py-4">{product.wsCode}</td>
                     <td className="border border-gray-300 px-4 py-4">{product.name}</td>
                     <td className="border border-gray-300 px-4 py-4">
-                      ${isDeleted ? "N/A" : (0.9 * product.mrp).toFixed(2)}
+                      ${isDeleted ? "N/A" : (Math.ceil(0.9 * product.mrp)).toFixed(2)}
                     </td>
                     <td className="border border-gray-300 px-4 py-4">
                       ${isDeleted ? "N/A" : product.mrp}

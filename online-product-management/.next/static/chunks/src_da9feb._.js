@@ -835,7 +835,7 @@ const ProductList = ()=>{
                                         className: "border border-gray-300 px-4 py-4",
                                         children: [
                                             "$",
-                                            isDeleted ? "N/A" : (0.9 * product.mrp).toFixed(2)
+                                            isDeleted ? "N/A" : Math.ceil(0.9 * product.mrp).toFixed(2)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/Dashboard/Products/ProductDataDashboard2.tsx",

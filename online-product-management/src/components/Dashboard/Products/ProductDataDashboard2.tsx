@@ -550,7 +550,7 @@ const ProductList: React.FC = () => {
                                         <td className="border border-gray-300 px-4 py-4">{product.wsCode}</td>
                                         <td className="border border-gray-300 px-4 py-4">{product.name}</td>
                                         <td className="border border-gray-300 px-4 py-4">
-                                            ${isDeleted ? "N/A" : (0.9 * product.mrp).toFixed(2)}
+                                            ${isDeleted ? "N/A" : (Math.ceil(0.9 * product.mrp)).toFixed(2)}
                                         </td>
                                         <td className="border border-gray-300 px-4 py-4">
                                             ${isDeleted ? "N/A" : product.mrp}
