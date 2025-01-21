@@ -662,14 +662,12 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/navigation.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$CartContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/components/CartContext.tsx [app-client] (ecmascript)"); // Assuming CartContext will be updated
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/next/image.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$hot$2d$toast$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/react-hot-toast/dist/index.mjs [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Layout$2f$Nav$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/components/Layout/Nav.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/react-icons/fa/index.mjs [app-client] (ecmascript)");
 ;
 var _s = __turbopack_refresh__.signature();
 "use client";
-;
 ;
 ;
 ;
@@ -732,7 +730,7 @@ const ProductDetail = ()=>{
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "ProductDetail.useEffect": ()=>{
             if (product) {
-                setTotalPrice(product.mrp * quantity * 0.9); // Apply a 10% discount if needed
+                setTotalPrice(Math.ceil(product.mrp * quantity * 0.9));
             }
         }
     }["ProductDetail.useEffect"], [
@@ -844,7 +842,7 @@ const ProductDetail = ()=>{
                                                         transform: `translateX(-${currentSlideIndex * 100}%)`,
                                                         transition: "transform 0.5s ease-in-out"
                                                     },
-                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
                                                         src: image,
                                                         alt: `Image ${index + 1}`,
                                                         width: 200,
@@ -909,7 +907,7 @@ const ProductDetail = ()=>{
                                                 className: "text-3xl font-bold text-green-600",
                                                 children: [
                                                     "$",
-                                                    0.9 * product.mrp
+                                                    Math.ceil(0.9 * product.mrp)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",
@@ -920,7 +918,7 @@ const ProductDetail = ()=>{
                                                 className: "text-lg text-gray-400 line-through ml-3",
                                                 children: [
                                                     "$",
-                                                    product.mrp
+                                                    Math.ceil(product.mrp)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/viewproducts/[wsCode]/page.tsx",

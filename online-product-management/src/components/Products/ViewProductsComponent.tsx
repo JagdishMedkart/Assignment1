@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Fuse from "fuse.js";
 import { FaSearch, FaSync } from "react-icons/fa";
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams  } from 'next/navigation'
 
 // Define types for product and API response
 interface Product {
@@ -36,6 +36,7 @@ const ProductSearch: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [categories, setCategories] = useState<Record<string, string>>({});
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   useEffect(() => {
     // Fetch the lightweight search index
@@ -99,14 +100,16 @@ const ProductSearch: React.FC = () => {
     setSearchQuery(query);
 
     if (query.length > 0) {
+      setSelectedCategory(""); // Clear category filter when search is active
       const results = fuse.search(query);
-      setFilteredProducts(results.map((result) => result.item)); // Extract items from fuse results
+      setFilteredProducts(results.map((result) => result.item));
       setShowDropdown(true);
     } else {
       setFilteredProducts([]);
       setShowDropdown(false);
     }
   };
+
 
   // Highlight matching parts in the product name
   const highlightText = (text: string, query: string): JSX.Element[] => {
@@ -131,11 +134,34 @@ const ProductSearch: React.FC = () => {
 
   const handleRefreshClick = () => {
     // Reset search and show random products
+    router.push(`/viewproducts`);
     setSearchQuery("");
     setFilteredProducts([]);
     setShowDropdown(false);
     setSelectedProduct(null);
+    setSelectedCategory("");
   };
+
+  const handleCategoryChange = async (categoryId: string) => {
+    try {
+      router.push(`/viewproducts?search=${searchQuery}&category=${categoryId}`);
+      setSelectedCategory(categoryId); // Update selectedCategory state
+      if (!categoryId) {
+        setFilteredProducts([]); // Reset to default if no category selected
+        return;
+      }
+      const response = await fetch(`/api/products/filter/${parseInt(categoryId)}`);
+      const data = await response.json();
+      if (data.success) {
+        setFilteredProducts(data.products); // Update filtered products
+      } else {
+        console.error("Failed to fetch filtered products:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching filtered products:", error);
+    }
+  };
+
 
   const handleProductClick = (product: ProductIndex) => {
     // console.log(`${product} is clicked`)
@@ -161,6 +187,27 @@ const ProductSearch: React.FC = () => {
           onChange={handleSearchChange}
           className="w-full py-3 px-4 border border-gray-300 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        <select
+          value={selectedCategory}
+          onChange={(e) => {
+            const categoryId = e.target.value; // Get the selected category ID
+            setSelectedCategory(categoryId); // Update the state
+            if (categoryId) {
+              handleCategoryChange(categoryId); // Fetch products for the selected category
+            } else {
+              // If "All Categories" is selected, reset to default products
+              setFilteredProducts([]);
+            }
+          }}
+          className="py-3 px-4 border border-gray-300 rounded-lg shadow-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">All Categories</option>
+          {Object.entries(categories).map(([id, name]) => (
+            <option key={id} value={id}>
+              {name}
+            </option>
+          ))}
+        </select>
         <button
           onClick={handleSearchClick}
           className="text-gray-500 p-2"
@@ -176,78 +223,78 @@ const ProductSearch: React.FC = () => {
       </div>
 
       {/* Dropdown for dynamic search results */}
-      {showDropdown && filteredProducts.length > 0 && (
-        <div className="absolute z-10 bg-white w-full border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto mt-1">
-          {filteredProducts.map((product) => (
-            <div
-              key={product.wsCode}
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-              onClick={() => handleProductClick(product)}
-            >
-              <p className="text-sm">
-                {highlightText(product.name, searchQuery)} - {product.wsCode}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Display Random Products or Search Results as Product Cards */}
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-          {searchQuery.length > 0 || selectedProduct ? "Search Results" : "Recommended Products"}
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {(searchQuery.length > 0 || selectedProduct ? filteredProducts : randomProducts)
-            .filter((product) => product.deletedAt === null) // Exclude deleted products
-            .map((product) => (
+      {
+        showDropdown && filteredProducts.length > 0 && (
+          <div className="absolute z-10 bg-white w-full border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto mt-1">
+            {filteredProducts.map((product) => (
               <div
                 key={product.wsCode}
-                className="border rounded-lg overflow-hidden shadow-lg bg-white transition-transform duration-300 ease-in-out hover:scale-105"
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                onClick={() => handleProductClick(product)}
               >
-                <div className="w-full h-64 relative">
-                  <Image
-                    src={getRandomImage(product.images)} // Random image from product images
-                    alt={product.name}
-                    fill
-                    style={{ objectFit: 'cover' }}
-                    className="rounded-t-lg"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    onClick={() => handleProductClick(product)}
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    {highlightText(product.name, searchQuery)}
-                  </h3>
-                  <div className="flex items-baseline mb-2">
-                    <p className="text-3xl font-bold text-green-600">
-                      ${0.9 * product.mrp}
-                    </p>
-                    <p className="text-lg text-gray-400 line-through ml-3">
-                      ${product.mrp}
-                    </p>
-                  </div>
-                  {/* <p className="text-sm text-gray-600">Package Size: {product.packageSize}</p> */}
-                  {/* <p className="text-sm text-gray-600">
-                    Category: {categories[product.categoryId] || "Unknown"}
-                  </p> */}
-
-                  {/* Tags */}
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {product.tags &&
-                      product.tags.map((tag, index) => (
-                        <span key={index} className="text-xs text-white bg-blue-500 px-2 py-1 rounded-full">
-                          {tag}
-                        </span>
-                      ))}
-                  </div>
-                </div>
+                <p className="text-sm">
+                  {highlightText(product.name, searchQuery)} - {product.wsCode}
+                </p>
               </div>
             ))}
-        </div>
+          </div>
+        )
+      }
+
+      {/* Display Random Products or Search Results as Product Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {(
+          searchQuery.length > 0 // If there's a search query, prioritize search results
+            ? filteredProducts
+            : selectedCategory // Otherwise, use category filter if selected
+              ? filteredProducts
+              : randomProducts // Fallback to random products
+        )
+          .filter((product) => product.deletedAt === null) // Exclude deleted products
+          .map((product) => (
+            <div
+              key={product.wsCode}
+              className="border rounded-lg overflow-hidden shadow-lg bg-white transition-transform duration-300 ease-in-out hover:scale-105"
+            >
+              <div className="w-full h-64 relative">
+                <Image
+                  src={getRandomImage(product.images)}
+                  alt={product.name}
+                  fill
+                  style={{ objectFit: "cover" }}
+                  className="rounded-t-lg"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  onClick={() => handleProductClick(product)}
+                />
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {highlightText(product.name, searchQuery)}
+                </h3>
+                <div className="flex items-baseline mb-2">
+                  <p className="text-3xl font-bold text-green-600">
+                    ${Math.ceil(0.9 * product.mrp)}
+                  </p>
+                  <p className="text-lg text-gray-400 line-through ml-3">
+                    ${Math.ceil(product.mrp)}
+                  </p>
+                </div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {product.tags &&
+                    product.tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="text-xs text-white bg-blue-500 px-2 py-1 rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                </div>
+              </div>
+            </div>
+          ))}
       </div>
-    </div>
+    </div >
   );
 };
 

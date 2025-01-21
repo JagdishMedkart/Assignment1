@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
         }
         if (email != null) {
             const sessionToken = randomString(32);
-            const futureDate = new Date(Date.now() + 1000 * 60 * 60 * 72); // 6 hours into the future
+            const futureDate = new Date(Date.now() + 1000 * 60 * 60 * 72); // 72 hours into the future
           
             // Remove only expired sessions
             await prisma.session.deleteMany({

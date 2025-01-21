@@ -233,7 +233,7 @@ const ProductDetail: React.FC = () => {
   // Update totalPrice when quantity or product price changes
   useEffect(() => {
     if (product) {
-      setTotalPrice(product.mrp * quantity * 0.9); // Apply a 10% discount if needed
+      setTotalPrice(Math.ceil(product.mrp * quantity * 0.9));
     }
   }, [quantity, product]);
 
@@ -315,7 +315,7 @@ const ProductDetail: React.FC = () => {
                       transition: "transform 0.5s ease-in-out",
                     }}
                   >
-                    <Image
+                    <img
                       src={image}
                       alt={`Image ${index + 1}`}
                       width={200}
@@ -354,10 +354,10 @@ const ProductDetail: React.FC = () => {
             {/* Pricing */}
             <div className="flex items-baseline mb-4">
               <p className="text-3xl font-bold text-green-600">
-                ${0.9 * product.mrp}
+                ${Math.ceil(0.9 * product.mrp)}
               </p>
               <p className="text-lg text-gray-400 line-through ml-3">
-                ${product.mrp}
+                ${Math.ceil(product.mrp)}
               </p>
             </div>
 
