@@ -48,6 +48,16 @@ const ProductBuilder: React.FC = () => {
       return;
     }
 
+    if(parseFloat(mrp) <= 0) {
+      toast.error("MRP is invalid!");
+      return;
+    }
+
+    if(parseInt(packageSize) < 0) {
+      toast.error("Package size is invalid!");
+      return;
+  }
+
     if (images.length > 5) {
       toast.error("You can upload a maximum of 5 images.");
       return;

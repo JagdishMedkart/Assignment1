@@ -605,10 +605,10 @@ const ProductList: React.FC = () => {
                 {/* Pricing */}
                 <div className="flex items-baseline mb-4">
                   <p className="text-3xl font-bold text-green-600">
-                    ${0.9 * detailedViewProduct.mrp}
+                    ${Math.ceil(0.9 * detailedViewProduct.mrp).toFixed(2)}
                   </p>
                   <p className="text-lg text-gray-400 line-through ml-3">
-                    ${detailedViewProduct.mrp}
+                    ${Math.ceil(detailedViewProduct.mrp)}
                   </p>
                 </div>
 

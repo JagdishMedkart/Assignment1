@@ -5,84 +5,6 @@
 
 var { r: __turbopack_require__, f: __turbopack_module_context__, i: __turbopack_import__, s: __turbopack_esm__, v: __turbopack_export_value__, n: __turbopack_export_namespace__, c: __turbopack_cache__, M: __turbopack_modules__, l: __turbopack_load__, j: __turbopack_dynamic__, P: __turbopack_resolve_absolute_path__, U: __turbopack_relative_url__, R: __turbopack_resolve_module_id_path__, b: __turbopack_worker_blob_url__, g: global, __dirname, k: __turbopack_refresh__, m: module, z: __turbopack_require_stub__ } = __turbopack_context__;
 {
-// "use client";
-// import React, { createContext, useContext, useState, useEffect } from "react";
-// // Define Cart Item Type
-// interface CartItem {
-//     productId: string;
-//     name: string;
-//     price: number;
-//     quantity: number;
-//     image: string;
-// }
-// interface CartContextType {
-//     cart: CartItem[];
-//     addToCart: (item: CartItem) => void;
-//     removeFromCart: (productId: string) => void;
-//     clearCart: () => void;
-// }
-// // Create Cart Context
-// const CartContext = createContext<CartContextType | undefined>(undefined);
-// export const useCart = (): CartContextType => {
-//     const context = useContext(CartContext);
-//     if (!context) {
-//         throw new Error("useCart must be used within a CartProvider");
-//     }
-//     return context;
-// };
-// export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-//     const [cart, setCart] = useState<CartItem[]>([]);
-//     // Load cart from localStorage on initial render
-//     useEffect(() => {
-//         const storedCart = localStorage.getItem("cart");
-//         if (storedCart) {
-//             setCart(JSON.parse(storedCart));
-//         }
-//     }, []);
-//     // Update localStorage whenever cart changes
-//     useEffect(() => {
-//         localStorage.setItem("cart", JSON.stringify(cart));
-//     }, [cart]);
-//     const addToCart = (item: CartItem) => {
-//         setCart((prevCart) => {
-//             const existingItemIndex = prevCart.findIndex((i) => i.productId === item.productId);
-//             let currentQuantity = 0;
-//             if (existingItemIndex !== -1) {
-//                 currentQuantity = prevCart[existingItemIndex].quantity;
-//                 setCart((prevCart) => prevCart.filter((item) => item.productId !== item.productId));
-//             }
-//             // console.log(existingItemIndex);
-//             // console.log(prevCart);
-//             if (existingItemIndex !== -1) {
-//                 // If the item already exists, just update the quantity to the exact selected quantity
-//                 const updatedCart = [...prevCart];
-//                 // console.log("qua = ", item.quantity)
-//                 // console.log("old quantity = ", updatedCart[existingItemIndex].quantity)
-//                 updatedCart[existingItemIndex].quantity += item.quantity;
-//                 if (updatedCart[existingItemIndex].quantity <= 0) {
-//                     updatedCart.splice(existingItemIndex, 1); // Remove if quantity is 0 or less
-//                 } // Replace with selected quantity
-//                 // console.log("new quantity = ", updatedCart[existingItemIndex].quantity)
-//                 // console.log(prevCart);
-//                 return updatedCart;
-//             } else {
-//                 // If item does not exist, add it as new
-//                 return [...prevCart, item];
-//             }
-//         });
-//     };
-//     const removeFromCart = (productId: string) => {
-//         setCart((prevCart) => prevCart.filter((item) => item.productId !== productId));
-//     };
-//     const clearCart = () => {
-//         setCart([]);
-//     };
-//     return (
-//         <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
-//             {children}
-//         </CartContext.Provider>
-//     );
-// };
 __turbopack_esm__({
     "CartProvider": (()=>CartProvider),
     "useCart": (()=>useCart)
@@ -161,11 +83,9 @@ const CartProvider = ({ children })=>{
             console.error("Error clearing cart:", error);
         }
     };
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "CartProvider.useEffect": ()=>{
-            fetchCart(); // Fetch cart on initialization
-        }
-    }["CartProvider.useEffect"], []);
+    // useEffect(() => {
+    //     fetchCart(); 
+    // }, []);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(CartContext.Provider, {
         value: {
             cart,
@@ -177,11 +97,11 @@ const CartProvider = ({ children })=>{
         children: children
     }, void 0, false, {
         fileName: "[project]/src/components/CartContext.tsx",
-        lineNumber: 190,
+        lineNumber: 97,
         columnNumber: 9
     }, this);
 };
-_s1(CartProvider, "5+HPoxSo1E/C3go3F1eDhM/DDhE=");
+_s1(CartProvider, "ZqFaEIYkzI5UoYUmTgmqHbYYm/0=");
 _c = CartProvider;
 var _c;
 __turbopack_refresh__.register(_c, "CartProvider");
