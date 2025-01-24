@@ -52,7 +52,7 @@ const Nav: React.FC = () => {
 
           <div className="flex justify-center md:justify-start flex-grow">
             <a href="#" className="text-2xl font-semibold text-white">
-              ProductEase
+              PharmaSync
             </a>
           </div>
 

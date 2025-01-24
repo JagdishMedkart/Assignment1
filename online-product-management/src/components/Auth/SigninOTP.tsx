@@ -198,7 +198,7 @@ const SignInOTP: React.FC = () => {
       <div className="flex flex-col min-h-screen md:flex-row">
         <div className="relative w-full md:w-1/2 bg-gray-100">
           <Image
-            src="/image1.png"
+            src="/image3.jpeg"
             alt="Sign Up Image"
             layout="fill"
             objectFit="cover"

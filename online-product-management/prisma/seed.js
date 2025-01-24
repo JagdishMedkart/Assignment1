@@ -5,41 +5,47 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Add predefined categories
-  const categories = [
-    { name: "Electronics" },
-    { name: "Fashion" },
-    { name: "Home Appliances" },
-    { name: "Books" },
-    { name: "Sports Equipment" },
+  const categoryUpdates = [
+    // { categoryId: 1, name: "Elderly Care" },
+    // { categoryId: 2, name: "Diabetes Care" },
+    // { categoryId: 3, name: "Blood Pressure" },
+    // { categoryId: 4, name: "Eye Care" },
+    { categoryId: 1, name: "Cold and Cough" },
+    { categoryId: 2, name: "Healthcare Products" },
+    { categoryId: 3, name: "Ayurvedic Products" },
+    // { categoryId: 8, name: "Vitamins and Supplements" },
+    { categoryId: 4, name: "Pain Relief" },
+    { categoryId: 5, name: "Personal Hygiene" },
   ];
 
-  for (const category of categories) {
-    await prisma.category.upsert({
-      where: { name: category.name },
-      update: {},
-      create: category,
+  for (const update of categoryUpdates) {
+    await prisma.category.update({
+      where: { categoryId: update.categoryId }, // Match by ID
+      data: { name: update.name }, // Update the name
     });
   }
-  const hashedPassword = await bcrypt.hash("admin123", 10);
-  console.log("Categories added successfully!");
 
-  // Add an admin user
-  const admin = {
-    name: "Admin User",
-    email: "admin@example.com",
-    emailVerified: null, // Change to a valid DateTime value if needed
-    image: null,
-    passwordHash: hashedPassword, // Replace with an actual hashed password
-    isSuperAdmin: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
+  console.log("Categories updated successfully!");
+  // const hashedPassword = await bcrypt.hash("admin123", 10);
+  // console.log("Categories added successfully!");
 
-  await prisma.user.upsert({
-    where: { email: admin.email },
-    update: {},
-    create: admin,
-  });
+  // // Add an admin user
+  // const admin = {
+  //   name: "Admin User",
+  //   email: "admin@example.com",
+  //   emailVerified: null, // Change to a valid DateTime value if needed
+  //   image: null,
+  //   passwordHash: hashedPassword, // Replace with an actual hashed password
+  //   isSuperAdmin: true,
+  //   createdAt: new Date(),
+  //   updatedAt: new Date(),
+  // };
+
+  // await prisma.user.upsert({
+  //   where: { email: admin.email },
+  //   update: {},
+  //   create: admin,
+  // });
 
   console.log("Admin user added successfully!");
 }

@@ -5,7 +5,7 @@ export const OTP = (otp: string) =>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProductEase - OTP Verification</title>
+    <title>PharmaSync - OTP Verification</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -71,7 +71,7 @@ export const OTP = (otp: string) =>
 <body>
     <div class="container">
         <div class="header">
-            <h1><strong>ProductEase</strong></h1>
+            <h1><strong>PharmaSync</strong></h1>
         </div>
         <div class="content">
             <p>Your One-Time Password (OTP) is:</p>
@@ -213,7 +213,7 @@ export const ContactToClient = (name: string) => `
         <p>Thank you for reaching out to us. We have received your message and appreciate you taking the time to contact us.</p>
         <p>Our team will review your message and get back to you as soon as possible.</p>
         <p>Thank you once again for contacting us. We look forward to assisting you.</p>
-        <p>ProductEase</p>
+        <p>PharmaSync</p>
         <hr/>
         <div class="footer">
             <p>&copy; ProdcutEase. All rights reserved.</p>

@@ -7,7 +7,8 @@
   "chunks": [
     "static/chunks/node_modules_react-icons_fa_index_mjs_d2e2d7._.js",
     "static/chunks/node_modules_react-icons_lib_74ccc9._.js",
-    "static/chunks/node_modules_a7ef94._.js",
+    "static/chunks/node_modules_framer-motion_dist_es_dec347._.js",
+    "static/chunks/node_modules_e8ac5b._.js",
     "static/chunks/src_6dec97._.js"
   ],
   "source": "dynamic"
